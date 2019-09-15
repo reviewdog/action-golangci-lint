@@ -11,6 +11,9 @@ inputs:
   tool-name:
     description: 'Tool name to use for reviewdog reporter'
     default: 'golangci'
+  level:
+    description: 'Report level for reviewdog [info,warning,error]'
+    default: 'error'
 runs:
   using: 'docker'
   image: 'Dockerfile'
@@ -18,3 +21,4 @@ runs:
     - ${{ inputs.github-token }}
     - ${{ inputs.golangci-lint-flags }}
     - ${{ inputs.tool-name }}
+    - ${{ inputs.level }}
