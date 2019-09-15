@@ -13,4 +13,4 @@ runs:
   image: 'Dockerfile'
   args:
     - ${{ inputs.github-token }}
-    - ${{ golangci-lint-flags }}
+    - ${{ inputs.golangci-lint-flags }}
