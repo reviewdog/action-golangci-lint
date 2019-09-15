@@ -78,7 +78,8 @@ jobs:
         # uses: reviewdog/action-golangci-lint@v1.0.2 # Can use specific version.
         with:
           github_token: ${{ secrets.github_token }}
-          # Can pass --config flag to change golangci-lint behavior.
+          # Can pass --config flag to change golangci-lint behavior and target
+          # directory.
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
 
   # Use golint via golangci-lint binary with "warning" level.
@@ -92,7 +93,7 @@ jobs:
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
-          golangci_lint_flags: "--disable-all -E golint ./testdata"
+          golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
           level: warning # GitHub Status Check won't become failure with this level.
 
@@ -107,7 +108,28 @@ jobs:
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
-          golangci_lint_flags: "--disable-all -E errcheck ./testdata"
+          golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
           level: info
+```
+
+### All-in-one golangci-lint configuration without config file
+
+#### [.github/workflows/reviewdog.yml](.github/workflows/reviewdog.yml)
+
+```yml
+name: reviewdog
+on: [pull_request]
+jobs:
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: docker://reviewdog/action-golangci-lint:v1
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```
