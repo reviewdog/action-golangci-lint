@@ -3,7 +3,7 @@ description: 'Run golangci-lint with reviewdog on pull requests to improve code 
 author: 'haya14busa (reviewdog)'
 inputs:
   github-token:
-    description: 'GITHUB_TOKEN. Must be in form of `github-token: ${{ secrets.github_token }}`'
+    description: 'GITHUB_TOKEN.'
     required: true
   golangci-lint-flags:
     description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci-lint-flags>)'
