@@ -1,6 +1,9 @@
 package main
 
-import "fmt"
+import (
+	"fmt"
+	"os"
+)
 
 func main() {
 	// langauge
@@ -8,4 +11,6 @@ func main() {
 	x := 1
 	x += 1
 	fmt.Sprintf("%d")
+
+	os.Open("main.go")
 }
