@@ -31,7 +31,7 @@ jobs:
           golangci_lint_flags: "./testdata"
 
   govet:
-    name: runner/govet
+    name: runner / govet
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -44,7 +44,7 @@ jobs:
           tool_name: govet
 
   staticcheck:
-    name: runner/staticcheck
+    name: runner / staticcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -57,7 +57,7 @@ jobs:
           tool_name: staticcheck
 
   golint:
-    name: runner/golint
+    name: runner / golint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -71,7 +71,7 @@ jobs:
           level: warning
 
   errcheck:
-    name: runner/errcheck
+    name: runner / errcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -85,7 +85,7 @@ jobs:
           level: warning
 
   misspell:
-    name: runner/misspell
+    name: runner / misspell
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
