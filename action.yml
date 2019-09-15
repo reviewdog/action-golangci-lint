@@ -1,0 +1,16 @@
+name: 'Run golangci-lint with reviewdog'
+description: 'Run golangci-lint with reviewdog on pull requests to improve code review experience.'
+author: 'haya14busa (reviewdog)'
+inputs:
+  github-token:
+    description: 'GITHUB_TOKEN. Must be in form of `github-token: ${{ secrets.github_token }}`'
+    required: true
+  golangci-lint-flags:
+    description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci-lint-flags>)'
+    default: ''
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+  args:
+    - ${{ inputs.github-token }}
+    - ${{ golangci-lint-flags }}
