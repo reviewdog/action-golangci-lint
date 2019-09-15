@@ -3,52 +3,67 @@ on: [pull_request]
 jobs:
   # NOTE: golangci-lint doesn't report multiple errors on the same line from
   # different linters and just report one of the errors?
+
   golangci-lint:
-    name: runner/golangci-lint
+    name: runner / golangci-lint (pre-build docker image)
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        # uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
+        uses: docker://reviewdog/action-golangci-lint:latest # Pre-built image
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
 
+  golangci-lint-dockerfile:
+    name: runner / golangci-lint (Dockerfile)
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
+        # uses: docker://reviewdog/action-golangci-lint:latest # Pre-built image
+        with:
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "./testdata"
+
   govet:
-    name: runner/govet
+    name: runner / govet
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: govet
-        uses: reviewdog/action-golangci-lint@v1
+        uses: docker://reviewdog/action-golangci-lint:latest
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E govet ./testdata"
           tool_name: govet
 
   staticcheck:
-    name: runner/staticcheck
+    name: runner / staticcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: staticcheck
-        uses: reviewdog/action-golangci-lint@v1
+        uses: docker://reviewdog/action-golangci-lint:latest
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E staticcheck ./testdata"
           tool_name: staticcheck
 
   golint:
-    name: runner/golint
+    name: runner / golint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: docker://reviewdog/action-golangci-lint:latest
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint ./testdata"
@@ -56,13 +71,13 @@ jobs:
           level: warning
 
   errcheck:
-    name: runner/errcheck
+    name: runner / errcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: errcheck
-        uses: reviewdog/action-golangci-lint@v1
+        uses: docker://reviewdog/action-golangci-lint:latest
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck ./testdata"
@@ -70,13 +85,13 @@ jobs:
           level: warning
 
   misspell:
-    name: runner/misspell
+    name: runner / misspell
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: misspell
-        uses: reviewdog/action-golangci-lint@v1
+        uses: docker://reviewdog/action-golangci-lint:latest
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E misspell ./testdata"
