@@ -15,7 +15,7 @@ Optional. golangci-lint flags. (golangci-lint run --out-format=line-number <gola
 ## Example usage
 
 ```yml
-uses: reviewdog/action-golang-ci-lint@master
+uses: reviewdog/action-golangci-lint@v1
 with:
   github-token: ${{ secrets.github_token }}
 ```

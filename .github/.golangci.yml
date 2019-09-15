@@ -1,0 +1,17 @@
+linters-settings:
+  govet:
+    check-shadowing: true
+  golint:
+    min-confidence: 0
+  misspell:
+    locale: US
+  errcheck:
+    check-type-assertions: false
+    check-blank: false
+
+linters:
+  enable-all: true
+
+issues:
+  exclude-use-default: false
+  max-same-issues: 0

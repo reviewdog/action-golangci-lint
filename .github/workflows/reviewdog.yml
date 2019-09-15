@@ -1,0 +1,84 @@
+name: reviewdog
+on: [pull_request]
+jobs:
+  # NOTE: golangci-lint doesn't report multiple errors on the same line from
+  # different linters and just report one of the errors?
+  golangci-lint:
+    name: runner/golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--config=.github/.golangci.yml ./testdata"
+
+  govet:
+    name: runner/govet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: govet
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E govet ./testdata"
+          tool-name: govet
+
+  staticcheck:
+    name: runner/staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: staticcheck
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E staticcheck ./testdata"
+          tool-name: staticcheck
+
+  golint:
+    name: runner/golint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golint
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E golint ./testdata"
+          tool-name: golint
+          level: warning
+
+  errcheck:
+    name: runner/errcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: errcheck
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E errcheck ./testdata"
+          tool-name: errcheck
+          level: warning
+
+  misspell:
+    name: runner/misspell
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: misspell
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E misspell ./testdata"
+          tool-name: misspell
+          level: info
