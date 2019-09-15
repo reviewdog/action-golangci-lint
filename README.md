@@ -9,6 +9,10 @@ This action runs [golangci-lint](https://github.com/golangci/golangci-lint) with
 [reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve
 code review experience.
 
+[![annotation on diff tab example](https://user-images.githubusercontent.com/3797062/64919877-27692780-d7eb-11e9-9791-1e9933fbb132.png)](https://github.com/reviewdog/action-golangci-lint/pull/10/files#annotation_6204126662041266)
+[![check tab example](https://user-images.githubusercontent.com/3797062/64919922-d279e100-d7eb-11e9-800d-9cef86c670df.png)](https://github.com/reviewdog/action-golangci-lint/pull/10/checks?check_run_id=222708776)
+[![status check example](https://user-images.githubusercontent.com/3797062/64919933-0b19ba80-d7ec-11e9-96cc-f6558f04924f.png)](https://github.com/reviewdog/action-golangci-lint/pull/10)
+
 ## Inputs
 
 ### `github_token`
