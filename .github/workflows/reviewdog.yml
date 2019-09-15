@@ -1,6 +1,8 @@
 name: reviewdog
 on: [pull_request]
 jobs:
+  # NOTE: golangci-lint doesn't report multiple errors on the same line from
+  # different linters and just report one of the errors?
   golangci-lint:
     name: golangci-lint (default)
     runs-on: ubuntu-latest
@@ -26,6 +28,19 @@ jobs:
           golangci-lint-flags: "--disable-all -E govet ./testdata"
           tool-name: govet
 
+  staticcheck:
+    name: staticcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: staticcheck
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E staticcheck ./testdata"
+          tool-name: staticcheck
+
   golint:
     name: golint
     runs-on: ubuntu-latest
@@ -38,6 +53,20 @@ jobs:
           github-token: ${{ secrets.github_token }}
           golangci-lint-flags: "--disable-all -E golint ./testdata"
           tool-name: golint
+          level: warning
+
+  errcheck:
+    name: errcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: errcheck
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E errcheck ./testdata"
+          tool-name: errcheck
           level: warning
 
   misspell:
