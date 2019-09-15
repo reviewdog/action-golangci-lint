@@ -5,7 +5,7 @@ cd "$GITHUB_WORKSPACE"
 REVIEWDOG_GITHUB_API_TOKEN="$1"
 GOLANGCI_LINT_FLAGS="$2"
 
-if [ -z "${REVIEWDOG_GITHUB_API_TOKEN}" ];
+if [ -z "${REVIEWDOG_GITHUB_API_TOKEN}" ]; then
   echo "GITHUB_TOKEN not found"
   exit 1
 fi
