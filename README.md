@@ -10,14 +10,14 @@ code review experience.
 
 ## Inputs
 
-### `github-token`
+### `github_token`
 
-**Required**. Must be in form of `github-token: ${{ secrets.github_token }}`'.
+**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`'.
 
-### `golangci-lint-flags`
+### `golangci_lint_flags`
 
 Optional. golangci-lint flags. (golangci-lint run --out-format=line-number
-`<golangci-lint-flags>`)
+`<golangci_lint_flags>`)
 
 Note that you can change golangci-lint behavior by [configuration
 file](https://github.com/golangci/golangci-lint#configuration) too.
