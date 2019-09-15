@@ -8,9 +8,13 @@ inputs:
   golangci-lint-flags:
     description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci-lint-flags>)'
     default: ''
+  tool-name:
+    description: 'Tool name to use for reviewdog reporter'
+    default: 'golangci'
 runs:
   using: 'docker'
   image: 'Dockerfile'
   args:
     - ${{ inputs.github-token }}
     - ${{ inputs.golangci-lint-flags }}
+    - ${{ inputs.tool-name }}
