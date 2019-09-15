@@ -49,7 +49,8 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golangci-lint
-        uses: docker://reviewdog/action-golangci-lint:v1
+        uses: reviewdog/action-golangci-lint@v1
+        # uses: docker://reviewdog/action-golangci-lint:v1 # pre-build docker image
         with:
           github_token: ${{ secrets.github_token }}
 ```
@@ -90,7 +91,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golint
-        uses: docker://reviewdog/action-golangci-lint:v1
+        uses: reviewdog/action-golangci-lint@v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint"
@@ -105,7 +106,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: errcheck
-        uses: docker://reviewdog/action-golangci-lint:v1
+        uses: reviewdog/action-golangci-lint@v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck"
@@ -128,7 +129,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golangci-lint
-        uses: docker://reviewdog/action-golangci-lint:v1
+        uses: reviewdog/action-golangci-lint@v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
