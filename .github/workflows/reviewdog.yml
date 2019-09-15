@@ -12,7 +12,7 @@ jobs:
         uses: actions/checkout@v1
       - name: golangci-lint
         # uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
-        uses: docker://reviewdog/action-golangci-lint:latest # Pre-built image
+        uses: docker://reviewdog/action-golangci-lint:v1 # Pre-built image
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
@@ -25,7 +25,7 @@ jobs:
         uses: actions/checkout@v1
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
-        # uses: docker://reviewdog/action-golangci-lint:latest # Pre-built image
+        # uses: docker://reviewdog/action-golangci-lint:v1 # Pre-built image
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "./testdata"
@@ -37,7 +37,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: govet
-        uses: docker://reviewdog/action-golangci-lint:latest
+        uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E govet ./testdata"
@@ -50,7 +50,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: staticcheck
-        uses: docker://reviewdog/action-golangci-lint:latest
+        uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E staticcheck ./testdata"
@@ -63,7 +63,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golint
-        uses: docker://reviewdog/action-golangci-lint:latest
+        uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint ./testdata"
@@ -77,7 +77,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: errcheck
-        uses: docker://reviewdog/action-golangci-lint:latest
+        uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck ./testdata"
@@ -91,7 +91,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: misspell
-        uses: docker://reviewdog/action-golangci-lint:latest
+        uses: docker://reviewdog/action-golangci-lint:v1
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E misspell ./testdata"
