@@ -40,16 +40,16 @@ jobs:
           tool-name: golint
           level: warning
 
-  whitespace:
-    name: whitespace
+  misspell:
+    name: misspell
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
-      - name: whitespace
+      - name: misspell
         uses: reviewdog/action-golangci-lint@v1
         with:
           github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E whitespace ./testdata"
-          tool-name: whitespace
+          golangci-lint-flags: "--disable-all -E misspell ./testdata"
+          tool-name: misspell
           level: info
