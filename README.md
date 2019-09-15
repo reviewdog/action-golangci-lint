@@ -1,5 +1,9 @@
 # GitHub Action: Run golangci-lint with reviewdog
 
+[![Docker Image CI](https://github.com/reviewdog/action-golangci-lint/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions)
+[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
+[![Docker Pulls](https://img.shields.io/docker/pulls/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
+
 This action runs [golangci-lint](https://github.com/golangci/golangci-lint) with
 [reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve
 code review experience.
