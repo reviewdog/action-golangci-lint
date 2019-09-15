@@ -1,8 +1,8 @@
 name: reviewdog - golangci-lint
 on: [pull_request]
 jobs:
-  reviewdog:
-    name: reviewdog
+  golangci-lint:
+    name: golangci-lint (default)
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -12,3 +12,27 @@ jobs:
         with:
           github-token: ${{ secrets.github_token }}
           golangci-lint-flags: "./testdata"
+
+  govet:
+    name: govet
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: govet
+        uses: reviewdog/action-golangci-lint@v1.0.1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E govet ./testdata"
+
+  golint:
+    name: golint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golint
+        uses: reviewdog/action-golangci-lint@v1.0.1
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "--disable-all -E golint ./testdata"
