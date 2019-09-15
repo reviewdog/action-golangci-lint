@@ -1,0 +1,16 @@
+name: reviewdog - golangci-lint
+on: [pull_request]
+jobs:
+  reviewdog:
+    name: reviewdog
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golang-ci-lint@master
+        with:
+          github-token: ${{ secrets.github_token }}
+          golangci-lint-flags: "./testdata"
+
+
