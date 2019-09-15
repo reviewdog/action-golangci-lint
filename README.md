@@ -60,6 +60,26 @@ jobs:
           github_token: ${{ secrets.github_token }}
 ```
 
+Run the following command to get started **Right Now**!
+
+```shell
+mkdir -p .github/workflows && cat <<EOF > .github/workflows/reviewdog.yml
+name: reviewdog
+on: [pull_request]
+jobs:
+  golangci-lint:
+    name: runner / golangci-lint
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1
+        with:
+          github_token: \${{ secrets.github_token }}
+EOF
+```
+
 ### Advanced Usage Example
 
 #### [.github/workflows/reviewdog.yml](.github/workflows/reviewdog.yml)
