@@ -1,16 +1,22 @@
-package main
+package testdata
 
 import (
-	"fmt"
 	"os"
+	"fmt"
 )
 
-func main() {
+func Main(    ) {
 	// langauge
 
-	x := 1
+	x    := 1
 	x += 1
 	fmt.Sprintf("%d")
 
 	os.Open("main.go")
+}
+
+func unused(unusedParam int) error {
+
+	return nil
+
 }

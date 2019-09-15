@@ -13,7 +13,7 @@ jobs:
         uses: reviewdog/action-golangci-lint@v1
         with:
           github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "./testdata"
+          golangci-lint-flags: "--config=.github/.golangci.yml ./testdata"
 
   govet:
     name: govet
