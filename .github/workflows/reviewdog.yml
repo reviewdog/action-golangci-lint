@@ -4,7 +4,7 @@ jobs:
   # NOTE: golangci-lint doesn't report multiple errors on the same line from
   # different linters and just report one of the errors?
   golangci-lint:
-    name: golangci-lint (default)
+    name: runner/golangci-lint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -16,7 +16,7 @@ jobs:
           golangci-lint-flags: "--config=.github/.golangci.yml ./testdata"
 
   govet:
-    name: govet
+    name: runner/govet
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -29,7 +29,7 @@ jobs:
           tool-name: govet
 
   staticcheck:
-    name: staticcheck
+    name: runner/staticcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -42,7 +42,7 @@ jobs:
           tool-name: staticcheck
 
   golint:
-    name: golint
+    name: runner/golint
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -56,7 +56,7 @@ jobs:
           level: warning
 
   errcheck:
-    name: errcheck
+    name: runner/errcheck
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
@@ -70,7 +70,7 @@ jobs:
           level: warning
 
   misspell:
-    name: misspell
+    name: runner/misspell
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
