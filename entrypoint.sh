@@ -8,11 +8,11 @@ TOOL_NAME="$3"
 LEVEL="$4"
 
 if [ -z "${REVIEWDOG_GITHUB_API_TOKEN}" ]; then
-  if [ -z "${GITHUB_TOKEN}" ]; then
-    echo "GITHUB_TOKEN not found"
+  if [ -z "${INPUT_GITHUB_TOKEN}" ]; then
+    echo "INPUT_GITHUB_TOKEN not found"
     exit 1
   else
-    export REVIEWDOG_GITHUB_API_TOKEN="${GITHUB_TOKEN}"
+    export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
   fi
 fi
 

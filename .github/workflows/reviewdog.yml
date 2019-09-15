@@ -12,8 +12,8 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--config=.github/.golangci.yml ./testdata"
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
 
   govet:
     name: runner/govet
@@ -24,9 +24,9 @@ jobs:
       - name: govet
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E govet ./testdata"
-          tool-name: govet
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E govet ./testdata"
+          tool_name: govet
 
   staticcheck:
     name: runner/staticcheck
@@ -37,9 +37,9 @@ jobs:
       - name: staticcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E staticcheck ./testdata"
-          tool-name: staticcheck
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E staticcheck ./testdata"
+          tool_name: staticcheck
 
   golint:
     name: runner/golint
@@ -50,9 +50,9 @@ jobs:
       - name: golint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E golint ./testdata"
-          tool-name: golint
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E golint ./testdata"
+          tool_name: golint
           level: warning
 
   errcheck:
@@ -64,9 +64,9 @@ jobs:
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E errcheck ./testdata"
-          tool-name: errcheck
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E errcheck ./testdata"
+          tool_name: errcheck
           level: warning
 
   misspell:
@@ -78,7 +78,7 @@ jobs:
       - name: misspell
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github-token: ${{ secrets.github_token }}
-          golangci-lint-flags: "--disable-all -E misspell ./testdata"
-          tool-name: misspell
+          github_token: ${{ secrets.github_token }}
+          golangci_lint_flags: "--disable-all -E misspell ./testdata"
+          tool_name: misspell
           level: info
