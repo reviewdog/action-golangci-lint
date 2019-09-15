@@ -8,8 +8,12 @@ TOOL_NAME="$3"
 LEVEL="$4"
 
 if [ -z "${REVIEWDOG_GITHUB_API_TOKEN}" ]; then
-  echo "GITHUB_TOKEN not found"
-  exit 1
+  if [ -z "${GITHUB_TOKEN}" ]; then
+    echo "GITHUB_TOKEN not found"
+    exit 1
+  else
+    export REVIEWDOG_GITHUB_API_TOKEN="${GITHUB_TOKEN}"
+  fi
 fi
 
 golangci-lint run --out-format line-number ${GOLANGCI_LINT_FLAGS} \
