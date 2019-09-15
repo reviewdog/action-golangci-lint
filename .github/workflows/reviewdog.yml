@@ -23,12 +23,13 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
-      - name: golangci-lint
+      - name: golangci-lint w/ Dockerfile
         uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
         # uses: docker://reviewdog/action-golangci-lint:v1 # Pre-built image
         with:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "./testdata"
+          tool_name: "golangci-lint-dockerfile"
 
   govet:
     name: runner / govet
