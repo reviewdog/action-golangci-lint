@@ -1,14 +1,14 @@
 package testdata
 
 import (
-	"os"
 	"fmt"
+	"os"
 )
 
-func Main(    ) {
+func Main() {
 	// langauge
 
-	x    := 1
+	x := 1
 	x += 1
 	fmt.Sprintf("%d")
 
@@ -19,4 +19,7 @@ func unused(unusedParam int) error {
 
 	return nil
 
+	x := 1
+	x += 1
+	return nil
 }
