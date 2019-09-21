@@ -1,5 +1,5 @@
 name: 'Run golangci-lint with reviewdog'
-description: 'Run golangci-lint with reviewdog on pull requests to improve code review experience.'
+description: '🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience.'
 author: 'haya14busa (reviewdog)'
 inputs:
   github_token:
