@@ -14,7 +14,7 @@ inputs:
   level:
     description: 'Report level for reviewdog [info,warning,error]'
     default: 'error'
-   directory:
+  directory:
     description: 'The subdirectory to execute the action in.'
     default: ''
 runs:
