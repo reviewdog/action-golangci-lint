@@ -25,6 +25,7 @@ runs:
     - ${{ inputs.golangci_lint_flags }}
     - ${{ inputs.tool_name }}
     - ${{ inputs.level }}
+    - ${{ inputs.directory }}
 branding:
   icon: 'check-circle'
   color: 'blue'
