@@ -14,6 +14,9 @@ inputs:
   level:
     description: 'Report level for reviewdog [info,warning,error]'
     default: 'error'
+  reporter:
+    description: 'Reporter of reviewdog command [github-pr-check,github-pr-review,github-check].'
+    default: 'github-pr-check'
 runs:
   using: 'docker'
   image: 'Dockerfile'
