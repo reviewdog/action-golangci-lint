@@ -57,6 +57,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "./testdata"
           tool_name: "golangci-lint-github-check"
+          level: warning
           reporter: "github-check"
 
   golangci-lint-all-in-one:
