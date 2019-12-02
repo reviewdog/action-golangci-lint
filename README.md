@@ -37,6 +37,11 @@ actions with different config.
 Optional. Report level for reviewdog [info,warning,error].
 It's same as `-level` flag of reviewdog.
 
+### `reporter`
+
+Optional. Reporter of reviewdog command [github-pr-check,github-pr-review].
+It's same as `-reporter` flag of reviewdog.
+
 ## Example usage
 
 ### Minimum Usage Example
