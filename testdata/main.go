@@ -20,3 +20,13 @@ func unused(unusedParam int) error {
 	return nil
 
 }
+
+
+func unused2(unusedParam int) error {
+
+	return nil
+
+}
+
+func ExplortedFunc() {
+} 
