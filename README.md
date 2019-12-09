@@ -38,7 +38,13 @@ Optional. Report level for reviewdog [info,warning,error].
 It's same as `-level` flag of reviewdog.
 
 ### `directory`
+
 Optional. The subdirectory where your Go code resides.
+
+### `reporter`
+
+Optional. Reporter of reviewdog command [github-pr-check,github-pr-review].
+It's same as `-reporter` flag of reviewdog.
 
 ## Example usage
 
