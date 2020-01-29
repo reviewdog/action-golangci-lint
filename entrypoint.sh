@@ -2,6 +2,9 @@
 
 cd "$GITHUB_WORKSPACE" || exit 1
 
+# check whether the file go.mod exists
+[ -f go.mod ] && ( go mod vendor || exit 1 )
+
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
 # shellcheck disable=SC2086
