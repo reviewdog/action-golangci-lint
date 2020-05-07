@@ -3,7 +3,10 @@
 [![Docker Image CI](https://github.com/reviewdog/action-golangci-lint/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
 [![Docker Pulls](https://img.shields.io/docker/pulls/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
-[![Release](https://img.shields.io/github/release/reviewdog/action-golangci-lint.svg?maxAge=43200)](https://github.com/reviewdog/action-golangci-lint/releases)
+[![depup](https://github.com/reviewdog/action-golangci-lint/workflows/depup/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Adepup)
+[![release](https://github.com/reviewdog/action-golangci-lint/workflows/release/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-golangci-lint?logo=github&sort=semver)](https://github.com/reviewdog/action-golangci-lint/releases)
+[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 This action runs [golangci-lint](https://github.com/golangci/golangci-lint) with
 [reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve
