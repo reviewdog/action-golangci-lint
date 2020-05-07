@@ -1,5 +1,17 @@
 {
   "extends": [
     "config:base"
+  ],
+  "packageRules": [
+    {
+      "updateTypes": ["minor"],
+      "automerge": true,
+      "labels": ["bump:minor"]
+    },
+    {
+      "updateTypes": ["patch", "pin", "digest"],
+      "automerge": true,
+      "labels": ["bump:patch"]
+    }
   ]
 }
