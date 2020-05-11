@@ -14,6 +14,7 @@ jobs:
         # uses: ./ # Build with Dockerfile
         uses: docker://reviewdog/action-golangci-lint:v1 # Pre-built image
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
 
   golangci-lint-dockerfile:
@@ -65,6 +66,7 @@ jobs:
       - name: golangci-lint (All-In-One config)
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--enable-all --exclude-use-default=false ./testdata"
 
   govet:
@@ -76,6 +78,7 @@ jobs:
       - name: govet
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E govet ./testdata"
           tool_name: govet
 
@@ -88,6 +91,7 @@ jobs:
       - name: staticcheck
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E staticcheck ./testdata"
           tool_name: staticcheck
 
@@ -100,6 +104,7 @@ jobs:
       - name: golint
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint ./testdata"
           tool_name: golint
           level: warning
@@ -113,6 +118,7 @@ jobs:
       - name: errcheck
         uses: docker://reviewdog/action-golangci-lint:v1
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck ./testdata"
           tool_name: errcheck
           level: warning
@@ -125,6 +131,7 @@ jobs:
         uses: actions/checkout@v1
       - name: misspell
         uses: docker://reviewdog/action-golangci-lint:v1
+          github_token: ${{ secrets.github_token }}
         with:
           golangci_lint_flags: "--disable-all -E misspell ./testdata"
           tool_name: misspell
