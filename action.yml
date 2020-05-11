@@ -5,6 +5,7 @@ inputs:
   github_token:
     description: 'GITHUB_TOKEN.'
     required: true
+    default: ${{ github.token }}
   golangci_lint_flags:
     description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci_lint_flags>)'
     default: ''
