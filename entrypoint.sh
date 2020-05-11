@@ -9,7 +9,7 @@ golangci-lint run --out-format line-number ${INPUT_GOLANGCI_LINT_FLAGS} \
   | reviewdog -f=golangci-lint \
       -name="${INPUT_TOOL_NAME}" \
       -reporter="${INPUT_REPORTER:-github-pr-check}" \
-      -filter-mode="${INPUT_FILTER_MODE}" \
+      -filter-mode="${INPUT_FILTER_MODE:-added}" \
       -fail-on-error="${INPUT_FAIL_ON_ERROR:-false}" \
       -level="${INPUT_LEVEL}" \
       ${INPUT_REVIEWDOG_FLAGS}
