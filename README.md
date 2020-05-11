@@ -20,7 +20,7 @@ code review experience.
 
 ### `github_token`
 
-**Required**. Default is `${{ github.token }}`
+**Required**. Default is `${{ github.token }}`. If using a pre-built docker image, you must set it explicitly to `github_token: ${{ secrets.github_token }}`.
 
 ### `golangci_lint_flags`
 
