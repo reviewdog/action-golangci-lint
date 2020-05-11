@@ -131,8 +131,8 @@ jobs:
         uses: actions/checkout@v1
       - name: misspell
         uses: docker://reviewdog/action-golangci-lint:v1
-          github_token: ${{ secrets.github_token }}
         with:
+          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E misspell ./testdata"
           tool_name: misspell
           level: info
