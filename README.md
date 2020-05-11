@@ -20,7 +20,7 @@ code review experience.
 
 ### `github_token`
 
-**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`'.
+**Required**. Default is `${{ github.token }}`
 
 ### `golangci_lint_flags`
 
@@ -77,8 +77,6 @@ jobs:
         uses: actions/checkout@v1
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
-        with:
-          github_token: ${{ secrets.github_token }}
 ```
 
 ### Advanced Usage Example
@@ -101,7 +99,6 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
@@ -116,7 +113,6 @@ jobs:
       - name: golint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
           level: warning # GitHub Status Check won't become failure with this level.
@@ -131,7 +127,6 @@ jobs:
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
           level: info
@@ -154,6 +149,5 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```
