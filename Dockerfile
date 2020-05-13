@@ -1,4 +1,4 @@
-FROM golangci/golangci-lint:v1.26-alpine
+FROM golangci/golangci-lint:v1.27-alpine
 
 ENV REVIEWDOG_VERSION=v0.10.0
 
