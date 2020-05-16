@@ -40,9 +40,9 @@ actions with different config.
 Optional. Report level for reviewdog [info,warning,error].
 It's same as `-level` flag of reviewdog.
 
-### `directory`
+### `workdir`
 
-Optional. The subdirectory where your Go code resides.
+Optional. Working directory relative to the root directory.
 
 ### `reporter`
 
@@ -106,7 +106,7 @@ jobs:
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
-          directory: subdirectory/
+          workdir: subdirectory/
 
   # Use golint via golangci-lint binary with "warning" level.
   golint:

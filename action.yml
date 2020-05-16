@@ -31,9 +31,9 @@ inputs:
   reviewdog_flags:
     description: 'Additional reviewdog flags'
     default: ''
-  directory:
-    description: 'The subdirectory to execute the action in.'
-    default: ''
+  workdir:
+    description: 'Working directory relative to the root directory.'
+    default: '.'
 runs:
   using: 'docker'
   image: 'Dockerfile'
