@@ -8,7 +8,7 @@ import (
 func Main(    ) {
 	// langauge
 
-	x    := 1
+	x    := 2
 	x += 1
 	fmt.Sprintf("%d")
 

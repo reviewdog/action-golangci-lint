@@ -57,6 +57,20 @@ jobs:
           level: warning
           reporter: "github-check"
 
+  golangci-lint-workdir:
+    name: runner / golangci-lint (workdir)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint (workdir)
+        uses: ./ # Build with Dockerfile
+        with:
+          workdir: "./testdata"
+          golangci_lint_flags: ""
+          tool_name: "golangci-lint-workdir"
+          level: warning
+          reporter: "github-check"
+
   golangci-lint-all-in-one:
     name: runner / golangci-lint-all-in-one
     runs-on: ubuntu-latest
