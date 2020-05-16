@@ -66,7 +66,7 @@ jobs:
         uses: ./ # Build with Dockerfile
         with:
           workdir: "./testdata"
-          golangci_lint_flags: ""
+          golangci_lint_flags: "./..."
           tool_name: "golangci-lint-workdir"
           level: warning
           reporter: "github-check"
