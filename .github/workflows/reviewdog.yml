@@ -70,6 +70,7 @@ jobs:
           tool_name: "golangci-lint-workdir"
           level: warning
           reporter: "github-check"
+          filter_mode: "file"
 
   golangci-lint-all-in-one:
     name: runner / golangci-lint-all-in-one
