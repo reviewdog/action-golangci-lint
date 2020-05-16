@@ -3,7 +3,10 @@
 [![Docker Image CI](https://github.com/reviewdog/action-golangci-lint/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions)
 [![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
 [![Docker Pulls](https://img.shields.io/docker/pulls/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
-[![Release](https://img.shields.io/github/release/reviewdog/action-golangci-lint.svg?maxAge=43200)](https://github.com/reviewdog/action-golangci-lint/releases)
+[![depup](https://github.com/reviewdog/action-golangci-lint/workflows/depup/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Adepup)
+[![release](https://github.com/reviewdog/action-golangci-lint/workflows/release/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Arelease)
+[![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-golangci-lint?logo=github&sort=semver)](https://github.com/reviewdog/action-golangci-lint/releases)
+[![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
 
 This action runs [golangci-lint](https://github.com/golangci/golangci-lint) with
 [reviewdog](https://github.com/reviewdog/reviewdog) on pull requests to improve
@@ -17,7 +20,7 @@ code review experience.
 
 ### `github_token`
 
-**Required**. Must be in form of `github_token: ${{ secrets.github_token }}`'.
+**Required**. Default is `${{ github.token }}`. If using a pre-built docker image, you must set it explicitly to `github_token: ${{ secrets.github_token }}`.
 
 ### `golangci_lint_flags`
 
@@ -46,6 +49,20 @@ Optional. The subdirectory where your Go code resides.
 Optional. Reporter of reviewdog command [github-pr-check,github-pr-review].
 It's same as `-reporter` flag of reviewdog.
 
+### `filter_mode`
+
+Optional. Filtering mode for the reviewdog command [added,diff_context,file,nofilter].
+Default is added.
+
+### `fail_on_error`
+
+Optional.  Exit code for reviewdog when errors are found [true,false]
+Default is `false`.
+
+### `reviewdog_flags`
+
+Optional. Additional reviewdog flags
+
 ## Example usage
 
 ### Minimum Usage Example
@@ -64,9 +81,6 @@ jobs:
         uses: actions/checkout@v1
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
-        # uses: docker://reviewdog/action-golangci-lint:v1 # pre-build docker image
-        with:
-          github_token: ${{ secrets.github_token }}
 ```
 
 ### Advanced Usage Example
@@ -87,12 +101,8 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
       - name: golangci-lint
-        uses: docker://reviewdog/action-golangci-lint:v1 # Pre-built image
-        # uses: reviewdog/action-golangci-lint@v1 # Build with Dockerfile
-        # uses: docker://reviewdog/action-golangci-lint:v1.0.2 # Can use specific version.
-        # uses: reviewdog/action-golangci-lint@v1.0.2 # Can use specific version.
+        uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
@@ -108,7 +118,6 @@ jobs:
       - name: golint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
           level: warning # GitHub Status Check won't become failure with this level.
@@ -123,7 +132,6 @@ jobs:
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
           level: info
@@ -146,6 +154,5 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          github_token: ${{ secrets.github_token }}
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```

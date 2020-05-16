@@ -1,9 +1,10 @@
-FROM golangci/golangci-lint:v1.21-alpine
+FROM golangci/golangci-lint:v1.27-alpine
 
-RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v0.9.14
+ENV REVIEWDOG_VERSION=v0.10.0
 
-RUN apk --no-cache add git && \
-    rm -rf /var/lib/apt/lists/*
+RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${REVIEWDOG_VERSION}
+
+RUN apk --no-cache add git
 
 COPY entrypoint.sh /entrypoint.sh
 
