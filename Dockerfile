@@ -1,6 +1,6 @@
 FROM golangci/golangci-lint:v1.27-alpine
 
-ENV REVIEWDOG_VERSION=v0.10.0
+ENV REVIEWDOG_VERSION=v0.10.1
 
 RUN wget -O - -q https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b $(go env GOPATH)/bin ${REVIEWDOG_VERSION}
 
