@@ -85,6 +85,8 @@ jobs:
         uses: ./
         with:
           github_token: ${{ secrets.github_token }}
+          tool_name: "golangci-lint-all-in-one"
+          level: warning
           golangci_lint_flags: "--enable-all --exclude-use-default=false ./testdata"
 
   govet:
