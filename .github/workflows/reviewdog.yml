@@ -17,6 +17,22 @@ jobs:
           level: warning
           golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
 
+  golangci-lint-platform:
+    name: runner / golangci-lint-platform
+    strategy:
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - uses: actions/checkout@v2
+      - name: golangci-lint (platform)
+        uses: ./
+        with:
+          github_token: ${{ secrets.github_token }}
+          tool_name: golangci-lint-${{ matrix.platform }}
+          level: warning
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
+
   golangci-lint-github-pr-review:
     name: runner / golangci-lint (github-pr-review)
     runs-on: ubuntu-latest
