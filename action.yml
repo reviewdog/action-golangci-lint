@@ -37,7 +37,7 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - run: $GITHUB_ACTION_PATH/entrypoint.sh
+    - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
         REVIEWDOG_VERSION: v0.10.2
