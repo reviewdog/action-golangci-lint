@@ -9,12 +9,13 @@ echo '::group::🐶 Installing reviewdog ... https://github.com/reviewdog/review
 curl -sfL https://raw.githubusercontent.com/reviewdog/reviewdog/master/install.sh | sh -s -- -b "${TEMP_PATH}" "${REVIEWDOG_VERSION}" 2>&1
 echo '::endgroup::'
 
-echo '::group::🐶 Installing golangci-lint ... https://github.com/golangci/golangci-lint'
+echo '::group:: Installing golangci-lint ... https://github.com/golangci/golangci-lint'
 curl -sfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "${TEMP_PATH}" "${GOLANGCI_LINT_VERSION}" 2>&1
 echo '::endgroup::'
 
 export REVIEWDOG_GITHUB_API_TOKEN="${INPUT_GITHUB_TOKEN}"
 
+echo '::group:: Running golangci-lint with reviewdog 🐶 ...'
 # shellcheck disable=SC2086
 golangci-lint run --out-format line-number ${INPUT_GOLANGCI_LINT_FLAGS} \
   | reviewdog -f=golangci-lint \
@@ -24,3 +25,4 @@ golangci-lint run --out-format line-number ${INPUT_GOLANGCI_LINT_FLAGS} \
       -fail-on-error="${INPUT_FAIL_ON_ERROR:-false}" \
       -level="${INPUT_LEVEL}" \
       ${INPUT_REVIEWDOG_FLAGS}
+echo '::endgroup::'
