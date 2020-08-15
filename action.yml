@@ -35,8 +35,22 @@ inputs:
     description: 'Working directory relative to the root directory.'
     default: '.'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'composite'
+  steps:
+    - run: $GITHUB_ACTION_PATH/entrypoint.sh
+      shell: bash
+      env:
+        REVIEWDOG_VERSION: v0.10.2
+        GOLANGCI_LINT_VERSION: v1.30.0
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_GOLANGCI_LINT_FLAGS: ${{ inputs.golangci_lint_flags }}
+        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
+        INPUT_LEVEL: ${{ inputs.level }}
+        INPUT_REPORTER: ${{ inputs.reporter }}
+        INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
 branding:
   icon: 'check-circle'
   color: 'blue'
