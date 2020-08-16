@@ -35,8 +35,26 @@ inputs:
     description: 'Working directory relative to the root directory.'
     default: '.'
 runs:
-  using: 'docker'
-  image: 'Dockerfile'
+  using: 'composite'
+  steps:
+    - run: $GITHUB_ACTION_PATH/script.sh
+      shell: bash
+      env:
+        # We may want to allow specifing reviewdog and golangci-lint version as
+        # action's input, but let's start with hard coded latest stable version.
+        REVIEWDOG_VERSION: v0.10.2
+        GOLANGCI_LINT_VERSION: v1.30.0
+        # INPUT_<VARIABLE_NAME> is not available in Composite run steps
+        # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_GOLANGCI_LINT_FLAGS: ${{ inputs.golangci_lint_flags }}
+        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
+        INPUT_LEVEL: ${{ inputs.level }}
+        INPUT_REPORTER: ${{ inputs.reporter }}
+        INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
 branding:
   icon: 'check-circle'
   color: 'blue'

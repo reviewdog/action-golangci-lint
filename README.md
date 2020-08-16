@@ -1,8 +1,5 @@
 # GitHub Action: Run golangci-lint with reviewdog
 
-[![Docker Image CI](https://github.com/reviewdog/action-golangci-lint/workflows/Docker%20Image%20CI/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions)
-[![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
-[![Docker Pulls](https://img.shields.io/docker/pulls/reviewdog/action-golangci-lint)](https://hub.docker.com/r/reviewdog/action-golangci-lint)
 [![depup](https://github.com/reviewdog/action-golangci-lint/workflows/depup/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Adepup)
 [![release](https://github.com/reviewdog/action-golangci-lint/workflows/release/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Arelease)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-golangci-lint?logo=github&sort=semver)](https://github.com/reviewdog/action-golangci-lint/releases)
@@ -20,7 +17,7 @@ code review experience.
 
 ### `github_token`
 
-**Required**. Default is `${{ github.token }}`. If using a pre-built docker image, you must set it explicitly to `github_token: ${{ secrets.github_token }}`.
+**Required**. Default is `${{ github.token }}`.
 
 ### `golangci_lint_flags`
 
