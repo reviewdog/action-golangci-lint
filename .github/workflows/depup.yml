@@ -40,7 +40,7 @@ jobs:
         id: depup
         with:
           file: action.yml
-          version_name: REVIEWDOG_VERSION
+          version_name: GOLANGCI_LINT_VERSION
           repo: golangci/golangci-lint
 
       - name: Create Pull Request
