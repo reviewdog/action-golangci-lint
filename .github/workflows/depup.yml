@@ -5,6 +5,7 @@ on:
   repository_dispatch:
     types: [depup]
   workflow_dispatch:
+  push:
 
 jobs:
   reviewdog:
@@ -17,6 +18,11 @@ jobs:
           file: action.yml
           version_name: REVIEWDOG_VERSION
           repo: reviewdog/reviewdog
+
+      - name: Dump depup outputs
+        env:
+          DEPUP_OUTPUTS: ${{ toJson(steps.depup.outputs) }}
+        run: echo "${DEPUP_OUTPUTS}"
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
