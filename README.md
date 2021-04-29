@@ -75,7 +75,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
+
+      # optionally use a specific version of Go rather than the default one
+      - name: Set up Go
+        uses: actions/setup-go@v2
+        with:
+          go-version: '1.16'
+
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
 ```
@@ -96,7 +103,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
@@ -111,7 +118,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: golint
         uses: reviewdog/action-golangci-lint@v1
         with:
@@ -125,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
@@ -139,7 +146,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
 
       - uses: actions/cache@v2
         with:
@@ -179,7 +186,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v1
+        uses: actions/checkout@v2
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
