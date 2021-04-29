@@ -141,15 +141,14 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v1
 
-    - uses: actions/cache@v2
-      with:
-        path: ~/.cache/golangci-lint
-        key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-golangci-lint-
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/golangci-lint
+          key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-golangci-lint-
 
       - uses: actions/cache@v2
-        if: ${{ inputs.skip-build-cache == 'false' }}
         with:
           path: ~/.cache/go-build
           key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
@@ -157,15 +156,14 @@ jobs:
             ${{ runner.os }}-gobuild-
 
       - uses: actions/cache@v2
-        if: ${{ inputs.skip-pkg-cache == 'false' }}
         with:
           path: ~/go/pkg/mod
           key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
           restore-keys: |
             ${{ runner.os }}-go-
 
-    - name: golangci-lint
-      uses: reviewdog/action-golangci-lint@v1
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1
 ```
 
 ### All-in-one golangci-lint configuration without config file
