@@ -9,14 +9,6 @@ inputs:
   golangci_lint_flags:
     description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci_lint_flags>)'
     default: ''
-  skip-pkg-cache:
-    description: "if set to true then the action don't cache or restore ~/go/pkg."
-    default: 'false'
-    required: 'true'
-  skip-build-cache:
-    description: "if set to true then the action don't cache or restore ~/.cache/go-build."
-    default: 'false'
-    required: 'true'
   tool_name:
     description: 'Tool name to use for reviewdog reporter'
     default: 'golangci'
@@ -45,29 +37,6 @@ inputs:
 runs:
   using: 'composite'
   steps:
-    - uses: actions/cache@v2
-      with:
-        path: ~/.cache/golangci-lint
-        key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-golangci-lint-
-
-    - uses: actions/cache@v2
-      if: ${{ inputs.skip-build-cache == 'false' }}
-      with:
-        path: ~/.cache/go-build
-        key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-gobuild-
-
-    - uses: actions/cache@v2
-      if: ${{ inputs.skip-pkg-cache == 'false' }}
-      with:
-        path: ~/go/pkg/mod
-        key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-        restore-keys: |
-          ${{ runner.os }}-go-
-
     - run: $GITHUB_ACTION_PATH/script.sh
       shell: bash
       env:
