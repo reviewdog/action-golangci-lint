@@ -139,6 +139,38 @@ jobs:
           golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
           level: info
+
+  # Enable cache of golangci-lint result, go build and go dependencies
+  with_cache:
+    name: runner / errcheck
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v1
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/golangci-lint
+          key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-golangci-lint-
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/.cache/go-build
+          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-gobuild-
+
+      - uses: actions/cache@v2
+        with:
+          path: ~/go/pkg/mod
+          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
+          restore-keys: |
+            ${{ runner.os }}-go-
+
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v1
 ```
 
 ### All-in-one golangci-lint configuration without config file
