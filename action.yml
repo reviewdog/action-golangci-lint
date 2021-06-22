@@ -55,6 +55,7 @@ runs:
         INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
         INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
         INPUT_WORKDIR: ${{ inputs.workdir }}
+        GITHUB_API: ${{ env.GITHUB_API_URL }}
 branding:
   icon: 'check-circle'
   color: 'blue'
