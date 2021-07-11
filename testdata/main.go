@@ -13,6 +13,8 @@ func Main() {
 	fmt.Sprintf("%d")
 
 	os.Open("main1.go")
+
+	os.ReadFile("main1.go")
 }
 
 func unused1(unusedParam int) error {
