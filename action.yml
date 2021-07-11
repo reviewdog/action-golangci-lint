@@ -1,60 +1,67 @@
-name: 'Run golangci-lint with reviewdog'
-description: '🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience.'
-author: 'haya14busa (reviewdog)'
+name: "Run golangci-lint with reviewdog"
+description: "🐶 Run golangci-lint with reviewdog on pull requests to improve code review experience."
+author: "haya14busa (reviewdog)"
 inputs:
   github_token:
-    description: 'GITHUB_TOKEN.'
+    description: "GITHUB_TOKEN."
     required: true
     default: ${{ github.token }}
   golangci_lint_flags:
-    description: 'golangci-lint flags. (golangci-lint run --out-format=line-number <golangci_lint_flags>)'
-    default: ''
+    description: "golangci-lint flags. (golangci-lint run --out-format=line-number <golangci_lint_flags>)"
+    required: false
+    default: ""
   tool_name:
-    description: 'Tool name to use for reviewdog reporter'
-    default: 'golangci'
+    description: "Tool name to use for reviewdog reporter"
+    required: false
+    default: "golangci"
   level:
-    description: 'Report level for reviewdog [info,warning,error]'
-    default: 'error'
+    description: "Report level for reviewdog [info,warning,error]"
+    required: false
+    default: "error"
   reporter:
-    description: 'Reporter of reviewdog command [github-pr-check,github-pr-review,github-check].'
-    default: 'github-pr-check'
+    description: "Reporter of reviewdog command [github-pr-check,github-pr-review,github-check]."
+    required: false
+    default: "github-pr-check"
   filter_mode:
     description: |
       Filtering for the reviewdog command [added,diff_context,file,nofilter].
       Default is added.
-    default: 'added'
+    required: false
+    default: "added"
   fail_on_error:
     description: |
       Exit code for reviewdog when errors are found [true,false]
       Default is `false`.
-    default: 'false'
+    required: false
+    default: "false"
   reviewdog_flags:
-    description: 'Additional reviewdog flags'
-    default: ''
+    description: "Additional reviewdog flags"
+    required: false
+    default: ""
   workdir:
-    description: 'Working directory relative to the root directory.'
-    default: '.'
+    description: "Working directory relative to the root directory."
+    required: false
+    default: "."
+  reviewdog_version:
+    description: "the version of reviewdog"
+    required: false
+    default: latest
+  golangci_lint_version:
+    description: "the version of golangci-lint"
+    required: false
+    default: latest
+  go_version:
+    description: "the version of Go. By default, Go is not installed."
+    required: false
+  cache:
+    deprecation: "enable cache"
+    default: false
+    required: false
+
 runs:
-  using: 'composite'
-  steps:
-    - run: $GITHUB_ACTION_PATH/script.sh
-      shell: bash
-      env:
-        # We may want to allow specifing reviewdog and golangci-lint version as
-        # action's input, but let's start with hard coded latest stable version.
-        REVIEWDOG_VERSION: v0.12.0
-        GOLANGCI_LINT_VERSION: v1.41.1
-        # INPUT_<VARIABLE_NAME> is not available in Composite run steps
-        # https://github.community/t/input-variable-name-is-not-available-in-composite-run-steps/127611
-        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
-        INPUT_GOLANGCI_LINT_FLAGS: ${{ inputs.golangci_lint_flags }}
-        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
-        INPUT_LEVEL: ${{ inputs.level }}
-        INPUT_REPORTER: ${{ inputs.reporter }}
-        INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
-        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
-        INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
-        INPUT_WORKDIR: ${{ inputs.workdir }}
+  using: "node12"
+  main: "dist/index.js"
+
 branding:
-  icon: 'check-circle'
-  color: 'blue'
+  icon: "check-circle"
+  color: "blue"

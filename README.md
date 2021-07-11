@@ -1,6 +1,5 @@
 # GitHub Action: Run golangci-lint with reviewdog
 
-[![depup](https://github.com/reviewdog/action-golangci-lint/workflows/depup/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Adepup)
 [![release](https://github.com/reviewdog/action-golangci-lint/workflows/release/badge.svg)](https://github.com/reviewdog/action-golangci-lint/actions?query=workflow%3Arelease)
 [![GitHub release (latest SemVer)](https://img.shields.io/github/v/release/reviewdog/action-golangci-lint?logo=github&sort=semver)](https://github.com/reviewdog/action-golangci-lint/releases)
 [![action-bumpr supported](https://img.shields.io/badge/bumpr-supported-ff69b4?logo=github&link=https://github.com/haya14busa/action-bumpr)](https://github.com/haya14busa/action-bumpr)
@@ -53,12 +52,23 @@ Default is added.
 
 ### `fail_on_error`
 
-Optional.  Exit code for reviewdog when errors are found [true,false]
+Optional. Exit code for reviewdog when errors are found [`true`, `false`]
 Default is `false`.
 
 ### `reviewdog_flags`
 
 Optional. Additional reviewdog flags
+
+### `go_version`
+
+Optional. Install a specific version of Go.
+By default, use the default one.
+
+### `cache`
+
+Optional. [`true`, `false`]
+If it is `true`, the action caches `~/.cache/golangci-lint`, `~/.cache/go-build`, `~/go/pkg/mod`.
+Default is `false`.
 
 ## Example usage
 
@@ -77,14 +87,11 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      # optionally use a specific version of Go rather than the default one
-      - name: Set up Go
-        uses: actions/setup-go@v2
-        with:
-          go-version: '1.16'
-
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
+        with:
+          # optionally use a specific version of Go rather than the default one
+          go_version: '1.16'
 ```
 
 ### Advanced Usage Example
@@ -109,7 +116,7 @@ jobs:
         with:
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
-          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
+          golangci_lint_flags: '--config=.github/.golangci.yml ./testdata'
           workdir: subdirectory/
 
   # Use golint via golangci-lint binary with "warning" level.
@@ -122,7 +129,7 @@ jobs:
       - name: golint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          golangci_lint_flags: "--disable-all -E golint"
+          golangci_lint_flags: '--disable-all -E golint'
           tool_name: golint # Change reporter name.
           level: warning # GitHub Status Check won't become failure with this level.
 
@@ -136,7 +143,7 @@ jobs:
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v1
         with:
-          golangci_lint_flags: "--disable-all -E errcheck"
+          golangci_lint_flags: '--disable-all -E errcheck'
           tool_name: errcheck
           level: info
 
@@ -148,29 +155,10 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/golangci-lint
-          key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-golangci-lint-
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/.cache/go-build
-          key: ${{ runner.os }}-gobuild-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-gobuild-
-
-      - uses: actions/cache@v2
-        with:
-          path: ~/go/pkg/mod
-          key: ${{ runner.os }}-go-${{ hashFiles('**/go.sum') }}
-          restore-keys: |
-            ${{ runner.os }}-go-
-
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
+        with:
+          cache: true
 ```
 
 ### All-in-one golangci-lint configuration without config file
@@ -190,5 +178,5 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          golangci_lint_flags: "--enable-all --exclude-use-default=false"
+          golangci_lint_flags: '--enable-all --exclude-use-default=false'
 ```
