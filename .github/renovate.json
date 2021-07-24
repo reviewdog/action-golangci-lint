@@ -4,14 +4,10 @@
   ],
   "packageRules": [
     {
-      "updateTypes": ["minor"],
-      "automerge": true,
-      "labels": ["bump:minor"]
+      "updateTypes": ["minor"]
     },
     {
-      "updateTypes": ["patch", "pin", "digest"],
-      "automerge": true,
-      "labels": ["bump:patch"]
+      "updateTypes": ["patch", "pin", "digest"]
     }
   ]
 }
