@@ -51,8 +51,9 @@ inputs:
     required: false
     default: latest
   go_version:
-    description: "the version of Go. By default, Go is not installed."
+    description: "the version of Go. By default, the latest version of Go 1.x is installed."
     required: false
+    default: "1.x"
   cache:
     deprecation: "enable cache"
     default: false
