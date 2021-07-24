@@ -62,7 +62,7 @@ Optional. Additional reviewdog flags
 ### `go_version`
 
 Optional. Install a specific version of Go.
-By default, use the default one.
+By default, the latest version of Go 1.x is installed.
 
 ### `cache`
 
@@ -89,9 +89,6 @@ jobs:
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
-        with:
-          # optionally use a specific version of Go rather than the default one
-          go_version: '1.16'
 ```
 
 ### Advanced Usage Example
@@ -114,6 +111,9 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
+          # optionally use a specific version of Go rather than the latest one
+          go_version: '1.16'
+
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
           golangci_lint_flags: '--config=.github/.golangci.yml ./testdata'
