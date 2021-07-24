@@ -56,7 +56,7 @@ inputs:
     default: "1.x"
   cache:
     deprecation: "enable cache"
-    default: false
+    default: true
     required: false
 
 runs:

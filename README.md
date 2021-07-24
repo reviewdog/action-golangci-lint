@@ -67,8 +67,8 @@ By default, the latest version of Go 1.x is installed.
 ### `cache`
 
 Optional. [`true`, `false`]
-If it is `true`, the action caches `~/.cache/golangci-lint`, `~/.cache/go-build`, `~/go/pkg/mod`.
-Default is `false`.
+It enables cache. The action caches `~/.cache/golangci-lint`, `~/.cache/go-build`, `~/go/pkg/mod`.
+Default is `true`.
 
 ## Example usage
 
@@ -147,7 +147,7 @@ jobs:
           tool_name: errcheck
           level: info
 
-  # Enable cache of golangci-lint result, go build and go dependencies
+  # Disable cache of golangci-lint result, go build and go dependencies
   with_cache:
     name: runner / errcheck
     runs-on: ubuntu-latest
@@ -158,7 +158,7 @@ jobs:
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v1
         with:
-          cache: true
+          cache: false
 ```
 
 ### All-in-one golangci-lint configuration without config file
