@@ -12,6 +12,43 @@ code review experience.
 [![check tab example](https://user-images.githubusercontent.com/3797062/64919922-d279e100-d7eb-11e9-800d-9cef86c670df.png)](https://github.com/reviewdog/action-golangci-lint/pull/10/checks?check_run_id=222708776)
 [![status check example](https://user-images.githubusercontent.com/3797062/64919933-0b19ba80-d7ec-11e9-96cc-f6558f04924f.png)](https://github.com/reviewdog/action-golangci-lint/pull/10)
 
+## Migrating from v1 to v2
+
+In many cases, you need to do nothing. Just use `reviewdog/action-golangci-lint@v2` instead of `reviewdog/action-golangci-lint@v1`.
+
+If your workflow have steps for setting up Go and caching go modules, they are no longer needed.
+`reviewdog/action-golangci-lint@v2` now set up Go and cache modules automatically, so remove these steps.
+
+```yaml
+on: [pull_request]
+jobs:
+  golangci-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      # no need with v2
+      # - name: Set up Go
+      #   uses: actions/setup-go@v2
+      #   with:
+      #     go-version: '1.16'
+
+      # no need with v2
+      # - uses: actions/cache@v2
+      #   with:
+      #     path: |
+      #         ~/.cache/golangci-lint
+      #         ~/.cache/go-build
+      #         ~/go/pkg/mod
+      #     key: ${{ runner.os }}-golangcilint-${{ hashFiles('**/go.sum') }}
+      #     restore-keys: |
+      #       ${{ runner.os }}-golangcilint-
+
+      - name: golangci-lint
+        uses: reviewdog/action-golangci-lint@v2
+```
+
 ## Inputs
 
 ### `github_token`
