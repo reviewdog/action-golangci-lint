@@ -1,0 +1,34 @@
+name: test
+on:
+  pull_request:
+  push:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        platform: [ubuntu-latest, macos-latest, windows-latest]
+    runs-on: ${{ matrix.platform }}
+    steps:
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: 12.x
+          cache: npm
+      - name: Install Dependencies
+        run: npm ci
+      - name: Run Test
+        run: npm run test
+      - name: Ensure dist/ folder is up-to-date
+        if: ${{ runner.os == 'Linux' }}
+        shell: bash
+        run: |
+          npm run package
+          if [ "$(git diff --ignore-space-at-eol | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
