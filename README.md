@@ -32,7 +32,7 @@ jobs:
       # - name: Set up Go
       #   uses: actions/setup-go@v2
       #   with:
-      #     go-version: '1.16'
+      #     go-version: '1.17'
 
       # no need with v2
       # - uses: actions/cache@v2
@@ -149,7 +149,7 @@ jobs:
         uses: reviewdog/action-golangci-lint@v1
         with:
           # optionally use a specific version of Go rather than the latest one
-          go_version: '1.16'
+          go_version: '1.17'
 
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
