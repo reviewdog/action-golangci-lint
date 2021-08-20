@@ -14,7 +14,7 @@ code review experience.
 
 ## Migrating from v1 to v2
 
-In many cases, you need to do nothing. Just use `reviewdog/action-golangci-lint@v2` instead of `reviewdog/action-golangci-lint@v2`.
+In many cases, you need to do nothing. Just use `reviewdog/action-golangci-lint@v2` instead of `reviewdog/action-golangci-lint@v1`.
 
 If your workflow have steps for setting up Go and caching go modules, they are no longer needed.
 `reviewdog/action-golangci-lint@v2` now set up Go and cache modules automatically, so remove these steps.
