@@ -125,7 +125,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
 ```
 
 ### Advanced Usage Example
@@ -146,7 +146,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
         with:
           # optionally use a specific version of Go rather than the latest one
           go_version: '1.17'
@@ -164,7 +164,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: golint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: '--disable-all -E golint'
           tool_name: golint # Change reporter name.
@@ -178,7 +178,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: errcheck
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: '--disable-all -E errcheck'
           tool_name: errcheck
@@ -193,7 +193,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
         with:
           cache: false
 ```
@@ -213,7 +213,7 @@ jobs:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v2
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v1
+        uses: reviewdog/action-golangci-lint@v2
         with:
           golangci_lint_flags: '--enable-all --exclude-use-default=false'
 ```
