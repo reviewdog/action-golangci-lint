@@ -42,7 +42,11 @@ export async function run(versionSpec: string, stable: boolean) {
     core.info(goEnv);
     core.endGroup();
   } catch (error) {
-    core.setFailed(error.message);
+    if (error instanceof Error) {
+      core.setFailed(error);
+    } else {
+      core.setFailed(`${error}`);
+    }
   }
 }
 

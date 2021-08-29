@@ -23,9 +23,12 @@ export async function restore(cwd: string): Promise<State> {
   try {
     cachedKey = await cache.restoreCache(paths, key, restoreKeys);
   } catch (error) {
-    if (error.name === cache.ValidationError.name) {
+    if (error instanceof Error) {
+      if (error.name !== cache.ValidationError.name) {
+        core.info(`[warning] There was an error restoring the cache ${error.message}`);
+      }
     } else {
-      core.info(`[warning] There was an error restoring the cache ${error.message}`);
+      core.info(`[warning] There was an error restoring the cache ${error}`);
     }
   }
 
@@ -47,12 +50,16 @@ export async function save(state: State): Promise<void> {
   try {
     await cache.saveCache(paths, key);
   } catch (error) {
-    if (error.name === cache.ValidationError.name) {
-      throw error;
-    } else if (error.name === cache.ReserveCacheError.name) {
-      core.info(error.message);
+    if (error instanceof Error) {
+      if (error.name === cache.ValidationError.name) {
+        throw error;
+      } else if (error.name === cache.ReserveCacheError.name) {
+        core.info(error.message);
+      } else {
+        core.info(`[warning]${error.message}`);
+      }
     } else {
-      core.info(`[warning]${error.message}`);
+      core.info(`[warning]${error}`);
     }
   }
 }
@@ -68,7 +75,7 @@ async function hashFiles(...files: string[]): Promise<string> {
       result.write(hash.digest());
     } catch (err) {
       // skip files that doesn't exist.
-      if (err.code !== 'ENOENT') {
+      if ((err as any).code !== 'ENOENT') {
         throw err;
       }
     }

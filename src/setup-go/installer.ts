@@ -58,14 +58,19 @@ export async function getGo(versionSpec: string, stable: boolean, auth: string |
       core.info('Not found in manifest.  Falling back to download directly from Go');
     }
   } catch (err) {
-    if (err instanceof tc.HTTPError && (err.httpStatusCode === 403 || err.httpStatusCode === 429)) {
-      core.info(
-        `Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`
-      );
-    } else {
+    if (err instanceof tc.HTTPError) {
+      if (err.httpStatusCode === 403 || err.httpStatusCode === 429) {
+        core.info(
+          `Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`
+        );
+      }
+      core.debug(err.stack || '');
+    } else if (err instanceof Error) {
       core.info(err.message);
+      core.debug(err.stack || '');
+    } else {
+      core.info(`${err}`);
     }
-    core.debug(err.stack);
     core.info('Falling back to download directly from Go');
   }
 
