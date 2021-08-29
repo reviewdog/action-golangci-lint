@@ -64662,13 +64662,19 @@ function getGo(versionSpec, stable, auth) {
             }
         }
         catch (err) {
-            if (err instanceof tool_cache.HTTPError && (err.httpStatusCode === 403 || err.httpStatusCode === 429)) {
-                core.info(`Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`);
+            if (err instanceof tool_cache.HTTPError) {
+                if (err.httpStatusCode === 403 || err.httpStatusCode === 429) {
+                    core.info(`Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`);
+                }
+                core.debug(err.stack || '');
+            }
+            else if (err instanceof Error) {
+                core.info(err.message);
+                core.debug(err.stack || '');
             }
             else {
-                core.info(err.message);
+                core.info(`${err}`);
             }
-            core.debug(err.stack);
             core.info('Falling back to download directly from Go');
         }
         //
@@ -65308,7 +65314,12 @@ function run(versionSpec, stable) {
             core.endGroup();
         }
         catch (error) {
-            core.setFailed(error.message);
+            if (error instanceof Error) {
+                core.setFailed(error);
+            }
+            else {
+                core.setFailed(`${error}`);
+            }
         }
     });
 }
@@ -65383,10 +65394,13 @@ function restore(cwd) {
             cachedKey = yield cache.restoreCache(paths, key, restoreKeys);
         }
         catch (error) {
-            if (error.name === cache.ValidationError.name) {
+            if (error instanceof Error) {
+                if (error.name !== cache.ValidationError.name) {
+                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
+                }
             }
             else {
-                core.info(`[warning] There was an error restoring the cache ${error.message}`);
+                core.info(`[warning] There was an error restoring the cache ${error}`);
             }
         }
         if (cachedKey) {
@@ -65410,14 +65424,19 @@ function save(state) {
             yield cache.saveCache(paths, key);
         }
         catch (error) {
-            if (error.name === cache.ValidationError.name) {
-                throw error;
-            }
-            else if (error.name === cache.ReserveCacheError.name) {
-                core.info(error.message);
+            if (error instanceof Error) {
+                if (error.name === cache.ValidationError.name) {
+                    throw error;
+                }
+                else if (error.name === cache.ReserveCacheError.name) {
+                    core.info(error.message);
+                }
+                else {
+                    core.info(`[warning]${error.message}`);
+                }
             }
             else {
-                core.info(`[warning]${error.message}`);
+                core.info(`[warning]${error}`);
             }
         }
     });
@@ -65528,7 +65547,12 @@ function main_run() {
             }
         }
         catch (error) {
-            core.setFailed(error.message);
+            if (error instanceof Error) {
+                core.setFailed(error);
+            }
+            else {
+                core.setFailed(`${error}`);
+            }
         }
         finally {
             // clean up the temporary directory
@@ -65538,7 +65562,12 @@ function main_run() {
             catch (error) {
                 // suppress errors
                 // Garbage will remain, but it may be harmless.
-                core.info(`clean up failed: ${error.message}`);
+                if (error instanceof Error) {
+                    core.info(`clean up failed: ${error.message}`);
+                }
+                else {
+                    core.info(`clean up failed: ${error}`);
+                }
             }
         }
     });

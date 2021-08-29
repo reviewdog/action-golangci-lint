@@ -94,7 +94,11 @@ async function run() {
       });
     }
   } catch (error) {
-    core.setFailed(error.message);
+    if (error instanceof Error) {
+      core.setFailed(error);
+    } else {
+      core.setFailed(`${error}`);
+    }
   } finally {
     // clean up the temporary directory
     try {
@@ -102,7 +106,11 @@ async function run() {
     } catch (error) {
       // suppress errors
       // Garbage will remain, but it may be harmless.
-      core.info(`clean up failed: ${error.message}`);
+      if (error instanceof Error) {
+        core.info(`clean up failed: ${error.message}`);
+      } else {
+        core.info(`clean up failed: ${error}`);
+      }
     }
   }
 }
