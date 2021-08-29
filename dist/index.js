@@ -64714,9 +64714,9 @@ function installGoVersion(info, auth) {
 }
 function extractGoArchive(archivePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const arch = external_os_default().arch();
+        const platform = external_os_default().platform();
         let extPath;
-        if (arch === 'win32') {
+        if (platform === 'win32') {
             extPath = yield tool_cache.extractZip(archivePath);
         }
         else {
