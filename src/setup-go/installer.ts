@@ -112,10 +112,10 @@ async function installGoVersion(info: IGoVersionInfo, auth: string | undefined):
 }
 
 export async function extractGoArchive(archivePath: string): Promise<string> {
-  const arch = os.arch();
+  const platform = os.platform();
   let extPath: string;
 
-  if (arch === 'win32') {
+  if (platform === 'win32') {
     extPath = await tc.extractZip(archivePath);
   } else {
     extPath = await tc.extractTar(archivePath);
