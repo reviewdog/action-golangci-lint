@@ -56451,7 +56451,7 @@ const urlParse = __nccwpck_require__(8835).parse;
 const util = __nccwpck_require__(1669);
 const pubsuffix = __nccwpck_require__(4401);
 const Store = __nccwpck_require__(460)/* .Store */ .y;
-const MemoryCookieStore = __nccwpck_require__(2640)/* .MemoryCookieStore */ .m;
+const MemoryCookieStore = __nccwpck_require__(1135)/* .MemoryCookieStore */ .m;
 const pathMatch = __nccwpck_require__(4336)/* .pathMatch */ .U;
 const VERSION = __nccwpck_require__(3199);
 const { fromCallback } = __nccwpck_require__(9046);
@@ -58090,7 +58090,7 @@ exports.PrefixSecurityEnum = PrefixSecurityEnum;
 
 /***/ }),
 
-/***/ 2640:
+/***/ 1135:
 /***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
 
 "use strict";
@@ -64555,70 +64555,31 @@ try {
 
 /***/ }),
 
-/***/ 2067:
-/***/ ((module, __webpack_exports__, __nccwpck_require__) => {
+/***/ 4810:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
-// EXPORTS
-__nccwpck_require__.d(__webpack_exports__, {
-  "Ct": () => (/* binding */ getGo)
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
 });
-
-// UNUSED EXPORTS: extractGoArchive, findMatch, getInfoFromManifest, getVersionsDist, makeSemver
-
-// EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
-var tool_cache = __nccwpck_require__(7784);
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(5622);
-// EXTERNAL MODULE: ./node_modules/semver/index.js
-var semver = __nccwpck_require__(1383);
-// EXTERNAL MODULE: ./node_modules/@actions/http-client/index.js
-var http_client = __nccwpck_require__(9925);
-;// CONCATENATED MODULE: ./src/setup-go/system.ts
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/system.ts
-// see LICENSE for its license
-let os = __nccwpck_require__(2087);
-function getPlatform() {
-    // darwin and linux match already
-    // freebsd not supported yet but future proofed.
-    // 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'
-    let plat = os.platform();
-    // wants 'darwin', 'freebsd', 'linux', 'windows'
-    if (plat === 'win32') {
-        plat = 'windows';
-    }
-    return plat;
-}
-function getArch() {
-    // 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'.
-    let arch = os.arch();
-    // wants amd64, 386, arm64, armv61, ppc641e, s390x
-    // currently not supported by runner but future proofed mapping
-    switch (arch) {
-        case 'x64':
-            arch = 'amd64';
-            break;
-        // case 'ppc':
-        //   arch = 'ppc64';
-        //   break;
-        case 'x32':
-            arch = '386';
-            break;
-    }
-    return arch;
-}
-
-// EXTERNAL MODULE: external "os"
-var external_os_ = __nccwpck_require__(2087);
-var external_os_default = /*#__PURE__*/__nccwpck_require__.n(external_os_);
-;// CONCATENATED MODULE: ./src/setup-go/installer.ts
-/* module decorator */ module = __nccwpck_require__.hmd(module);
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
-// see LICENSE for its license
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
     function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
     return new (P || (P = Promise))(function (resolve, reject) {
         function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
@@ -64627,20 +64588,465 @@ var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _argume
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.save = exports.restore = void 0;
+const crypto = __importStar(__nccwpck_require__(6417));
+const fs = __importStar(__nccwpck_require__(5747));
+const stream = __importStar(__nccwpck_require__(2413));
+const util = __importStar(__nccwpck_require__(1669));
+const path = __importStar(__nccwpck_require__(5622));
+const core = __importStar(__nccwpck_require__(2186));
+const cache = __importStar(__nccwpck_require__(7799));
+const paths = ['~/.cache/golangci-lint', '~/.cache/go-build', '~/go/pkg'];
+function restore(cwd) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const keyPrefix = `${process.platform}-golangci-`;
+        const hash = yield hashFiles(path.join(cwd, 'go.sum'));
+        const key = keyPrefix + hash;
+        const restoreKeys = [keyPrefix];
+        let cachedKey = undefined;
+        try {
+            cachedKey = yield cache.restoreCache(paths, key, restoreKeys);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.name !== cache.ValidationError.name) {
+                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
+                }
+            }
+            else {
+                core.info(`[warning] There was an error restoring the cache ${error}`);
+            }
+        }
+        if (cachedKey) {
+            core.info(`Found cache for key: ${cachedKey}`);
+        }
+        else {
+            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+        }
+        return { key, cachedKey };
+    });
+}
+exports.restore = restore;
+function save(state) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const { cachedKey, key } = state;
+        if (cachedKey === key) {
+            core.info(`cache for ${key} already exists, skip saving.`);
+            return;
+        }
+        core.info(`saving cache for ${key}.`);
+        try {
+            yield cache.saveCache(paths, key);
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                if (error.name === cache.ValidationError.name) {
+                    throw error;
+                }
+                else if (error.name === cache.ReserveCacheError.name) {
+                    core.info(error.message);
+                }
+                else {
+                    core.info(`[warning]${error.message}`);
+                }
+            }
+            else {
+                core.info(`[warning]${error}`);
+            }
+        }
+    });
+}
+exports.save = save;
+// see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
+function hashFiles(...files) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const result = crypto.createHash('sha256');
+        for (const file of files) {
+            try {
+                const hash = crypto.createHash('sha256');
+                const pipeline = util.promisify(stream.pipeline);
+                yield pipeline(fs.createReadStream(file), hash);
+                result.write(hash.digest());
+            }
+            catch (err) {
+                // skip files that doesn't exist.
+                if (err.code !== 'ENOENT') {
+                    throw err;
+                }
+            }
+        }
+        result.end();
+        return result.digest('hex');
+    });
+}
 
 
+/***/ }),
+
+/***/ 3252:
+/***/ ((__unused_webpack_module, exports) => {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.parse = void 0;
+function parse(flags) {
+    flags = flags.trim();
+    if (flags === '') {
+        return [];
+    }
+    // TODO: need to simulate bash?
+    return flags.split(/\s+/);
+}
+exports.parse = parse;
 
 
+/***/ }),
+
+/***/ 2574:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.installGolangciLint = exports.installReviewdog = void 0;
+const path = __importStar(__nccwpck_require__(5622));
+const core = __importStar(__nccwpck_require__(2186));
+const tc = __importStar(__nccwpck_require__(7784));
+const http = __importStar(__nccwpck_require__(9925));
+function installReviewdog(tag, directory) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const owner = 'reviewdog';
+        const repo = 'reviewdog';
+        const version = yield tagToVersion(tag, owner, repo);
+        // get the os information
+        let platform = process.platform.toString();
+        let ext = '';
+        switch (platform) {
+            case 'darwin':
+                platform = 'Darwin';
+                break;
+            case 'linux':
+                platform = 'Linux';
+                break;
+            case 'win32':
+                platform = 'Windows';
+                ext = '.exe';
+                break;
+            default:
+                throw new Error(`unsupported platform: ${platform}`);
+        }
+        // get the arch information
+        let arch = process.arch;
+        switch (arch) {
+            case 'x64':
+                arch = 'x86_64';
+                break;
+            case 'arm64':
+                break;
+            case 'x32':
+                arch = 'i386';
+                break;
+            default:
+                throw new Error(`unsupported arch: ${arch}`);
+        }
+        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/reviewdog_${version}_${platform}_${arch}.tar.gz`;
+        core.info(`downloading from ${url}`);
+        const archivePath = yield tc.downloadTool(url);
+        core.info(`extracting`);
+        const extractedDir = yield tc.extractTar(archivePath, directory);
+        return path.join(extractedDir, `reviewdog${ext}`);
+    });
+}
+exports.installReviewdog = installReviewdog;
+function installGolangciLint(tag, directory) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const owner = 'golangci';
+        const repo = 'golangci-lint';
+        const version = yield tagToVersion(tag, owner, repo);
+        // get the os information
+        let platform = process.platform.toString();
+        let ext = '';
+        let archive = 'tar.gz';
+        switch (platform) {
+            case 'darwin':
+                break;
+            case 'linux':
+                break;
+            case 'win32':
+                platform = 'windows';
+                ext = '.exe';
+                archive = 'zip';
+                break;
+            default:
+                throw new Error(`unsupported platform: ${platform}`);
+        }
+        // get the arch information
+        let arch = process.arch;
+        switch (arch) {
+            case 'x64':
+                arch = 'amd64';
+                break;
+            case 'arm64':
+                break;
+            case 'x32':
+                arch = '386';
+                break;
+            default:
+                throw new Error(`unsupported arch: ${arch}`);
+        }
+        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/golangci-lint-${version}-${platform}-${arch}.${archive}`;
+        core.info(`downloading from ${url}`);
+        const archivePath = yield tc.downloadTool(url);
+        core.info(`extracting`);
+        const extractedDir = archive === 'zip' ? yield tc.extractZip(archivePath, directory) : yield tc.extractTar(archivePath, directory);
+        return path.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
+    });
+}
+exports.installGolangciLint = installGolangciLint;
+function tagToVersion(tag, owner, repo) {
+    return __awaiter(this, void 0, void 0, function* () {
+        core.info(`finding a release for ${tag}`);
+        const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
+        const client = new http.HttpClient('action-golangci-lint/v1');
+        const headers = { [http.Headers.Accept]: 'application/json' };
+        const response = yield client.getJson(url, headers);
+        if (response.statusCode != http.HttpCodes.OK) {
+            core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
+        }
+        if (!response.result) {
+            throw new Error(`unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`);
+        }
+        let realTag = response.result.tag_name;
+        // if version starts with 'v', remove it
+        realTag = realTag.replace(/^v/, '');
+        return realTag;
+    });
+}
 
 
+/***/ }),
 
+/***/ 399:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+const fs_1 = __nccwpck_require__(5747);
+const os = __importStar(__nccwpck_require__(2087));
+const path = __importStar(__nccwpck_require__(5622));
+const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
+const io = __importStar(__nccwpck_require__(7436));
+const installer = __importStar(__nccwpck_require__(2574));
+const flags = __importStar(__nccwpck_require__(3252));
+const setupGo = __importStar(__nccwpck_require__(5117));
+const cache = __importStar(__nccwpck_require__(4810));
+function run() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const runnerTmpdir = process.env['RUNNER_TEMP'] || os.tmpdir();
+        const tmpdir = yield fs_1.promises.mkdtemp(path.join(runnerTmpdir, 'reviewdog-'));
+        try {
+            const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
+            const golangciVersion = core.getInput('golangci_version') || 'latest';
+            const goVersion = core.getInput('go_version');
+            const golangciLintFlags = core.getInput('golangci_lint_flags');
+            const toolName = core.getInput('tool_name') || 'golangci';
+            const level = core.getInput('level') || 'error';
+            const reporter = core.getInput('reporter') || 'github-pr-check';
+            const filterMode = core.getInput('filter_mode') || 'added';
+            const failOnError = core.getInput('fail_on_error') || 'false';
+            const reviewdogFlags = core.getInput('reviewdog_flags');
+            const workdir = core.getInput('workdir') || '.';
+            const cwd = path.relative(process.env['GITHUB_WORKSPACE'] || process.cwd(), workdir);
+            const enableCache = core.getBooleanInput('cache');
+            if (goVersion !== '') {
+                yield core.group('Installing Go ...', () => __awaiter(this, void 0, void 0, function* () {
+                    yield setupGo.run(goVersion, true);
+                }));
+            }
+            const reviewdog = yield core.group('🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog', () => __awaiter(this, void 0, void 0, function* () {
+                return yield installer.installReviewdog(reviewdogVersion, tmpdir);
+            }));
+            const golangci = yield core.group('Installing golangci-lint ... https://github.com/golangci/golangci-lint', () => __awaiter(this, void 0, void 0, function* () {
+                return yield installer.installGolangciLint(golangciVersion, tmpdir);
+            }));
+            let cacheState = undefined;
+            if (enableCache) {
+                cacheState = yield core.group('Restoring cache ...', () => __awaiter(this, void 0, void 0, function* () {
+                    return yield cache.restore(cwd);
+                }));
+            }
+            yield core.group('Running golangci-lint with reviewdog 🐶 ...', () => __awaiter(this, void 0, void 0, function* () {
+                const output = yield exec.getExecOutput(golangci, ['run', '--out-format', 'line-number', ...flags.parse(golangciLintFlags)], {
+                    cwd: cwd,
+                    ignoreReturnCode: true
+                });
+                process.env['REVIEWDOG_GITHUB_API_TOKEN'] = core.getInput('github_token');
+                yield exec.exec(reviewdog, [
+                    '-f=golangci-lint',
+                    `-name=${toolName}`,
+                    `-reporter=${reporter}`,
+                    `-filter-mode=${filterMode}`,
+                    `-fail-on-error=${failOnError}`,
+                    `-level=${level}`,
+                    ...flags.parse(reviewdogFlags)
+                ], {
+                    cwd: cwd,
+                    input: Buffer.from(output.stdout, 'utf-8')
+                });
+            }));
+            if (cacheState) {
+                yield core.group('Saving cache ...', () => __awaiter(this, void 0, void 0, function* () {
+                    if (cacheState) {
+                        yield cache.save(cacheState);
+                    }
+                }));
+            }
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                core.setFailed(error);
+            }
+            else {
+                core.setFailed(`${error}`);
+            }
+        }
+        finally {
+            // clean up the temporary directory
+            try {
+                yield io.rmRF(tmpdir);
+            }
+            catch (error) {
+                // suppress errors
+                // Garbage will remain, but it may be harmless.
+                if (error instanceof Error) {
+                    core.info(`clean up failed: ${error.message}`);
+                }
+                else {
+                    core.info(`clean up failed: ${error}`);
+                }
+            }
+        }
+    });
+}
+run();
+
+
+/***/ }),
+
+/***/ 2640:
+/***/ (function(module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
+// see LICENSE for its license
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
+const tc = __importStar(__nccwpck_require__(7784));
+const core = __importStar(__nccwpck_require__(2186));
+const path = __importStar(__nccwpck_require__(5622));
+const semver = __importStar(__nccwpck_require__(1383));
+const httpm = __importStar(__nccwpck_require__(9925));
+const sys = __importStar(__nccwpck_require__(540));
+const os_1 = __importDefault(__nccwpck_require__(2087));
 function getGo(versionSpec, stable, auth) {
     return __awaiter(this, void 0, void 0, function* () {
-        let osPlat = external_os_default().platform();
-        let osArch = external_os_default().arch();
+        let osPlat = os_1.default.platform();
+        let osArch = os_1.default.arch();
         // check cache
         let toolPath;
-        toolPath = tool_cache.find('go', versionSpec);
+        toolPath = tc.find('go', versionSpec);
         // If not found in cache, download
         if (toolPath) {
             core.info(`Found in cache @ ${toolPath}`);
@@ -64662,7 +65068,7 @@ function getGo(versionSpec, stable, auth) {
             }
         }
         catch (err) {
-            if (err instanceof tool_cache.HTTPError) {
+            if (err instanceof tc.HTTPError) {
                 if (err.httpStatusCode === 403 || err.httpStatusCode === 429) {
                     core.info(`Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`);
                 }
@@ -64696,41 +65102,43 @@ function getGo(versionSpec, stable, auth) {
         return downloadPath;
     });
 }
+exports.getGo = getGo;
 function installGoVersion(info, auth) {
     return __awaiter(this, void 0, void 0, function* () {
         core.info(`Acquiring ${info.resolvedVersion} from ${info.downloadUrl}`);
-        const downloadPath = yield tool_cache.downloadTool(info.downloadUrl, undefined, auth);
+        const downloadPath = yield tc.downloadTool(info.downloadUrl, undefined, auth);
         core.info('Extracting Go...');
         let extPath = yield extractGoArchive(downloadPath);
         core.info(`Successfully extracted go to ${extPath}`);
         if (info.type === 'dist') {
-            extPath = external_path_.join(extPath, 'go');
+            extPath = path.join(extPath, 'go');
         }
         core.info('Adding to the cache ...');
-        const cachedDir = yield tool_cache.cacheDir(extPath, 'go', makeSemver(info.resolvedVersion));
+        const cachedDir = yield tc.cacheDir(extPath, 'go', makeSemver(info.resolvedVersion));
         core.info(`Successfully cached go to ${cachedDir}`);
         return cachedDir;
     });
 }
 function extractGoArchive(archivePath) {
     return __awaiter(this, void 0, void 0, function* () {
-        const platform = external_os_default().platform();
+        const platform = os_1.default.platform();
         let extPath;
         if (platform === 'win32') {
-            extPath = yield tool_cache.extractZip(archivePath);
+            extPath = yield tc.extractZip(archivePath);
         }
         else {
-            extPath = yield tool_cache.extractTar(archivePath);
+            extPath = yield tc.extractTar(archivePath);
         }
         return extPath;
     });
 }
+exports.extractGoArchive = extractGoArchive;
 function getInfoFromManifest(versionSpec, stable, auth) {
     return __awaiter(this, void 0, void 0, function* () {
         let info = null;
-        const releases = yield tool_cache.getManifestFromRepo('actions', 'go-versions', auth, 'main');
+        const releases = yield tc.getManifestFromRepo('actions', 'go-versions', auth, 'main');
         core.info(`matching ${versionSpec}...`);
-        const rel = yield tool_cache.findFromManifest(versionSpec, stable, releases);
+        const rel = yield tc.findFromManifest(versionSpec, stable, releases);
         if (rel && rel.files.length > 0) {
             info = {};
             info.type = 'manifest';
@@ -64741,6 +65149,7 @@ function getInfoFromManifest(versionSpec, stable, auth) {
         return info;
     });
 }
+exports.getInfoFromManifest = getInfoFromManifest;
 function getInfoFromDist(versionSpec, stable) {
     return __awaiter(this, void 0, void 0, function* () {
         let version;
@@ -64759,8 +65168,8 @@ function getInfoFromDist(versionSpec, stable) {
 }
 function findMatch(versionSpec, stable) {
     return __awaiter(this, void 0, void 0, function* () {
-        let archFilter = getArch();
-        let platFilter = getPlatform();
+        let archFilter = sys.getArch();
+        let platFilter = sys.getPlatform();
         let result;
         let match;
         const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
@@ -64799,6 +65208,7 @@ function findMatch(versionSpec, stable) {
         return result;
     });
 }
+exports.findMatch = findMatch;
 function getVersionsDist(dlUrl) {
     return __awaiter(this, void 0, void 0, function* () {
         // this returns versions descending so latest is first
@@ -64809,6 +65219,7 @@ function getVersionsDist(dlUrl) {
         return (yield http.getJson(dlUrl)).result;
     });
 }
+exports.getVersionsDist = getVersionsDist;
 //
 // Convert the go version syntax into semver for semver matching
 // 1.13.1 => 1.13.1
@@ -64827,6 +65238,175 @@ function makeSemver(version) {
     }
     return `${verPart}${prereleasePart}`;
 }
+exports.makeSemver = makeSemver;
+
+
+/***/ }),
+
+/***/ 5117:
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
+
+"use strict";
+
+// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/main.ts
+// see LICENSE for its license
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
+    if (mod && mod.__esModule) return mod;
+    var result = {};
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
+    __setModuleDefault(result, mod);
+    return result;
+};
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.addBinToPath = exports.run = void 0;
+const core = __importStar(__nccwpck_require__(2186));
+const io = __importStar(__nccwpck_require__(7436));
+const installer = __importStar(__nccwpck_require__(2640));
+const path_1 = __importDefault(__nccwpck_require__(5622));
+const child_process_1 = __importDefault(__nccwpck_require__(3129));
+const fs_1 = __importDefault(__nccwpck_require__(5747));
+const url_1 = __nccwpck_require__(8835);
+function run(versionSpec, stable) {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
+            if (versionSpec) {
+                let token = core.getInput('token');
+                let auth = !token || isGhes() ? undefined : `token ${token}`;
+                const installDir = yield installer.getGo(versionSpec, stable, auth);
+                core.exportVariable('GOROOT', installDir);
+                core.addPath(path_1.default.join(installDir, 'bin'));
+                core.info('Added go to the path');
+                let added = yield addBinToPath();
+                core.debug(`add bin ${added}`);
+                core.info(`Successfully setup go version ${versionSpec}`);
+            }
+            // add problem matchers
+            const matchersPath = path_1.default.join(__dirname, 'matchers.json');
+            core.info(`##[add-matcher]${matchersPath}`);
+            // output the version actually being used
+            let goPath = yield io.which('go');
+            let goVersion = (child_process_1.default.execSync(`${goPath} version`) || '').toString();
+            core.info(goVersion);
+            core.startGroup('go env');
+            let goEnv = (child_process_1.default.execSync(`${goPath} env`) || '').toString();
+            core.info(goEnv);
+            core.endGroup();
+        }
+        catch (error) {
+            if (error instanceof Error) {
+                core.setFailed(error);
+            }
+            else {
+                core.setFailed(`${error}`);
+            }
+        }
+    });
+}
+exports.run = run;
+function addBinToPath() {
+    return __awaiter(this, void 0, void 0, function* () {
+        let added = false;
+        let g = yield io.which('go');
+        core.debug(`which go :${g}:`);
+        if (!g) {
+            core.debug('go not in the path');
+            return added;
+        }
+        let buf = child_process_1.default.execSync('go env GOPATH');
+        if (buf) {
+            let gp = buf.toString().trim();
+            core.debug(`go env GOPATH :${gp}:`);
+            if (!fs_1.default.existsSync(gp)) {
+                // some of the hosted images have go install but not profile dir
+                core.debug(`creating ${gp}`);
+                io.mkdirP(gp);
+            }
+            let bp = path_1.default.join(gp, 'bin');
+            if (!fs_1.default.existsSync(bp)) {
+                core.debug(`creating ${bp}`);
+                io.mkdirP(bp);
+            }
+            core.addPath(bp);
+            added = true;
+        }
+        return added;
+    });
+}
+exports.addBinToPath = addBinToPath;
+function isGhes() {
+    const ghUrl = new url_1.URL(process.env['GITHUB_SERVER_URL'] || 'https://github.com');
+    return ghUrl.hostname.toUpperCase() !== 'GITHUB.COM';
+}
+
+
+/***/ }),
+
+/***/ 540:
+/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+
+"use strict";
+
+// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/system.ts
+// see LICENSE for its license
+Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.getArch = exports.getPlatform = void 0;
+let os = __nccwpck_require__(2087);
+function getPlatform() {
+    // darwin and linux match already
+    // freebsd not supported yet but future proofed.
+    // 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'
+    let plat = os.platform();
+    // wants 'darwin', 'freebsd', 'linux', 'windows'
+    if (plat === 'win32') {
+        plat = 'windows';
+    }
+    return plat;
+}
+exports.getPlatform = getPlatform;
+function getArch() {
+    // 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'.
+    let arch = os.arch();
+    // wants amd64, 386, arm64, armv61, ppc641e, s390x
+    // currently not supported by runner but future proofed mapping
+    switch (arch) {
+        case 'x64':
+            arch = 'amd64';
+            break;
+        // case 'ppc':
+        //   arch = 'ppc64';
+        //   break;
+        case 'x32':
+            arch = '386';
+            break;
+    }
+    return arch;
+}
+exports.getArch = getArch;
 
 
 /***/ }),
@@ -65021,8 +65601,8 @@ module.exports = require("zlib");
 /******/ 		}
 /******/ 		// Create a new module (and put it into the cache)
 /******/ 		var module = __webpack_module_cache__[moduleId] = {
-/******/ 			id: moduleId,
-/******/ 			loaded: false,
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
 /******/ 			exports: {}
 /******/ 		};
 /******/ 	
@@ -65035,548 +65615,23 @@ module.exports = require("zlib");
 /******/ 			if(threw) delete __webpack_module_cache__[moduleId];
 /******/ 		}
 /******/ 	
-/******/ 		// Flag the module as loaded
-/******/ 		module.loaded = true;
-/******/ 	
 /******/ 		// Return the exports of the module
 /******/ 		return module.exports;
 /******/ 	}
 /******/ 	
 /************************************************************************/
-/******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
-/******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__nccwpck_require__.n = (module) => {
-/******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
-/******/ 			__nccwpck_require__.d(getter, { a: getter });
-/******/ 			return getter;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
-/******/ 		// define getter functions for harmony exports
-/******/ 		__nccwpck_require__.d = (exports, definition) => {
-/******/ 			for(var key in definition) {
-/******/ 				if(__nccwpck_require__.o(definition, key) && !__nccwpck_require__.o(exports, key)) {
-/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
-/******/ 				}
-/******/ 			}
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/harmony module decorator */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.hmd = (module) => {
-/******/ 			module = Object.create(module);
-/******/ 			if (!module.children) module.children = [];
-/******/ 			Object.defineProperty(module, 'exports', {
-/******/ 				enumerable: true,
-/******/ 				set: () => {
-/******/ 					throw new Error('ES Modules may not assign module.exports or exports.*, Use ESM export syntax, instead: ' + module.id);
-/******/ 				}
-/******/ 			});
-/******/ 			return module;
-/******/ 		};
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__nccwpck_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
-/******/ 	
-/******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
-/******/ 		// define __esModule on exports
-/******/ 		__nccwpck_require__.r = (exports) => {
-/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 			}
-/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 		};
-/******/ 	})();
-/******/ 	
 /******/ 	/* webpack/runtime/compat */
 /******/ 	
 /******/ 	if (typeof __nccwpck_require__ !== 'undefined') __nccwpck_require__.ab = __dirname + "/";
 /******/ 	
 /************************************************************************/
-var __webpack_exports__ = {};
-// This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
-"use strict";
-// ESM COMPAT FLAG
-__nccwpck_require__.r(__webpack_exports__);
-
-// EXTERNAL MODULE: external "fs"
-var external_fs_ = __nccwpck_require__(5747);
-var external_fs_default = /*#__PURE__*/__nccwpck_require__.n(external_fs_);
-// EXTERNAL MODULE: external "os"
-var external_os_ = __nccwpck_require__(2087);
-// EXTERNAL MODULE: external "path"
-var external_path_ = __nccwpck_require__(5622);
-var external_path_default = /*#__PURE__*/__nccwpck_require__.n(external_path_);
-// EXTERNAL MODULE: ./node_modules/@actions/core/lib/core.js
-var core = __nccwpck_require__(2186);
-// EXTERNAL MODULE: ./node_modules/@actions/exec/lib/exec.js
-var exec = __nccwpck_require__(1514);
-// EXTERNAL MODULE: ./node_modules/@actions/io/lib/io.js
-var io = __nccwpck_require__(7436);
-// EXTERNAL MODULE: ./node_modules/@actions/tool-cache/lib/tool-cache.js
-var tool_cache = __nccwpck_require__(7784);
-// EXTERNAL MODULE: ./node_modules/@actions/http-client/index.js
-var http_client = __nccwpck_require__(9925);
-;// CONCATENATED MODULE: ./src/installer.ts
-var __awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-function installReviewdog(tag, directory) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const owner = 'reviewdog';
-        const repo = 'reviewdog';
-        const version = yield tagToVersion(tag, owner, repo);
-        // get the os information
-        let platform = process.platform.toString();
-        let ext = '';
-        switch (platform) {
-            case 'darwin':
-                platform = 'Darwin';
-                break;
-            case 'linux':
-                platform = 'Linux';
-                break;
-            case 'win32':
-                platform = 'Windows';
-                ext = '.exe';
-                break;
-            default:
-                throw new Error(`unsupported platform: ${platform}`);
-        }
-        // get the arch information
-        let arch = process.arch;
-        switch (arch) {
-            case 'x64':
-                arch = 'x86_64';
-                break;
-            case 'arm64':
-                break;
-            case 'x32':
-                arch = 'i386';
-                break;
-            default:
-                throw new Error(`unsupported arch: ${arch}`);
-        }
-        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/reviewdog_${version}_${platform}_${arch}.tar.gz`;
-        core.info(`downloading from ${url}`);
-        const archivePath = yield tool_cache.downloadTool(url);
-        core.info(`extracting`);
-        const extractedDir = yield tool_cache.extractTar(archivePath, directory);
-        return external_path_.join(extractedDir, `reviewdog${ext}`);
-    });
-}
-function installGolangciLint(tag, directory) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const owner = 'golangci';
-        const repo = 'golangci-lint';
-        const version = yield tagToVersion(tag, owner, repo);
-        // get the os information
-        let platform = process.platform.toString();
-        let ext = '';
-        let archive = 'tar.gz';
-        switch (platform) {
-            case 'darwin':
-                break;
-            case 'linux':
-                break;
-            case 'win32':
-                platform = 'windows';
-                ext = '.exe';
-                archive = 'zip';
-                break;
-            default:
-                throw new Error(`unsupported platform: ${platform}`);
-        }
-        // get the arch information
-        let arch = process.arch;
-        switch (arch) {
-            case 'x64':
-                arch = 'amd64';
-                break;
-            case 'arm64':
-                break;
-            case 'x32':
-                arch = '386';
-                break;
-            default:
-                throw new Error(`unsupported arch: ${arch}`);
-        }
-        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/golangci-lint-${version}-${platform}-${arch}.${archive}`;
-        core.info(`downloading from ${url}`);
-        const archivePath = yield tool_cache.downloadTool(url);
-        core.info(`extracting`);
-        const extractedDir = archive === 'zip' ? yield tool_cache.extractZip(archivePath, directory) : yield tool_cache.extractTar(archivePath, directory);
-        return external_path_.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
-    });
-}
-function tagToVersion(tag, owner, repo) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info(`finding a release for ${tag}`);
-        const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
-        const client = new http_client.HttpClient('action-golangci-lint/v1');
-        const headers = { [http_client.Headers.Accept]: 'application/json' };
-        const response = yield client.getJson(url, headers);
-        if (response.statusCode != http_client.HttpCodes.OK) {
-            core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
-        }
-        if (!response.result) {
-            throw new Error(`unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`);
-        }
-        let realTag = response.result.tag_name;
-        // if version starts with 'v', remove it
-        realTag = realTag.replace(/^v/, '');
-        return realTag;
-    });
-}
-
-;// CONCATENATED MODULE: ./src/flags.ts
-function parse(flags) {
-    flags = flags.trim();
-    if (flags === '') {
-        return [];
-    }
-    // TODO: need to simulate bash?
-    return flags.split(/\s+/);
-}
-
-// EXTERNAL MODULE: ./src/setup-go/installer.ts + 1 modules
-var installer = __nccwpck_require__(2067);
-// EXTERNAL MODULE: external "child_process"
-var external_child_process_ = __nccwpck_require__(3129);
-var external_child_process_default = /*#__PURE__*/__nccwpck_require__.n(external_child_process_);
-// EXTERNAL MODULE: external "url"
-var external_url_ = __nccwpck_require__(8835);
-;// CONCATENATED MODULE: ./src/setup-go/main.ts
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/main.ts
-// see LICENSE for its license
-var main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-function run(versionSpec, stable) {
-    return main_awaiter(this, void 0, void 0, function* () {
-        try {
-            core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
-            if (versionSpec) {
-                let token = core.getInput('token');
-                let auth = !token || isGhes() ? undefined : `token ${token}`;
-                const installDir = yield installer/* getGo */.Ct(versionSpec, stable, auth);
-                core.exportVariable('GOROOT', installDir);
-                core.addPath(external_path_default().join(installDir, 'bin'));
-                core.info('Added go to the path');
-                let added = yield addBinToPath();
-                core.debug(`add bin ${added}`);
-                core.info(`Successfully setup go version ${versionSpec}`);
-            }
-            // add problem matchers
-            const matchersPath = __nccwpck_require__.ab + "matchers.json";
-            core.info(`##[add-matcher]${matchersPath}`);
-            // output the version actually being used
-            let goPath = yield io.which('go');
-            let goVersion = (external_child_process_default().execSync(`${goPath} version`) || '').toString();
-            core.info(goVersion);
-            core.startGroup('go env');
-            let goEnv = (external_child_process_default().execSync(`${goPath} env`) || '').toString();
-            core.info(goEnv);
-            core.endGroup();
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                core.setFailed(error);
-            }
-            else {
-                core.setFailed(`${error}`);
-            }
-        }
-    });
-}
-function addBinToPath() {
-    return main_awaiter(this, void 0, void 0, function* () {
-        let added = false;
-        let g = yield io.which('go');
-        core.debug(`which go :${g}:`);
-        if (!g) {
-            core.debug('go not in the path');
-            return added;
-        }
-        let buf = external_child_process_default().execSync('go env GOPATH');
-        if (buf) {
-            let gp = buf.toString().trim();
-            core.debug(`go env GOPATH :${gp}:`);
-            if (!external_fs_default().existsSync(gp)) {
-                // some of the hosted images have go install but not profile dir
-                core.debug(`creating ${gp}`);
-                io.mkdirP(gp);
-            }
-            let bp = external_path_default().join(gp, 'bin');
-            if (!external_fs_default().existsSync(bp)) {
-                core.debug(`creating ${bp}`);
-                io.mkdirP(bp);
-            }
-            core.addPath(bp);
-            added = true;
-        }
-        return added;
-    });
-}
-function isGhes() {
-    const ghUrl = new external_url_.URL(process.env['GITHUB_SERVER_URL'] || 'https://github.com');
-    return ghUrl.hostname.toUpperCase() !== 'GITHUB.COM';
-}
-
-// EXTERNAL MODULE: external "crypto"
-var external_crypto_ = __nccwpck_require__(6417);
-// EXTERNAL MODULE: external "stream"
-var external_stream_ = __nccwpck_require__(2413);
-// EXTERNAL MODULE: external "util"
-var external_util_ = __nccwpck_require__(1669);
-// EXTERNAL MODULE: ./node_modules/@actions/cache/lib/cache.js
-var cache = __nccwpck_require__(7799);
-;// CONCATENATED MODULE: ./src/cache.ts
-var cache_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-const paths = ['~/.cache/golangci-lint', '~/.cache/go-build', '~/go/pkg'];
-function restore(cwd) {
-    return cache_awaiter(this, void 0, void 0, function* () {
-        const keyPrefix = `${process.platform}-golangci-`;
-        const hash = yield hashFiles(external_path_.join(cwd, 'go.sum'));
-        const key = keyPrefix + hash;
-        const restoreKeys = [keyPrefix];
-        let cachedKey = undefined;
-        try {
-            cachedKey = yield cache.restoreCache(paths, key, restoreKeys);
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name !== cache.ValidationError.name) {
-                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
-                }
-            }
-            else {
-                core.info(`[warning] There was an error restoring the cache ${error}`);
-            }
-        }
-        if (cachedKey) {
-            core.info(`Found cache for key: ${cachedKey}`);
-        }
-        else {
-            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
-        }
-        return { key, cachedKey };
-    });
-}
-function save(state) {
-    return cache_awaiter(this, void 0, void 0, function* () {
-        const { cachedKey, key } = state;
-        if (cachedKey === key) {
-            core.info(`cache for ${key} already exists, skip saving.`);
-            return;
-        }
-        core.info(`saving cache for ${key}.`);
-        try {
-            yield cache.saveCache(paths, key);
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name === cache.ValidationError.name) {
-                    throw error;
-                }
-                else if (error.name === cache.ReserveCacheError.name) {
-                    core.info(error.message);
-                }
-                else {
-                    core.info(`[warning]${error.message}`);
-                }
-            }
-            else {
-                core.info(`[warning]${error}`);
-            }
-        }
-    });
-}
-// see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-function hashFiles(...files) {
-    return cache_awaiter(this, void 0, void 0, function* () {
-        const result = external_crypto_.createHash('sha256');
-        for (const file of files) {
-            try {
-                const hash = external_crypto_.createHash('sha256');
-                const pipeline = external_util_.promisify(external_stream_.pipeline);
-                yield pipeline(external_fs_.createReadStream(file), hash);
-                result.write(hash.digest());
-            }
-            catch (err) {
-                // skip files that doesn't exist.
-                if (err.code !== 'ENOENT') {
-                    throw err;
-                }
-            }
-        }
-        result.end();
-        return result.digest('hex');
-    });
-}
-
-;// CONCATENATED MODULE: ./src/main.ts
-var src_main_awaiter = (undefined && undefined.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
-
-
-
-
-
-
-
-
-
-
-function main_run() {
-    return src_main_awaiter(this, void 0, void 0, function* () {
-        const runnerTmpdir = process.env['RUNNER_TEMP'] || external_os_.tmpdir();
-        const tmpdir = yield external_fs_.promises.mkdtemp(external_path_.join(runnerTmpdir, 'reviewdog-'));
-        try {
-            const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
-            const golangciVersion = core.getInput('golangci_version') || 'latest';
-            const goVersion = core.getInput('go_version');
-            const golangciLintFlags = core.getInput('golangci_lint_flags');
-            const toolName = core.getInput('tool_name') || 'golangci';
-            const level = core.getInput('level') || 'error';
-            const reporter = core.getInput('reporter') || 'github-pr-check';
-            const filterMode = core.getInput('filter_mode') || 'added';
-            const failOnError = core.getInput('fail_on_error') || 'false';
-            const reviewdogFlags = core.getInput('reviewdog_flags');
-            const workdir = core.getInput('workdir') || '.';
-            const cwd = external_path_.relative(process.env['GITHUB_WORKSPACE'] || process.cwd(), workdir);
-            const enableCache = core.getBooleanInput('cache');
-            if (goVersion !== '') {
-                yield core.group('Installing Go ...', () => src_main_awaiter(this, void 0, void 0, function* () {
-                    yield run(goVersion, true);
-                }));
-            }
-            const reviewdog = yield core.group('🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog', () => src_main_awaiter(this, void 0, void 0, function* () {
-                return yield installReviewdog(reviewdogVersion, tmpdir);
-            }));
-            const golangci = yield core.group('Installing golangci-lint ... https://github.com/golangci/golangci-lint', () => src_main_awaiter(this, void 0, void 0, function* () {
-                return yield installGolangciLint(golangciVersion, tmpdir);
-            }));
-            let cacheState = undefined;
-            if (enableCache) {
-                cacheState = yield core.group('Restoring cache ...', () => src_main_awaiter(this, void 0, void 0, function* () {
-                    return yield restore(cwd);
-                }));
-            }
-            yield core.group('Running golangci-lint with reviewdog 🐶 ...', () => src_main_awaiter(this, void 0, void 0, function* () {
-                const output = yield exec.getExecOutput(golangci, ['run', '--out-format', 'line-number', ...parse(golangciLintFlags)], {
-                    cwd: cwd,
-                    ignoreReturnCode: true
-                });
-                process.env['REVIEWDOG_GITHUB_API_TOKEN'] = core.getInput('github_token');
-                yield exec.exec(reviewdog, [
-                    '-f=golangci-lint',
-                    `-name=${toolName}`,
-                    `-reporter=${reporter}`,
-                    `-filter-mode=${filterMode}`,
-                    `-fail-on-error=${failOnError}`,
-                    `-level=${level}`,
-                    ...parse(reviewdogFlags)
-                ], {
-                    cwd: cwd,
-                    input: Buffer.from(output.stdout, 'utf-8')
-                });
-            }));
-            if (cacheState) {
-                yield core.group('Saving cache ...', () => src_main_awaiter(this, void 0, void 0, function* () {
-                    if (cacheState) {
-                        yield save(cacheState);
-                    }
-                }));
-            }
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                core.setFailed(error);
-            }
-            else {
-                core.setFailed(`${error}`);
-            }
-        }
-        finally {
-            // clean up the temporary directory
-            try {
-                yield io.rmRF(tmpdir);
-            }
-            catch (error) {
-                // suppress errors
-                // Garbage will remain, but it may be harmless.
-                if (error instanceof Error) {
-                    core.info(`clean up failed: ${error.message}`);
-                }
-                else {
-                    core.info(`clean up failed: ${error}`);
-                }
-            }
-        }
-    });
-}
-main_run();
-
-})();
-
-module.exports = __webpack_exports__;
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module is referenced by other modules so it can't be inlined
+/******/ 	var __webpack_exports__ = __nccwpck_require__(399);
+/******/ 	module.exports = __webpack_exports__;
+/******/ 	
 /******/ })()
 ;
 //# sourceMappingURL=index.js.map
