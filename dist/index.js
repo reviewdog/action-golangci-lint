@@ -64671,15 +64671,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.save = exports.restore = void 0;
 const crypto = __importStar(__nccwpck_require__(6417));
@@ -64690,87 +64681,81 @@ const path = __importStar(__nccwpck_require__(5622));
 const core = __importStar(__nccwpck_require__(2186));
 const cache = __importStar(__nccwpck_require__(7799));
 const paths = ['~/.cache/golangci-lint', '~/.cache/go-build', '~/go/pkg'];
-function restore(cwd) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const keyPrefix = `${process.platform}-golangci-`;
-        const hash = yield hashFiles(path.join(cwd, 'go.sum'));
-        const key = keyPrefix + hash;
-        const restoreKeys = [keyPrefix];
-        let cachedKey = undefined;
-        try {
-            cachedKey = yield cache.restoreCache(paths, key, restoreKeys);
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name !== cache.ValidationError.name) {
-                    core.info(`[warning] There was an error restoring the cache ${error.message}`);
-                }
+async function restore(cwd) {
+    const keyPrefix = `${process.platform}-golangci-`;
+    const hash = await hashFiles(path.join(cwd, 'go.sum'));
+    const key = keyPrefix + hash;
+    const restoreKeys = [keyPrefix];
+    let cachedKey = undefined;
+    try {
+        cachedKey = await cache.restoreCache(paths, key, restoreKeys);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            if (error.name !== cache.ValidationError.name) {
+                core.info(`[warning] There was an error restoring the cache ${error.message}`);
             }
-            else {
-                core.info(`[warning] There was an error restoring the cache ${error}`);
-            }
-        }
-        if (cachedKey) {
-            core.info(`Found cache for key: ${cachedKey}`);
         }
         else {
-            core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+            core.info(`[warning] There was an error restoring the cache ${error}`);
         }
-        return { key, cachedKey };
-    });
+    }
+    if (cachedKey) {
+        core.info(`Found cache for key: ${cachedKey}`);
+    }
+    else {
+        core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(', ')}`);
+    }
+    return { key, cachedKey };
 }
 exports.restore = restore;
-function save(state) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const { cachedKey, key } = state;
-        if (cachedKey === key) {
-            core.info(`cache for ${key} already exists, skip saving.`);
-            return;
-        }
-        core.info(`saving cache for ${key}.`);
-        try {
-            yield cache.saveCache(paths, key);
-        }
-        catch (error) {
-            if (error instanceof Error) {
-                if (error.name === cache.ValidationError.name) {
-                    throw error;
-                }
-                else if (error.name === cache.ReserveCacheError.name) {
-                    core.info(error.message);
-                }
-                else {
-                    core.info(`[warning]${error.message}`);
-                }
+async function save(state) {
+    const { cachedKey, key } = state;
+    if (cachedKey === key) {
+        core.info(`cache for ${key} already exists, skip saving.`);
+        return;
+    }
+    core.info(`saving cache for ${key}.`);
+    try {
+        await cache.saveCache(paths, key);
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            if (error.name === cache.ValidationError.name) {
+                throw error;
+            }
+            else if (error.name === cache.ReserveCacheError.name) {
+                core.info(error.message);
             }
             else {
-                core.info(`[warning]${error}`);
+                core.info(`[warning]${error.message}`);
             }
         }
-    });
+        else {
+            core.info(`[warning]${error}`);
+        }
+    }
 }
 exports.save = save;
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
-function hashFiles(...files) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const result = crypto.createHash('sha256');
-        for (const file of files) {
-            try {
-                const hash = crypto.createHash('sha256');
-                const pipeline = util.promisify(stream.pipeline);
-                yield pipeline(fs.createReadStream(file), hash);
-                result.write(hash.digest());
-            }
-            catch (err) {
-                // skip files that doesn't exist.
-                if (err.code !== 'ENOENT') {
-                    throw err;
-                }
+async function hashFiles(...files) {
+    const result = crypto.createHash('sha256');
+    for (const file of files) {
+        try {
+            const hash = crypto.createHash('sha256');
+            const pipeline = util.promisify(stream.pipeline);
+            await pipeline(fs.createReadStream(file), hash);
+            result.write(hash.digest());
+        }
+        catch (err) {
+            // skip files that doesn't exist.
+            if (err.code !== 'ENOENT') {
+                throw err;
             }
         }
-        result.end();
-        return result.digest('hex');
-    });
+    }
+    result.end();
+    return result.digest('hex');
 }
 
 
@@ -64820,129 +64805,114 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.installGolangciLint = exports.installReviewdog = void 0;
 const path = __importStar(__nccwpck_require__(5622));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
 const http = __importStar(__nccwpck_require__(9925));
-function installReviewdog(tag, directory) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const owner = 'reviewdog';
-        const repo = 'reviewdog';
-        const version = yield tagToVersion(tag, owner, repo);
-        // get the os information
-        let platform = process.platform.toString();
-        let ext = '';
-        switch (platform) {
-            case 'darwin':
-                platform = 'Darwin';
-                break;
-            case 'linux':
-                platform = 'Linux';
-                break;
-            case 'win32':
-                platform = 'Windows';
-                ext = '.exe';
-                break;
-            default:
-                throw new Error(`unsupported platform: ${platform}`);
-        }
-        // get the arch information
-        let arch = process.arch;
-        switch (arch) {
-            case 'x64':
-                arch = 'x86_64';
-                break;
-            case 'arm64':
-                break;
-            case 'x32':
-                arch = 'i386';
-                break;
-            default:
-                throw new Error(`unsupported arch: ${arch}`);
-        }
-        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/reviewdog_${version}_${platform}_${arch}.tar.gz`;
-        core.info(`downloading from ${url}`);
-        const archivePath = yield tc.downloadTool(url);
-        core.info(`extracting`);
-        const extractedDir = yield tc.extractTar(archivePath, directory);
-        return path.join(extractedDir, `reviewdog${ext}`);
-    });
+async function installReviewdog(tag, directory) {
+    const owner = 'reviewdog';
+    const repo = 'reviewdog';
+    const version = await tagToVersion(tag, owner, repo);
+    // get the os information
+    let platform = process.platform.toString();
+    let ext = '';
+    switch (platform) {
+        case 'darwin':
+            platform = 'Darwin';
+            break;
+        case 'linux':
+            platform = 'Linux';
+            break;
+        case 'win32':
+            platform = 'Windows';
+            ext = '.exe';
+            break;
+        default:
+            throw new Error(`unsupported platform: ${platform}`);
+    }
+    // get the arch information
+    let arch = process.arch;
+    switch (arch) {
+        case 'x64':
+            arch = 'x86_64';
+            break;
+        case 'arm64':
+            break;
+        case 'x32':
+            arch = 'i386';
+            break;
+        default:
+            throw new Error(`unsupported arch: ${arch}`);
+    }
+    const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/reviewdog_${version}_${platform}_${arch}.tar.gz`;
+    core.info(`downloading from ${url}`);
+    const archivePath = await tc.downloadTool(url);
+    core.info(`extracting`);
+    const extractedDir = await tc.extractTar(archivePath, directory);
+    return path.join(extractedDir, `reviewdog${ext}`);
 }
 exports.installReviewdog = installReviewdog;
-function installGolangciLint(tag, directory) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const owner = 'golangci';
-        const repo = 'golangci-lint';
-        const version = yield tagToVersion(tag, owner, repo);
-        // get the os information
-        let platform = process.platform.toString();
-        let ext = '';
-        let archive = 'tar.gz';
-        switch (platform) {
-            case 'darwin':
-                break;
-            case 'linux':
-                break;
-            case 'win32':
-                platform = 'windows';
-                ext = '.exe';
-                archive = 'zip';
-                break;
-            default:
-                throw new Error(`unsupported platform: ${platform}`);
-        }
-        // get the arch information
-        let arch = process.arch;
-        switch (arch) {
-            case 'x64':
-                arch = 'amd64';
-                break;
-            case 'arm64':
-                break;
-            case 'x32':
-                arch = '386';
-                break;
-            default:
-                throw new Error(`unsupported arch: ${arch}`);
-        }
-        const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/golangci-lint-${version}-${platform}-${arch}.${archive}`;
-        core.info(`downloading from ${url}`);
-        const archivePath = yield tc.downloadTool(url);
-        core.info(`extracting`);
-        const extractedDir = archive === 'zip' ? yield tc.extractZip(archivePath, directory) : yield tc.extractTar(archivePath, directory);
-        return path.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
-    });
+async function installGolangciLint(tag, directory) {
+    const owner = 'golangci';
+    const repo = 'golangci-lint';
+    const version = await tagToVersion(tag, owner, repo);
+    // get the os information
+    let platform = process.platform.toString();
+    let ext = '';
+    let archive = 'tar.gz';
+    switch (platform) {
+        case 'darwin':
+            break;
+        case 'linux':
+            break;
+        case 'win32':
+            platform = 'windows';
+            ext = '.exe';
+            archive = 'zip';
+            break;
+        default:
+            throw new Error(`unsupported platform: ${platform}`);
+    }
+    // get the arch information
+    let arch = process.arch;
+    switch (arch) {
+        case 'x64':
+            arch = 'amd64';
+            break;
+        case 'arm64':
+            break;
+        case 'x32':
+            arch = '386';
+            break;
+        default:
+            throw new Error(`unsupported arch: ${arch}`);
+    }
+    const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/golangci-lint-${version}-${platform}-${arch}.${archive}`;
+    core.info(`downloading from ${url}`);
+    const archivePath = await tc.downloadTool(url);
+    core.info(`extracting`);
+    const extractedDir = archive === 'zip' ? await tc.extractZip(archivePath, directory) : await tc.extractTar(archivePath, directory);
+    return path.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
 }
 exports.installGolangciLint = installGolangciLint;
-function tagToVersion(tag, owner, repo) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info(`finding a release for ${tag}`);
-        const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
-        const client = new http.HttpClient('action-golangci-lint/v1');
-        const headers = { [http.Headers.Accept]: 'application/json' };
-        const response = yield client.getJson(url, headers);
-        if (response.statusCode != http.HttpCodes.OK) {
-            core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
-        }
-        if (!response.result) {
-            throw new Error(`unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`);
-        }
-        let realTag = response.result.tag_name;
-        // if version starts with 'v', remove it
-        realTag = realTag.replace(/^v/, '');
-        return realTag;
-    });
+async function tagToVersion(tag, owner, repo) {
+    core.info(`finding a release for ${tag}`);
+    const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
+    const client = new http.HttpClient('action-golangci-lint/v1');
+    const headers = { [http.Headers.Accept]: 'application/json' };
+    const response = await client.getJson(url, headers);
+    if (response.statusCode != http.HttpCodes.OK) {
+        core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
+    }
+    if (!response.result) {
+        throw new Error(`unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`);
+    }
+    let realTag = response.result.tag_name;
+    // if version starts with 'v', remove it
+    realTag = realTag.replace(/^v/, '');
+    return realTag;
 }
 
 
@@ -64972,15 +64942,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 const fs_1 = __nccwpck_require__(5747);
 const os = __importStar(__nccwpck_require__(2087));
@@ -64992,93 +64953,91 @@ const installer = __importStar(__nccwpck_require__(2574));
 const flags = __importStar(__nccwpck_require__(3252));
 const setupGo = __importStar(__nccwpck_require__(5117));
 const cache = __importStar(__nccwpck_require__(4810));
-function run() {
-    return __awaiter(this, void 0, void 0, function* () {
-        const runnerTmpdir = process.env['RUNNER_TEMP'] || os.tmpdir();
-        const tmpdir = yield fs_1.promises.mkdtemp(path.join(runnerTmpdir, 'reviewdog-'));
+async function run() {
+    const runnerTmpdir = process.env['RUNNER_TEMP'] || os.tmpdir();
+    const tmpdir = await fs_1.promises.mkdtemp(path.join(runnerTmpdir, 'reviewdog-'));
+    try {
+        const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
+        const golangciVersion = core.getInput('golangci_version') || 'latest';
+        const goVersion = core.getInput('go_version');
+        const golangciLintFlags = core.getInput('golangci_lint_flags');
+        const toolName = core.getInput('tool_name') || 'golangci';
+        const level = core.getInput('level') || 'error';
+        const reporter = core.getInput('reporter') || 'github-pr-check';
+        const filterMode = core.getInput('filter_mode') || 'added';
+        const failOnError = core.getInput('fail_on_error') || 'false';
+        const reviewdogFlags = core.getInput('reviewdog_flags');
+        const workdir = core.getInput('workdir') || '.';
+        const cwd = path.relative(process.env['GITHUB_WORKSPACE'] || process.cwd(), workdir);
+        const enableCache = core.getBooleanInput('cache');
+        if (goVersion !== '') {
+            await core.group('Installing Go ...', async () => {
+                await setupGo.run(goVersion, true);
+            });
+        }
+        const reviewdog = await core.group('🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog', async () => {
+            return await installer.installReviewdog(reviewdogVersion, tmpdir);
+        });
+        const golangci = await core.group('Installing golangci-lint ... https://github.com/golangci/golangci-lint', async () => {
+            return await installer.installGolangciLint(golangciVersion, tmpdir);
+        });
+        let cacheState = undefined;
+        if (enableCache) {
+            cacheState = await core.group('Restoring cache ...', async () => {
+                return await cache.restore(cwd);
+            });
+        }
+        await core.group('Running golangci-lint with reviewdog 🐶 ...', async () => {
+            const output = await exec.getExecOutput(golangci, ['run', '--out-format', 'line-number', ...flags.parse(golangciLintFlags)], {
+                cwd: cwd,
+                ignoreReturnCode: true
+            });
+            process.env['REVIEWDOG_GITHUB_API_TOKEN'] = core.getInput('github_token');
+            await exec.exec(reviewdog, [
+                '-f=golangci-lint',
+                `-name=${toolName}`,
+                `-reporter=${reporter}`,
+                `-filter-mode=${filterMode}`,
+                `-fail-on-error=${failOnError}`,
+                `-level=${level}`,
+                ...flags.parse(reviewdogFlags)
+            ], {
+                cwd: cwd,
+                input: Buffer.from(output.stdout, 'utf-8')
+            });
+        });
+        if (cacheState) {
+            await core.group('Saving cache ...', async () => {
+                if (cacheState) {
+                    await cache.save(cacheState);
+                }
+            });
+        }
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error);
+        }
+        else {
+            core.setFailed(`${error}`);
+        }
+    }
+    finally {
+        // clean up the temporary directory
         try {
-            const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
-            const golangciVersion = core.getInput('golangci_version') || 'latest';
-            const goVersion = core.getInput('go_version');
-            const golangciLintFlags = core.getInput('golangci_lint_flags');
-            const toolName = core.getInput('tool_name') || 'golangci';
-            const level = core.getInput('level') || 'error';
-            const reporter = core.getInput('reporter') || 'github-pr-check';
-            const filterMode = core.getInput('filter_mode') || 'added';
-            const failOnError = core.getInput('fail_on_error') || 'false';
-            const reviewdogFlags = core.getInput('reviewdog_flags');
-            const workdir = core.getInput('workdir') || '.';
-            const cwd = path.relative(process.env['GITHUB_WORKSPACE'] || process.cwd(), workdir);
-            const enableCache = core.getBooleanInput('cache');
-            if (goVersion !== '') {
-                yield core.group('Installing Go ...', () => __awaiter(this, void 0, void 0, function* () {
-                    yield setupGo.run(goVersion, true);
-                }));
-            }
-            const reviewdog = yield core.group('🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog', () => __awaiter(this, void 0, void 0, function* () {
-                return yield installer.installReviewdog(reviewdogVersion, tmpdir);
-            }));
-            const golangci = yield core.group('Installing golangci-lint ... https://github.com/golangci/golangci-lint', () => __awaiter(this, void 0, void 0, function* () {
-                return yield installer.installGolangciLint(golangciVersion, tmpdir);
-            }));
-            let cacheState = undefined;
-            if (enableCache) {
-                cacheState = yield core.group('Restoring cache ...', () => __awaiter(this, void 0, void 0, function* () {
-                    return yield cache.restore(cwd);
-                }));
-            }
-            yield core.group('Running golangci-lint with reviewdog 🐶 ...', () => __awaiter(this, void 0, void 0, function* () {
-                const output = yield exec.getExecOutput(golangci, ['run', '--out-format', 'line-number', ...flags.parse(golangciLintFlags)], {
-                    cwd: cwd,
-                    ignoreReturnCode: true
-                });
-                process.env['REVIEWDOG_GITHUB_API_TOKEN'] = core.getInput('github_token');
-                yield exec.exec(reviewdog, [
-                    '-f=golangci-lint',
-                    `-name=${toolName}`,
-                    `-reporter=${reporter}`,
-                    `-filter-mode=${filterMode}`,
-                    `-fail-on-error=${failOnError}`,
-                    `-level=${level}`,
-                    ...flags.parse(reviewdogFlags)
-                ], {
-                    cwd: cwd,
-                    input: Buffer.from(output.stdout, 'utf-8')
-                });
-            }));
-            if (cacheState) {
-                yield core.group('Saving cache ...', () => __awaiter(this, void 0, void 0, function* () {
-                    if (cacheState) {
-                        yield cache.save(cacheState);
-                    }
-                }));
-            }
+            await io.rmRF(tmpdir);
         }
         catch (error) {
+            // suppress errors
+            // Garbage will remain, but it may be harmless.
             if (error instanceof Error) {
-                core.setFailed(error);
+                core.info(`clean up failed: ${error.message}`);
             }
             else {
-                core.setFailed(`${error}`);
+                core.info(`clean up failed: ${error}`);
             }
         }
-        finally {
-            // clean up the temporary directory
-            try {
-                yield io.rmRF(tmpdir);
-            }
-            catch (error) {
-                // suppress errors
-                // Garbage will remain, but it may be harmless.
-                if (error instanceof Error) {
-                    core.info(`clean up failed: ${error.message}`);
-                }
-                else {
-                    core.info(`clean up failed: ${error}`);
-                }
-            }
-        }
-    });
+    }
 }
 run();
 
@@ -65111,15 +65070,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -65132,184 +65082,170 @@ const semver = __importStar(__nccwpck_require__(1383));
 const httpm = __importStar(__nccwpck_require__(9925));
 const sys = __importStar(__nccwpck_require__(540));
 const os_1 = __importDefault(__nccwpck_require__(2087));
-function getGo(versionSpec, stable, auth) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let osPlat = os_1.default.platform();
-        let osArch = os_1.default.arch();
-        // check cache
-        let toolPath;
-        toolPath = tc.find('go', versionSpec);
-        // If not found in cache, download
-        if (toolPath) {
-            core.info(`Found in cache @ ${toolPath}`);
-            return toolPath;
-        }
-        core.info(`Attempting to download ${versionSpec}...`);
-        let downloadPath = '';
-        let info = null;
-        //
-        // Try download from internal distribution (popular versions only)
-        //
-        try {
-            info = yield getInfoFromManifest(versionSpec, stable, auth);
-            if (info) {
-                downloadPath = yield installGoVersion(info, auth);
-            }
-            else {
-                core.info('Not found in manifest.  Falling back to download directly from Go');
-            }
-        }
-        catch (err) {
-            if (err instanceof tc.HTTPError) {
-                if (err.httpStatusCode === 403 || err.httpStatusCode === 429) {
-                    core.info(`Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`);
-                }
-                core.debug(err.stack || '');
-            }
-            else if (err instanceof Error) {
-                core.info(err.message);
-                core.debug(err.stack || '');
-            }
-            else {
-                core.info(`${err}`);
-            }
-            core.info('Falling back to download directly from Go');
-        }
-        //
-        // Download from storage.googleapis.com
-        //
-        if (!downloadPath) {
-            info = yield getInfoFromDist(versionSpec, stable);
-            if (!info) {
-                throw new Error(`Unable to find Go version '${versionSpec}' for platform ${osPlat} and architecture ${osArch}.`);
-            }
-            try {
-                core.info('Install from dist');
-                downloadPath = yield installGoVersion(info, undefined);
-            }
-            catch (err) {
-                throw new Error(`Failed to download version ${versionSpec}: ${err}`);
-            }
-        }
-        return downloadPath;
-    });
-}
-exports.getGo = getGo;
-function installGoVersion(info, auth) {
-    return __awaiter(this, void 0, void 0, function* () {
-        core.info(`Acquiring ${info.resolvedVersion} from ${info.downloadUrl}`);
-        const downloadPath = yield tc.downloadTool(info.downloadUrl, undefined, auth);
-        core.info('Extracting Go...');
-        let extPath = yield extractGoArchive(downloadPath);
-        core.info(`Successfully extracted go to ${extPath}`);
-        if (info.type === 'dist') {
-            extPath = path.join(extPath, 'go');
-        }
-        core.info('Adding to the cache ...');
-        const cachedDir = yield tc.cacheDir(extPath, 'go', makeSemver(info.resolvedVersion));
-        core.info(`Successfully cached go to ${cachedDir}`);
-        return cachedDir;
-    });
-}
-function extractGoArchive(archivePath) {
-    return __awaiter(this, void 0, void 0, function* () {
-        const platform = os_1.default.platform();
-        let extPath;
-        if (platform === 'win32') {
-            extPath = yield tc.extractZip(archivePath);
+async function getGo(versionSpec, stable, auth) {
+    let osPlat = os_1.default.platform();
+    let osArch = os_1.default.arch();
+    // check cache
+    let toolPath;
+    toolPath = tc.find('go', versionSpec);
+    // If not found in cache, download
+    if (toolPath) {
+        core.info(`Found in cache @ ${toolPath}`);
+        return toolPath;
+    }
+    core.info(`Attempting to download ${versionSpec}...`);
+    let downloadPath = '';
+    let info = null;
+    //
+    // Try download from internal distribution (popular versions only)
+    //
+    try {
+        info = await getInfoFromManifest(versionSpec, stable, auth);
+        if (info) {
+            downloadPath = await installGoVersion(info, auth);
         }
         else {
-            extPath = yield tc.extractTar(archivePath);
+            core.info('Not found in manifest.  Falling back to download directly from Go');
         }
-        return extPath;
-    });
+    }
+    catch (err) {
+        if (err instanceof tc.HTTPError) {
+            if (err.httpStatusCode === 403 || err.httpStatusCode === 429) {
+                core.info(`Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`);
+            }
+            core.debug(err.stack || '');
+        }
+        else if (err instanceof Error) {
+            core.info(err.message);
+            core.debug(err.stack || '');
+        }
+        else {
+            core.info(`${err}`);
+        }
+        core.info('Falling back to download directly from Go');
+    }
+    //
+    // Download from storage.googleapis.com
+    //
+    if (!downloadPath) {
+        info = await getInfoFromDist(versionSpec, stable);
+        if (!info) {
+            throw new Error(`Unable to find Go version '${versionSpec}' for platform ${osPlat} and architecture ${osArch}.`);
+        }
+        try {
+            core.info('Install from dist');
+            downloadPath = await installGoVersion(info, undefined);
+        }
+        catch (err) {
+            throw new Error(`Failed to download version ${versionSpec}: ${err}`);
+        }
+    }
+    return downloadPath;
+}
+exports.getGo = getGo;
+async function installGoVersion(info, auth) {
+    core.info(`Acquiring ${info.resolvedVersion} from ${info.downloadUrl}`);
+    const downloadPath = await tc.downloadTool(info.downloadUrl, undefined, auth);
+    core.info('Extracting Go...');
+    let extPath = await extractGoArchive(downloadPath);
+    core.info(`Successfully extracted go to ${extPath}`);
+    if (info.type === 'dist') {
+        extPath = path.join(extPath, 'go');
+    }
+    core.info('Adding to the cache ...');
+    const cachedDir = await tc.cacheDir(extPath, 'go', makeSemver(info.resolvedVersion));
+    core.info(`Successfully cached go to ${cachedDir}`);
+    return cachedDir;
+}
+async function extractGoArchive(archivePath) {
+    const platform = os_1.default.platform();
+    let extPath;
+    if (platform === 'win32') {
+        extPath = await tc.extractZip(archivePath);
+    }
+    else {
+        extPath = await tc.extractTar(archivePath);
+    }
+    return extPath;
 }
 exports.extractGoArchive = extractGoArchive;
-function getInfoFromManifest(versionSpec, stable, auth) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let info = null;
-        const releases = yield tc.getManifestFromRepo('actions', 'go-versions', auth, 'main');
-        core.info(`matching ${versionSpec}...`);
-        const rel = yield tc.findFromManifest(versionSpec, stable, releases);
-        if (rel && rel.files.length > 0) {
-            info = {};
-            info.type = 'manifest';
-            info.resolvedVersion = rel.version;
-            info.downloadUrl = rel.files[0].download_url;
-            info.fileName = rel.files[0].filename;
-        }
-        return info;
-    });
+async function getInfoFromManifest(versionSpec, stable, auth) {
+    let info = null;
+    const releases = await tc.getManifestFromRepo('actions', 'go-versions', auth, 'main');
+    core.info(`matching ${versionSpec}...`);
+    const rel = await tc.findFromManifest(versionSpec, stable, releases);
+    if (rel && rel.files.length > 0) {
+        info = {};
+        info.type = 'manifest';
+        info.resolvedVersion = rel.version;
+        info.downloadUrl = rel.files[0].download_url;
+        info.fileName = rel.files[0].filename;
+    }
+    return info;
 }
 exports.getInfoFromManifest = getInfoFromManifest;
-function getInfoFromDist(versionSpec, stable) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let version;
-        version = yield findMatch(versionSpec, stable);
-        if (!version) {
-            return null;
-        }
-        let downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
-        return {
-            type: 'dist',
-            downloadUrl: downloadUrl,
-            resolvedVersion: version.version,
-            fileName: version.files[0].filename
-        };
-    });
+async function getInfoFromDist(versionSpec, stable) {
+    let version;
+    version = await findMatch(versionSpec, stable);
+    if (!version) {
+        return null;
+    }
+    let downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
+    return {
+        type: 'dist',
+        downloadUrl: downloadUrl,
+        resolvedVersion: version.version,
+        fileName: version.files[0].filename
+    };
 }
-function findMatch(versionSpec, stable) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let archFilter = sys.getArch();
-        let platFilter = sys.getPlatform();
-        let result;
-        let match;
-        const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
-        let candidates = yield module.exports.getVersionsDist(dlUrl);
-        if (!candidates) {
-            throw new Error(`golang download url did not return results`);
+async function findMatch(versionSpec, stable) {
+    let archFilter = sys.getArch();
+    let platFilter = sys.getPlatform();
+    let result;
+    let match;
+    const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
+    let candidates = await module.exports.getVersionsDist(dlUrl);
+    if (!candidates) {
+        throw new Error(`golang download url did not return results`);
+    }
+    let goFile;
+    for (let i = 0; i < candidates.length; i++) {
+        let candidate = candidates[i];
+        let version = makeSemver(candidate.version);
+        // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
+        // since a semver of 1.13 would match latest 1.13
+        let parts = version.split('.');
+        if (parts.length == 2) {
+            version = version + '.0';
         }
-        let goFile;
-        for (let i = 0; i < candidates.length; i++) {
-            let candidate = candidates[i];
-            let version = makeSemver(candidate.version);
-            // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
-            // since a semver of 1.13 would match latest 1.13
-            let parts = version.split('.');
-            if (parts.length == 2) {
-                version = version + '.0';
-            }
-            core.debug(`check ${version} satisfies ${versionSpec}`);
-            if (semver.satisfies(version, versionSpec) && (!stable || candidate.stable === stable)) {
-                goFile = candidate.files.find(file => {
-                    core.debug(`${file.arch}===${archFilter} && ${file.os}===${platFilter}`);
-                    return file.arch === archFilter && file.os === platFilter;
-                });
-                if (goFile) {
-                    core.debug(`matched ${candidate.version}`);
-                    match = candidate;
-                    break;
-                }
+        core.debug(`check ${version} satisfies ${versionSpec}`);
+        if (semver.satisfies(version, versionSpec) && (!stable || candidate.stable === stable)) {
+            goFile = candidate.files.find(file => {
+                core.debug(`${file.arch}===${archFilter} && ${file.os}===${platFilter}`);
+                return file.arch === archFilter && file.os === platFilter;
+            });
+            if (goFile) {
+                core.debug(`matched ${candidate.version}`);
+                match = candidate;
+                break;
             }
         }
-        if (match && goFile) {
-            // clone since we're mutating the file list to be only the file that matches
-            result = Object.assign({}, match);
-            result.files = [goFile];
-        }
-        return result;
-    });
+    }
+    if (match && goFile) {
+        // clone since we're mutating the file list to be only the file that matches
+        result = Object.assign({}, match);
+        result.files = [goFile];
+    }
+    return result;
 }
 exports.findMatch = findMatch;
-function getVersionsDist(dlUrl) {
-    return __awaiter(this, void 0, void 0, function* () {
-        // this returns versions descending so latest is first
-        let http = new httpm.HttpClient('setup-go', [], {
-            allowRedirects: true,
-            maxRedirects: 3
-        });
-        return (yield http.getJson(dlUrl)).result;
+async function getVersionsDist(dlUrl) {
+    // this returns versions descending so latest is first
+    let http = new httpm.HttpClient('setup-go', [], {
+        allowRedirects: true,
+        maxRedirects: 3
     });
+    return (await http.getJson(dlUrl)).result;
 }
 exports.getVersionsDist = getVersionsDist;
 //
@@ -65361,15 +65297,6 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
-};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -65382,72 +65309,68 @@ const path_1 = __importDefault(__nccwpck_require__(5622));
 const child_process_1 = __importDefault(__nccwpck_require__(3129));
 const fs_1 = __importDefault(__nccwpck_require__(5747));
 const url_1 = __nccwpck_require__(8835);
-function run(versionSpec, stable) {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
-            if (versionSpec) {
-                let token = core.getInput('token');
-                let auth = !token || isGhes() ? undefined : `token ${token}`;
-                const installDir = yield installer.getGo(versionSpec, stable, auth);
-                core.exportVariable('GOROOT', installDir);
-                core.addPath(path_1.default.join(installDir, 'bin'));
-                core.info('Added go to the path');
-                let added = yield addBinToPath();
-                core.debug(`add bin ${added}`);
-                core.info(`Successfully setup go version ${versionSpec}`);
-            }
-            // add problem matchers
-            const matchersPath = path_1.default.join(__dirname, 'matchers.json');
-            core.info(`##[add-matcher]${matchersPath}`);
-            // output the version actually being used
-            let goPath = yield io.which('go');
-            let goVersion = (child_process_1.default.execSync(`${goPath} version`) || '').toString();
-            core.info(goVersion);
-            core.startGroup('go env');
-            let goEnv = (child_process_1.default.execSync(`${goPath} env`) || '').toString();
-            core.info(goEnv);
-            core.endGroup();
+async function run(versionSpec, stable) {
+    try {
+        core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
+        if (versionSpec) {
+            let token = core.getInput('token');
+            let auth = !token || isGhes() ? undefined : `token ${token}`;
+            const installDir = await installer.getGo(versionSpec, stable, auth);
+            core.exportVariable('GOROOT', installDir);
+            core.addPath(path_1.default.join(installDir, 'bin'));
+            core.info('Added go to the path');
+            let added = await addBinToPath();
+            core.debug(`add bin ${added}`);
+            core.info(`Successfully setup go version ${versionSpec}`);
         }
-        catch (error) {
-            if (error instanceof Error) {
-                core.setFailed(error);
-            }
-            else {
-                core.setFailed(`${error}`);
-            }
+        // add problem matchers
+        const matchersPath = path_1.default.join(__dirname, 'matchers.json');
+        core.info(`##[add-matcher]${matchersPath}`);
+        // output the version actually being used
+        let goPath = await io.which('go');
+        let goVersion = (child_process_1.default.execSync(`${goPath} version`) || '').toString();
+        core.info(goVersion);
+        core.startGroup('go env');
+        let goEnv = (child_process_1.default.execSync(`${goPath} env`) || '').toString();
+        core.info(goEnv);
+        core.endGroup();
+    }
+    catch (error) {
+        if (error instanceof Error) {
+            core.setFailed(error);
         }
-    });
+        else {
+            core.setFailed(`${error}`);
+        }
+    }
 }
 exports.run = run;
-function addBinToPath() {
-    return __awaiter(this, void 0, void 0, function* () {
-        let added = false;
-        let g = yield io.which('go');
-        core.debug(`which go :${g}:`);
-        if (!g) {
-            core.debug('go not in the path');
-            return added;
-        }
-        let buf = child_process_1.default.execSync('go env GOPATH');
-        if (buf) {
-            let gp = buf.toString().trim();
-            core.debug(`go env GOPATH :${gp}:`);
-            if (!fs_1.default.existsSync(gp)) {
-                // some of the hosted images have go install but not profile dir
-                core.debug(`creating ${gp}`);
-                io.mkdirP(gp);
-            }
-            let bp = path_1.default.join(gp, 'bin');
-            if (!fs_1.default.existsSync(bp)) {
-                core.debug(`creating ${bp}`);
-                io.mkdirP(bp);
-            }
-            core.addPath(bp);
-            added = true;
-        }
+async function addBinToPath() {
+    let added = false;
+    let g = await io.which('go');
+    core.debug(`which go :${g}:`);
+    if (!g) {
+        core.debug('go not in the path');
         return added;
-    });
+    }
+    let buf = child_process_1.default.execSync('go env GOPATH');
+    if (buf) {
+        let gp = buf.toString().trim();
+        core.debug(`go env GOPATH :${gp}:`);
+        if (!fs_1.default.existsSync(gp)) {
+            // some of the hosted images have go install but not profile dir
+            core.debug(`creating ${gp}`);
+            io.mkdirP(gp);
+        }
+        let bp = path_1.default.join(gp, 'bin');
+        if (!fs_1.default.existsSync(bp)) {
+            core.debug(`creating ${bp}`);
+            io.mkdirP(bp);
+        }
+        core.addPath(bp);
+        added = true;
+    }
+    return added;
 }
 exports.addBinToPath = addBinToPath;
 function isGhes() {
