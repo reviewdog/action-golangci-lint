@@ -32,8 +32,8 @@ export interface IGoVersionInfo {
 }
 
 export async function getGo(versionSpec: string, stable: boolean, auth: string | undefined) {
-  let osPlat: string = os.platform();
-  let osArch: string = os.arch();
+  const osPlat: string = os.platform();
+  const osArch: string = os.arch();
 
   // check cache
   let toolPath: string;
@@ -152,39 +152,39 @@ async function getInfoFromDist(versionSpec: string, stable: boolean): Promise<IG
     return null;
   }
 
-  let downloadUrl: string = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
+  const downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
 
   return <IGoVersionInfo>{
     type: 'dist',
-    downloadUrl: downloadUrl,
+    downloadUrl,
     resolvedVersion: version.version,
     fileName: version.files[0].filename
   };
 }
 
 export async function findMatch(versionSpec: string, stable: boolean): Promise<IGoVersion | undefined> {
-  let archFilter = sys.getArch();
-  let platFilter = sys.getPlatform();
+  const archFilter = sys.getArch();
+  const platFilter = sys.getPlatform();
 
   let result: IGoVersion | undefined;
   let match: IGoVersion | undefined;
 
-  const dlUrl: string = 'https://golang.org/dl/?mode=json&include=all';
-  let candidates: IGoVersion[] | null = await module.exports.getVersionsDist(dlUrl);
+  const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
+  const candidates: IGoVersion[] | null = await module.exports.getVersionsDist(dlUrl);
   if (!candidates) {
     throw new Error(`golang download url did not return results`);
   }
 
   let goFile: IGoVersionFile | undefined;
   for (let i = 0; i < candidates.length; i++) {
-    let candidate: IGoVersion = candidates[i];
+    const candidate: IGoVersion = candidates[i];
     let version = makeSemver(candidate.version);
 
     // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
     // since a semver of 1.13 would match latest 1.13
-    let parts: string[] = version.split('.');
+    const parts: string[] = version.split('.');
     if (parts.length == 2) {
-      version = version + '.0';
+      version = `${version}.0`;
     }
 
     core.debug(`check ${version} satisfies ${versionSpec}`);
@@ -204,7 +204,7 @@ export async function findMatch(versionSpec: string, stable: boolean): Promise<I
 
   if (match && goFile) {
     // clone since we're mutating the file list to be only the file that matches
-    result = <IGoVersion>Object.assign({}, match);
+    result = Object.assign({}, match);
     result.files = [goFile];
   }
 
@@ -213,7 +213,7 @@ export async function findMatch(versionSpec: string, stable: boolean): Promise<I
 
 export async function getVersionsDist(dlUrl: string): Promise<IGoVersion[] | null> {
   // this returns versions descending so latest is first
-  let http: httpm.HttpClient = new httpm.HttpClient('setup-go', [], {
+  const http: httpm.HttpClient = new httpm.HttpClient('setup-go', [], {
     allowRedirects: true,
     maxRedirects: 3
   });
@@ -229,12 +229,12 @@ export async function getVersionsDist(dlUrl: string): Promise<IGoVersion[] | nul
 export function makeSemver(version: string): string {
   version = version.replace('go', '');
   version = version.replace('beta', '-beta').replace('rc', '-rc');
-  let parts = version.split('-');
+  const parts = version.split('-');
 
   let verPart: string = parts[0];
-  let prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
+  const prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
 
-  let verParts: string[] = verPart.split('.');
+  const verParts: string[] = verPart.split('.');
   if (verParts.length == 2) {
     verPart += '.0';
   }
