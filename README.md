@@ -107,6 +107,16 @@ Optional. [`true`, `false`]
 It enables cache. The action caches `~/.cache/golangci-lint`, `~/.cache/go-build`, `~/go/pkg/mod`.
 Default is `true`.
 
+### `reviewdog_version`
+
+Optional. Install a specific version of reviewdog.
+By default, the latest version of reviewdog is installed.
+
+### `golangci_lint_version`
+
+Optional. Install a specific version of golangci-lint.
+By default, the latest version of golangci-lint is installed.
+
 ## Example usage
 
 ### Minimum Usage Example
