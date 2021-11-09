@@ -62,7 +62,7 @@ async function run() {
         golangci,
         ['run', '--out-format', 'line-number', ...flags.parse(golangciLintFlags)],
         {
-          cwd: cwd,
+          cwd,
           ignoreReturnCode: true
         }
       );
@@ -80,7 +80,7 @@ async function run() {
           ...flags.parse(reviewdogFlags)
         ],
         {
-          cwd: cwd,
+          cwd,
           input: Buffer.from(output.stdout, 'utf-8')
         }
       );

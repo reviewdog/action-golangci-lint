@@ -64989,7 +64989,7 @@ async function run() {
         }
         await core.group('Running golangci-lint with reviewdog 🐶 ...', async () => {
             const output = await exec.getExecOutput(golangci, ['run', '--out-format', 'line-number', ...flags.parse(golangciLintFlags)], {
-                cwd: cwd,
+                cwd,
                 ignoreReturnCode: true
             });
             process.env['REVIEWDOG_GITHUB_API_TOKEN'] = core.getInput('github_token');
@@ -65002,7 +65002,7 @@ async function run() {
                 `-level=${level}`,
                 ...flags.parse(reviewdogFlags)
             ], {
-                cwd: cwd,
+                cwd,
                 input: Buffer.from(output.stdout, 'utf-8')
             });
         });
@@ -65045,7 +65045,7 @@ run();
 /***/ }),
 
 /***/ 2640:
-/***/ (function(module, exports, __nccwpck_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -65075,19 +65075,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
-const tc = __importStar(__nccwpck_require__(7784));
 const core = __importStar(__nccwpck_require__(2186));
+const httpm = __importStar(__nccwpck_require__(9925));
 const path = __importStar(__nccwpck_require__(5622));
 const semver = __importStar(__nccwpck_require__(1383));
-const httpm = __importStar(__nccwpck_require__(9925));
 const sys = __importStar(__nccwpck_require__(540));
+const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2087));
 async function getGo(versionSpec, stable, auth) {
-    let osPlat = os_1.default.platform();
-    let osArch = os_1.default.arch();
+    const osPlat = os_1.default.platform();
+    const osArch = os_1.default.arch();
     // check cache
-    let toolPath;
-    toolPath = tc.find('go', versionSpec);
+    const toolPath = tc.find('go', versionSpec);
     // If not found in cache, download
     if (toolPath) {
         core.info(`Found in cache @ ${toolPath}`);
@@ -65185,38 +65184,36 @@ async function getInfoFromManifest(versionSpec, stable, auth) {
 }
 exports.getInfoFromManifest = getInfoFromManifest;
 async function getInfoFromDist(versionSpec, stable) {
-    let version;
-    version = await findMatch(versionSpec, stable);
+    const version = await findMatch(versionSpec, stable);
     if (!version) {
         return null;
     }
-    let downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
+    const downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
     return {
         type: 'dist',
-        downloadUrl: downloadUrl,
+        downloadUrl,
         resolvedVersion: version.version,
         fileName: version.files[0].filename
     };
 }
 async function findMatch(versionSpec, stable) {
-    let archFilter = sys.getArch();
-    let platFilter = sys.getPlatform();
+    const archFilter = sys.getArch();
+    const platFilter = sys.getPlatform();
     let result;
     let match;
     const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
-    let candidates = await module.exports.getVersionsDist(dlUrl);
+    const candidates = await getVersionsDist(dlUrl);
     if (!candidates) {
         throw new Error(`golang download url did not return results`);
     }
     let goFile;
-    for (let i = 0; i < candidates.length; i++) {
-        let candidate = candidates[i];
+    for (const candidate of candidates) {
         let version = makeSemver(candidate.version);
         // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
         // since a semver of 1.13 would match latest 1.13
-        let parts = version.split('.');
-        if (parts.length == 2) {
-            version = version + '.0';
+        const parts = version.split('.');
+        if (parts.length === 2) {
+            version = `${version}.0`;
         }
         core.debug(`check ${version} satisfies ${versionSpec}`);
         if (semver.satisfies(version, versionSpec) && (!stable || candidate.stable === stable)) {
@@ -65241,7 +65238,7 @@ async function findMatch(versionSpec, stable) {
 exports.findMatch = findMatch;
 async function getVersionsDist(dlUrl) {
     // this returns versions descending so latest is first
-    let http = new httpm.HttpClient('setup-go', [], {
+    const http = new httpm.HttpClient('setup-go', [], {
         allowRedirects: true,
         maxRedirects: 3
     });
@@ -65257,11 +65254,11 @@ exports.getVersionsDist = getVersionsDist;
 function makeSemver(version) {
     version = version.replace('go', '');
     version = version.replace('beta', '-beta').replace('rc', '-rc');
-    let parts = version.split('-');
+    const parts = version.split('-');
     let verPart = parts[0];
-    let prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
-    let verParts = verPart.split('.');
-    if (verParts.length == 2) {
+    const prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
+    const verParts = verPart.split('.');
+    if (verParts.length === 2) {
         verPart += '.0';
     }
     return `${verPart}${prereleasePart}`;
@@ -65303,23 +65300,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.addBinToPath = exports.run = void 0;
 const core = __importStar(__nccwpck_require__(2186));
-const io = __importStar(__nccwpck_require__(7436));
 const installer = __importStar(__nccwpck_require__(2640));
-const path_1 = __importDefault(__nccwpck_require__(5622));
-const child_process_1 = __importDefault(__nccwpck_require__(3129));
-const fs_1 = __importDefault(__nccwpck_require__(5747));
+const io = __importStar(__nccwpck_require__(7436));
 const url_1 = __nccwpck_require__(8835);
+const child_process_1 = __importDefault(__nccwpck_require__(3129));
+const path_1 = __importDefault(__nccwpck_require__(5622));
 async function run(versionSpec, stable) {
     try {
         core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
         if (versionSpec) {
-            let token = core.getInput('token');
-            let auth = !token || isGhes() ? undefined : `token ${token}`;
+            const token = core.getInput('token');
+            const auth = !token || isGhes() ? undefined : `token ${token}`;
             const installDir = await installer.getGo(versionSpec, stable, auth);
             core.exportVariable('GOROOT', installDir);
             core.addPath(path_1.default.join(installDir, 'bin'));
             core.info('Added go to the path');
-            let added = await addBinToPath();
+            const added = await addBinToPath();
             core.debug(`add bin ${added}`);
             core.info(`Successfully setup go version ${versionSpec}`);
         }
@@ -65327,11 +65323,11 @@ async function run(versionSpec, stable) {
         const matchersPath = path_1.default.join(__dirname, 'matchers.json');
         core.info(`##[add-matcher]${matchersPath}`);
         // output the version actually being used
-        let goPath = await io.which('go');
-        let goVersion = (child_process_1.default.execSync(`${goPath} version`) || '').toString();
+        const goPath = await io.which('go');
+        const goVersion = (child_process_1.default.execSync(`${goPath} version`) || '').toString();
         core.info(goVersion);
         core.startGroup('go env');
-        let goEnv = (child_process_1.default.execSync(`${goPath} env`) || '').toString();
+        const goEnv = (child_process_1.default.execSync(`${goPath} env`) || '').toString();
         core.info(goEnv);
         core.endGroup();
     }
@@ -65347,26 +65343,21 @@ async function run(versionSpec, stable) {
 exports.run = run;
 async function addBinToPath() {
     let added = false;
-    let g = await io.which('go');
+    const g = await io.which('go');
     core.debug(`which go :${g}:`);
     if (!g) {
         core.debug('go not in the path');
         return added;
     }
-    let buf = child_process_1.default.execSync('go env GOPATH');
+    const buf = child_process_1.default.execSync('go env GOPATH');
     if (buf) {
-        let gp = buf.toString().trim();
+        const gp = buf.toString().trim();
         core.debug(`go env GOPATH :${gp}:`);
-        if (!fs_1.default.existsSync(gp)) {
-            // some of the hosted images have go install but not profile dir
-            core.debug(`creating ${gp}`);
-            io.mkdirP(gp);
-        }
-        let bp = path_1.default.join(gp, 'bin');
-        if (!fs_1.default.existsSync(bp)) {
-            core.debug(`creating ${bp}`);
-            io.mkdirP(bp);
-        }
+        core.debug(`creating ${gp}`);
+        await io.mkdirP(gp);
+        const bp = path_1.default.join(gp, 'bin');
+        core.debug(`creating ${bp}`);
+        await io.mkdirP(bp);
         core.addPath(bp);
         added = true;
     }
@@ -65382,20 +65373,23 @@ function isGhes() {
 /***/ }),
 
 /***/ 540:
-/***/ ((__unused_webpack_module, exports, __nccwpck_require__) => {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
 // this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/system.ts
 // see LICENSE for its license
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.getArch = exports.getPlatform = void 0;
-let os = __nccwpck_require__(2087);
+const os_1 = __importDefault(__nccwpck_require__(2087));
 function getPlatform() {
     // darwin and linux match already
     // freebsd not supported yet but future proofed.
     // 'aix', 'darwin', 'freebsd', 'linux', 'openbsd', 'sunos', and 'win32'
-    let plat = os.platform();
+    let plat = os_1.default.platform();
     // wants 'darwin', 'freebsd', 'linux', 'windows'
     if (plat === 'win32') {
         plat = 'windows';
@@ -65405,7 +65399,7 @@ function getPlatform() {
 exports.getPlatform = getPlatform;
 function getArch() {
     // 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'.
-    let arch = os.arch();
+    let arch = os_1.default.arch();
     // wants amd64, 386, arm64, armv61, ppc641e, s390x
     // currently not supported by runner but future proofed mapping
     switch (arch) {

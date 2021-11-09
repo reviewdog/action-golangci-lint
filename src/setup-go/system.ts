@@ -1,7 +1,7 @@
 // this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/system.ts
 // see LICENSE for its license
 
-let os = require('os');
+import os from 'os';
 
 export function getPlatform(): string {
   // darwin and linux match already
