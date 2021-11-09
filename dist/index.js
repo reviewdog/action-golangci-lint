@@ -64958,7 +64958,7 @@ async function run() {
     const tmpdir = await fs_1.promises.mkdtemp(path.join(runnerTmpdir, 'reviewdog-'));
     try {
         const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
-        const golangciVersion = core.getInput('golangci_version') || 'latest';
+        const golangciLintVersion = core.getInput('golangci_lint_version') || 'latest';
         const goVersion = core.getInput('go_version');
         const golangciLintFlags = core.getInput('golangci_lint_flags');
         const toolName = core.getInput('tool_name') || 'golangci';
@@ -64979,7 +64979,7 @@ async function run() {
             return await installer.installReviewdog(reviewdogVersion, tmpdir);
         });
         const golangci = await core.group('Installing golangci-lint ... https://github.com/golangci/golangci-lint', async () => {
-            return await installer.installGolangciLint(golangciVersion, tmpdir);
+            return await installer.installGolangciLint(golangciLintVersion, tmpdir);
         });
         let cacheState = undefined;
         if (enableCache) {
