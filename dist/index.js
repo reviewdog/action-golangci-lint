@@ -65045,7 +65045,7 @@ run();
 /***/ }),
 
 /***/ 2640:
-/***/ (function(module, exports, __nccwpck_require__) {
+/***/ (function(__unused_webpack_module, exports, __nccwpck_require__) {
 
 "use strict";
 
@@ -65075,19 +65075,18 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
-const tc = __importStar(__nccwpck_require__(7784));
 const core = __importStar(__nccwpck_require__(2186));
+const httpm = __importStar(__nccwpck_require__(9925));
 const path = __importStar(__nccwpck_require__(5622));
 const semver = __importStar(__nccwpck_require__(1383));
-const httpm = __importStar(__nccwpck_require__(9925));
 const sys = __importStar(__nccwpck_require__(540));
+const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2087));
 async function getGo(versionSpec, stable, auth) {
     const osPlat = os_1.default.platform();
     const osArch = os_1.default.arch();
     // check cache
-    let toolPath;
-    toolPath = tc.find('go', versionSpec);
+    const toolPath = tc.find('go', versionSpec);
     // If not found in cache, download
     if (toolPath) {
         core.info(`Found in cache @ ${toolPath}`);
@@ -65185,8 +65184,7 @@ async function getInfoFromManifest(versionSpec, stable, auth) {
 }
 exports.getInfoFromManifest = getInfoFromManifest;
 async function getInfoFromDist(versionSpec, stable) {
-    let version;
-    version = await findMatch(versionSpec, stable);
+    const version = await findMatch(versionSpec, stable);
     if (!version) {
         return null;
     }
@@ -65204,7 +65202,7 @@ async function findMatch(versionSpec, stable) {
     let result;
     let match;
     const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
-    const candidates = await module.exports.getVersionsDist(dlUrl);
+    const candidates = await getVersionsDist(dlUrl);
     if (!candidates) {
         throw new Error(`golang download url did not return results`);
     }
@@ -65214,7 +65212,7 @@ async function findMatch(versionSpec, stable) {
         // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
         // since a semver of 1.13 would match latest 1.13
         const parts = version.split('.');
-        if (parts.length == 2) {
+        if (parts.length === 2) {
             version = `${version}.0`;
         }
         core.debug(`check ${version} satisfies ${versionSpec}`);
@@ -65260,7 +65258,7 @@ function makeSemver(version) {
     let verPart = parts[0];
     const prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
     const verParts = verPart.split('.');
-    if (verParts.length == 2) {
+    if (verParts.length === 2) {
         verPart += '.0';
     }
     return `${verPart}${prereleasePart}`;

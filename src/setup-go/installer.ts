@@ -1,12 +1,12 @@
 // this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
 // see LICENSE for its license
 
-import * as tc from '@actions/tool-cache';
 import * as core from '@actions/core';
+import * as httpm from '@actions/http-client';
 import * as path from 'path';
 import * as semver from 'semver';
-import * as httpm from '@actions/http-client';
 import * as sys from './system';
+import * as tc from '@actions/tool-cache';
 import os from 'os';
 
 type InstallationType = 'dist' | 'manifest';
@@ -36,8 +36,7 @@ export async function getGo(versionSpec: string, stable: boolean, auth: string |
   const osArch: string = os.arch();
 
   // check cache
-  let toolPath: string;
-  toolPath = tc.find('go', versionSpec);
+  const toolPath = tc.find('go', versionSpec);
   // If not found in cache, download
   if (toolPath) {
     core.info(`Found in cache @ ${toolPath}`);
@@ -146,8 +145,7 @@ export async function getInfoFromManifest(
 }
 
 async function getInfoFromDist(versionSpec: string, stable: boolean): Promise<IGoVersionInfo | null> {
-  let version: IGoVersion | undefined;
-  version = await findMatch(versionSpec, stable);
+  const version = await findMatch(versionSpec, stable);
   if (!version) {
     return null;
   }
@@ -170,7 +168,7 @@ export async function findMatch(versionSpec: string, stable: boolean): Promise<I
   let match: IGoVersion | undefined;
 
   const dlUrl = 'https://golang.org/dl/?mode=json&include=all';
-  const candidates: IGoVersion[] | null = await module.exports.getVersionsDist(dlUrl);
+  const candidates = await getVersionsDist(dlUrl);
   if (!candidates) {
     throw new Error(`golang download url did not return results`);
   }
@@ -182,7 +180,7 @@ export async function findMatch(versionSpec: string, stable: boolean): Promise<I
     // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0
     // since a semver of 1.13 would match latest 1.13
     const parts: string[] = version.split('.');
-    if (parts.length == 2) {
+    if (parts.length === 2) {
       version = `${version}.0`;
     }
 
@@ -234,7 +232,7 @@ export function makeSemver(version: string): string {
   const prereleasePart = parts.length > 1 ? `-${parts[1]}` : '';
 
   const verParts: string[] = verPart.split('.');
-  if (verParts.length == 2) {
+  if (verParts.length === 2) {
     verPart += '.0';
   }
 
