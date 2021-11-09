@@ -17,7 +17,7 @@ async function run() {
 
   try {
     const reviewdogVersion = core.getInput('reviewdog_version') || 'latest';
-    const golangciVersion = core.getInput('golangci_version') || 'latest';
+    const golangciVersion = core.getInput('golangci_lint_version') || 'latest';
     const goVersion = core.getInput('go_version');
     const golangciLintFlags = core.getInput('golangci_lint_flags');
     const toolName = core.getInput('tool_name') || 'golangci';
