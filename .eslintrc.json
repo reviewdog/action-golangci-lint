@@ -57,6 +57,7 @@
         "@typescript-eslint/prefer-includes": "error",
         "@typescript-eslint/prefer-string-starts-ends-with": "error",
         "@typescript-eslint/promise-function-async": "error",
+        "@typescript-eslint/no-floating-promises": "error",
         "@typescript-eslint/require-array-sort-compare": "error",
         "@typescript-eslint/restrict-plus-operands": "error",
         "semi": "off",
