@@ -31,7 +31,7 @@ export interface IGoVersionInfo {
   fileName: string;
 }
 
-export async function getGo(versionSpec: string, stable: boolean, auth: string | undefined) {
+export async function getGo(versionSpec: string, stable: boolean, auth: string | undefined): Promise<string> {
   const osPlat: string = os.platform();
   const osArch: string = os.arch();
 
@@ -135,7 +135,7 @@ export async function getInfoFromManifest(
   const rel = await tc.findFromManifest(versionSpec, stable, releases);
 
   if (rel && rel.files.length > 0) {
-    info = <IGoVersionInfo>{};
+    info = {} as IGoVersionInfo;
     info.type = 'manifest';
     info.resolvedVersion = rel.version;
     info.downloadUrl = rel.files[0].download_url;
@@ -154,7 +154,7 @@ async function getInfoFromDist(versionSpec: string, stable: boolean): Promise<IG
 
   const downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
 
-  return <IGoVersionInfo>{
+  return {
     type: 'dist',
     downloadUrl,
     resolvedVersion: version.version,
@@ -176,8 +176,7 @@ export async function findMatch(versionSpec: string, stable: boolean): Promise<I
   }
 
   let goFile: IGoVersionFile | undefined;
-  for (let i = 0; i < candidates.length; i++) {
-    const candidate: IGoVersion = candidates[i];
+  for (const candidate of candidates) {
     let version = makeSemver(candidate.version);
 
     // 1.13.0 is advertised as 1.13 preventing being able to match exactly 1.13.0

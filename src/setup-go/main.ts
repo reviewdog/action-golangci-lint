@@ -2,14 +2,13 @@
 // see LICENSE for its license
 
 import * as core from '@actions/core';
-import * as io from '@actions/io';
 import * as installer from './installer';
-import path from 'path';
-import cp from 'child_process';
-import fs from 'fs';
+import * as io from '@actions/io';
 import {URL} from 'url';
+import cp from 'child_process';
+import path from 'path';
 
-export async function run(versionSpec: string, stable: boolean) {
+export async function run(versionSpec: string, stable: boolean): Promise<void> {
   try {
     core.info(`Setup go ${stable ? 'stable' : ''} version spec ${versionSpec}`);
 
@@ -63,17 +62,12 @@ export async function addBinToPath(): Promise<boolean> {
   if (buf) {
     const gp = buf.toString().trim();
     core.debug(`go env GOPATH :${gp}:`);
-    if (!fs.existsSync(gp)) {
-      // some of the hosted images have go install but not profile dir
-      core.debug(`creating ${gp}`);
-      io.mkdirP(gp);
-    }
+    core.debug(`creating ${gp}`);
+    await io.mkdirP(gp);
 
     const bp = path.join(gp, 'bin');
-    if (!fs.existsSync(bp)) {
-      core.debug(`creating ${bp}`);
-      io.mkdirP(bp);
-    }
+    core.debug(`creating ${bp}`);
+    await io.mkdirP(bp);
 
     core.addPath(bp);
     added = true;
