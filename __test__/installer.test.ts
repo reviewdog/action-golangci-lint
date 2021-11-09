@@ -33,11 +33,11 @@ describe('installer', () => {
     const dir = await fs.mkdtemp(path.join(tempDir, 'golangci-'));
     const golangci = await installer.installGolangciLint('v1.41.1', dir);
     await exec.exec(golangci, ['--version']);
-  }, 10000);
+  }, 20000);
 
   it('installs the latest version of golangci-lint', async () => {
     const dir = await fs.mkdtemp(path.join(tempDir, 'golangci-'));
     const golangci = await installer.installGolangciLint('latest', dir);
     await exec.exec(golangci, ['--version']);
-  }, 10000);
+  }, 20000);
 });
