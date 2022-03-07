@@ -1,10 +1,10 @@
+import * as cache from "@actions/cache";
+import * as core from "@actions/core";
 import * as crypto from "crypto";
 import * as fs from "fs";
+import * as path from "path";
 import * as stream from "stream";
 import * as util from "util";
-import * as path from "path";
-import * as core from "@actions/core";
-import * as cache from "@actions/cache";
 
 const paths = ["~/.cache/golangci-lint", "~/.cache/go-build", "~/go/pkg"];
 

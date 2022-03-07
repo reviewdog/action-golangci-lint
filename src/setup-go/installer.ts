@@ -1,12 +1,12 @@
 // this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
 // see LICENSE for its license
 
-import * as tc from "@actions/tool-cache";
 import * as core from "@actions/core";
+import * as httpm from "@actions/http-client";
 import * as path from "path";
 import * as semver from "semver";
-import * as httpm from "@actions/http-client";
 import * as sys from "./system";
+import * as tc from "@actions/tool-cache";
 import os from "os";
 
 type InstallationType = "dist" | "manifest";
@@ -31,7 +31,7 @@ export interface IGoVersionInfo {
   fileName: string;
 }
 
-export async function getGo(versionSpec: string, checkLatest: boolean, auth: string | undefined) {
+export async function getGo(versionSpec: string, checkLatest: boolean, auth: string | undefined): Promise<string> {
   const osPlat: string = os.platform();
   const osArch: string = os.arch();
 
@@ -47,8 +47,7 @@ export async function getGo(versionSpec: string, checkLatest: boolean, auth: str
   }
 
   // check cache
-  let toolPath: string;
-  toolPath = tc.find("go", versionSpec);
+  const toolPath = tc.find("go", versionSpec);
   // If not found in cache, download
   if (toolPath) {
     core.info(`Found in cache @ ${toolPath}`);
@@ -155,7 +154,7 @@ export async function getInfoFromManifest(
   const rel = await tc.findFromManifest(versionSpec, stable, releases);
 
   if (rel && rel.files.length > 0) {
-    info = <IGoVersionInfo>{};
+    info = {} as IGoVersionInfo;
     info.type = "manifest";
     info.resolvedVersion = rel.version;
     info.downloadUrl = rel.files[0].download_url;
@@ -166,39 +165,37 @@ export async function getInfoFromManifest(
 }
 
 async function getInfoFromDist(versionSpec: string): Promise<IGoVersionInfo | null> {
-  let version: IGoVersion | undefined;
-  version = await findMatch(versionSpec);
+  const version = await findMatch(versionSpec);
   if (!version) {
     return null;
   }
 
-  let downloadUrl: string = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
+  const downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
 
-  return <IGoVersionInfo>{
+  return {
     type: "dist",
-    downloadUrl: downloadUrl,
+    downloadUrl,
     resolvedVersion: version.version,
     fileName: version.files[0].filename,
   };
 }
 
 export async function findMatch(versionSpec: string): Promise<IGoVersion | undefined> {
-  let archFilter = sys.getArch();
-  let platFilter = sys.getPlatform();
+  const archFilter = sys.getArch();
+  const platFilter = sys.getPlatform();
 
   let result: IGoVersion | undefined;
   let match: IGoVersion | undefined;
 
-  const dlUrl: string = "https://golang.org/dl/?mode=json&include=all";
-  let candidates: IGoVersion[] | null = await module.exports.getVersionsDist(dlUrl);
+  const dlUrl = "https://golang.org/dl/?mode=json&include=all";
+  const candidates: IGoVersion[] | null = await getVersionsDist(dlUrl);
   if (!candidates) {
     throw new Error(`golang download url did not return results`);
   }
 
   let goFile: IGoVersionFile | undefined;
-  for (let i = 0; i < candidates.length; i++) {
-    let candidate: IGoVersion = candidates[i];
-    let version = makeSemver(candidate.version);
+  for (const candidate of candidates) {
+    const version = makeSemver(candidate.version);
 
     core.debug(`check ${version} satisfies ${versionSpec}`);
     if (semver.satisfies(version, versionSpec)) {
@@ -217,7 +214,7 @@ export async function findMatch(versionSpec: string): Promise<IGoVersion | undef
 
   if (match && goFile) {
     // clone since we're mutating the file list to be only the file that matches
-    result = <IGoVersion>Object.assign({}, match);
+    result = Object.assign({}, match);
     result.files = [goFile];
   }
 
@@ -226,7 +223,7 @@ export async function findMatch(versionSpec: string): Promise<IGoVersion | undef
 
 export async function getVersionsDist(dlUrl: string): Promise<IGoVersion[] | null> {
   // this returns versions descending so latest is first
-  let http: httpm.HttpClient = new httpm.HttpClient("setup-go", [], {
+  const http: httpm.HttpClient = new httpm.HttpClient("setup-go", [], {
     allowRedirects: true,
     maxRedirects: 3,
   });
@@ -242,9 +239,9 @@ export async function getVersionsDist(dlUrl: string): Promise<IGoVersion[] | nul
 export function makeSemver(version: string): string {
   version = version.replace("go", "");
   version = version.replace("beta", "-beta.").replace("rc", "-rc.");
-  let parts = version.split("-");
+  const parts = version.split("-");
 
-  let semVersion = semver.coerce(parts[0])?.version;
+  const semVersion = semver.coerce(parts[0])?.version;
   if (!semVersion) {
     throw new Error(`The version: ${version} can't be changed to SemVer notation`);
   }
