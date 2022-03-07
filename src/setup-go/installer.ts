@@ -67,15 +67,19 @@ export async function getGo(versionSpec: string, checkLatest: boolean, auth: str
     } else {
       core.info("Not found in manifest.  Falling back to download directly from Go");
     }
-  } catch (err: any) {
+  } catch (err) {
     if (err instanceof tc.HTTPError && (err.httpStatusCode === 403 || err.httpStatusCode === 429)) {
       core.info(
         `Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`
       );
     } else {
-      core.info(err.message);
+      core.info(`${err}`);
     }
-    core.debug(err.stack);
+    if (err instanceof Error) {
+      if (err.stack) {
+        core.debug(err.stack);
+      }
+    }
     core.info("Falling back to download directly from Go");
   }
 
@@ -107,9 +111,9 @@ async function resolveVersionFromManifest(
   try {
     const info = await getInfoFromManifest(versionSpec, stable, auth);
     return info?.resolvedVersion;
-  } catch (err: any) {
+  } catch (err) {
     core.info("Unable to resolve a version from the manifest...");
-    core.debug(err.message);
+    core.debug(`${err}`);
   }
 }
 

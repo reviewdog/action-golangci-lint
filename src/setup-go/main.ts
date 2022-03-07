@@ -42,8 +42,8 @@ export async function run(versionSpec: string): Promise<void> {
     const goEnv = (cp.execSync(`${goPath} env`) || "").toString();
     core.info(goEnv);
     core.endGroup();
-  } catch (error: any) {
-    core.setFailed(error.message);
+  } catch (error) {
+    core.setFailed(`${error}`);
   }
 }
 
