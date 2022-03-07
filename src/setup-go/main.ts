@@ -14,7 +14,7 @@ export async function run(versionSpec: string) {
     core.info(`Setup go version spec ${versionSpec}`);
 
     if (versionSpec) {
-      let token = core.getInput("token");
+      const token = core.getInput("token");
       let auth = !token || isGhes() ? undefined : `token ${token}`;
 
       const checkLatest = false;
