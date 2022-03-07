@@ -32,7 +32,7 @@ export interface IGoVersionInfo {
 }
 
 export async function getGo(versionSpec: string, checkLatest: boolean, auth: string | undefined) {
-  let osPlat: string = os.platform();
+  const osPlat: string = os.platform();
   let osArch: string = os.arch();
 
   if (checkLatest) {
