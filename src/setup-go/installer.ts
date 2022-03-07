@@ -33,7 +33,7 @@ export interface IGoVersionInfo {
 
 export async function getGo(versionSpec: string, checkLatest: boolean, auth: string | undefined) {
   const osPlat: string = os.platform();
-  let osArch: string = os.arch();
+  const osArch: string = os.arch();
 
   if (checkLatest) {
     core.info("Attempting to resolve the latest version from the manifest...");
