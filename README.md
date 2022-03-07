@@ -26,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # no need with v2
       # - name: Set up Go
@@ -132,7 +132,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
@@ -154,16 +154,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
           # optionally use a specific version of Go rather than the latest one
-          go_version: '1.17'
+          go_version: "1.17"
 
           # Can pass --config flag to change golangci-lint behavior and target
           # directory.
-          golangci_lint_flags: '--config=.github/.golangci.yml ./testdata'
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
           workdir: subdirectory/
 
   # Use golint via golangci-lint binary with "warning" level.
@@ -172,11 +172,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: golint
         uses: reviewdog/action-golangci-lint@v2
         with:
-          golangci_lint_flags: '--disable-all -E golint'
+          golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
           level: warning # GitHub Status Check won't become failure with this level.
 
@@ -186,11 +186,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v2
         with:
-          golangci_lint_flags: '--disable-all -E errcheck'
+          golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
           level: info
 
@@ -200,7 +200,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
@@ -221,9 +221,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
-          golangci_lint_flags: '--enable-all --exclude-use-default=false'
+          golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```
