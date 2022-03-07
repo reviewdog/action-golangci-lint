@@ -1,26 +1,26 @@
-import * as path from 'path';
-import * as core from '@actions/core';
-import * as tc from '@actions/tool-cache';
-import * as http from '@actions/http-client';
+import * as path from "path";
+import * as core from "@actions/core";
+import * as tc from "@actions/tool-cache";
+import * as http from "@actions/http-client";
 
 export async function installReviewdog(tag: string, directory: string): Promise<string> {
-  const owner = 'reviewdog';
-  const repo = 'reviewdog';
+  const owner = "reviewdog";
+  const repo = "reviewdog";
   const version = await tagToVersion(tag, owner, repo);
 
   // get the os information
   let platform = process.platform.toString();
-  let ext = '';
+  let ext = "";
   switch (platform) {
-    case 'darwin':
-      platform = 'Darwin';
+    case "darwin":
+      platform = "Darwin";
       break;
-    case 'linux':
-      platform = 'Linux';
+    case "linux":
+      platform = "Linux";
       break;
-    case 'win32':
-      platform = 'Windows';
-      ext = '.exe';
+    case "win32":
+      platform = "Windows";
+      ext = ".exe";
       break;
     default:
       throw new Error(`unsupported platform: ${platform}`);
@@ -29,13 +29,13 @@ export async function installReviewdog(tag: string, directory: string): Promise<
   // get the arch information
   let arch = process.arch;
   switch (arch) {
-    case 'x64':
-      arch = 'x86_64';
+    case "x64":
+      arch = "x86_64";
       break;
-    case 'arm64':
+    case "arm64":
       break;
-    case 'x32':
-      arch = 'i386';
+    case "x32":
+      arch = "i386";
       break;
     default:
       throw new Error(`unsupported arch: ${arch}`);
@@ -51,23 +51,23 @@ export async function installReviewdog(tag: string, directory: string): Promise<
 }
 
 export async function installGolangciLint(tag: string, directory: string): Promise<string> {
-  const owner = 'golangci';
-  const repo = 'golangci-lint';
+  const owner = "golangci";
+  const repo = "golangci-lint";
   const version = await tagToVersion(tag, owner, repo);
 
   // get the os information
   let platform = process.platform.toString();
-  let ext = '';
-  let archive = 'tar.gz';
+  let ext = "";
+  let archive = "tar.gz";
   switch (platform) {
-    case 'darwin':
+    case "darwin":
       break;
-    case 'linux':
+    case "linux":
       break;
-    case 'win32':
-      platform = 'windows';
-      ext = '.exe';
-      archive = 'zip';
+    case "win32":
+      platform = "windows";
+      ext = ".exe";
+      archive = "zip";
       break;
     default:
       throw new Error(`unsupported platform: ${platform}`);
@@ -76,13 +76,13 @@ export async function installGolangciLint(tag: string, directory: string): Promi
   // get the arch information
   let arch = process.arch;
   switch (arch) {
-    case 'x64':
-      arch = 'amd64';
+    case "x64":
+      arch = "amd64";
       break;
-    case 'arm64':
+    case "arm64":
       break;
-    case 'x32':
-      arch = '386';
+    case "x32":
+      arch = "386";
       break;
     default:
       throw new Error(`unsupported arch: ${arch}`);
@@ -94,7 +94,7 @@ export async function installGolangciLint(tag: string, directory: string): Promi
 
   core.info(`extracting`);
   const extractedDir =
-    archive === 'zip' ? await tc.extractZip(archivePath, directory) : await tc.extractTar(archivePath, directory);
+    archive === "zip" ? await tc.extractZip(archivePath, directory) : await tc.extractTar(archivePath, directory);
   return path.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
 }
 
@@ -105,8 +105,8 @@ async function tagToVersion(tag: string, owner: string, repo: string): Promise<s
     tag_name: string;
   }
   const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
-  const client = new http.HttpClient('action-golangci-lint/v1');
-  const headers = {[http.Headers.Accept]: 'application/json'};
+  const client = new http.HttpClient("action-golangci-lint/v1");
+  const headers = { [http.Headers.Accept]: "application/json" };
   const response = await client.getJson<Release>(url, headers);
 
   if (response.statusCode != http.HttpCodes.OK) {
@@ -120,7 +120,7 @@ async function tagToVersion(tag: string, owner: string, repo: string): Promise<s
   let realTag = response.result.tag_name;
 
   // if version starts with 'v', remove it
-  realTag = realTag.replace(/^v/, '');
+  realTag = realTag.replace(/^v/, "");
 
   return realTag;
 }

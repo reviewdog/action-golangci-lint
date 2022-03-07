@@ -1,6 +1,6 @@
 export function parse(flags: string): string[] {
   flags = flags.trim();
-  if (flags === '') {
+  if (flags === "") {
     return [];
   }
 
