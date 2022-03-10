@@ -57,7 +57,7 @@ async function run() {
       });
     }
 
-    await core.group("Running golangci-lint with reviewdog 🐶 ...", async () => {
+    const code = await core.group("Running golangci-lint with reviewdog 🐶 ...", async (): Promise<number> => {
       const output = await exec.getExecOutput(
         golangci,
         ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)],
@@ -68,7 +68,7 @@ async function run() {
       );
 
       process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
-      await exec.exec(
+      return await exec.exec(
         reviewdog,
         [
           "-f=golangci-lint",
@@ -82,6 +82,7 @@ async function run() {
         {
           cwd,
           input: Buffer.from(output.stdout, "utf-8"),
+          ignoreReturnCode: true,
         }
       );
     });
@@ -92,6 +93,10 @@ async function run() {
           await cache.save(cacheState);
         }
       });
+    }
+
+    if (code !== 0) {
+      core.setFailed(`reviewdog exited with status code: ${code}`);
     }
   } catch (error) {
     if (error instanceof Error) {
