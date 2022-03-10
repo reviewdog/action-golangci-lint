@@ -63852,9 +63852,6 @@ async function run(versionSpec) {
             core.debug(`add bin ${added}`);
             core.info(`Successfully setup go version ${versionSpec}`);
         }
-        // add problem matchers
-        const matchersPath = path_1.default.join(__dirname, "..", "matchers.json");
-        core.info(`##[add-matcher]${matchersPath}`);
         // output the version actually being used
         const goPath = await io.which("go");
         const goVersion = (child_process_1.default.execSync(`${goPath} version`) || "").toString();
