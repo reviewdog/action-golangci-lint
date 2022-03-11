@@ -29,10 +29,6 @@ export async function run(versionSpec: string): Promise<void> {
       core.info(`Successfully setup go version ${versionSpec}`);
     }
 
-    // add problem matchers
-    const matchersPath = path.join(__dirname, "..", "matchers.json");
-    core.info(`##[add-matcher]${matchersPath}`);
-
     // output the version actually being used
     const goPath = await io.which("go");
     const goVersion = (cp.execSync(`${goPath} version`) || "").toString();

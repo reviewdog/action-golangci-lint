@@ -63488,13 +63488,13 @@ async function run() {
                 return await cache.restore(cwd);
             });
         }
-        await core.group("Running golangci-lint with reviewdog 🐶 ...", async () => {
+        const code = await core.group("Running golangci-lint with reviewdog 🐶 ...", async () => {
             const output = await exec.getExecOutput(golangci, ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)], {
                 cwd,
                 ignoreReturnCode: true,
             });
             process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
-            await exec.exec(reviewdog, [
+            return await exec.exec(reviewdog, [
                 "-f=golangci-lint",
                 `-name=${toolName}`,
                 `-reporter=${reporter}`,
@@ -63505,6 +63505,7 @@ async function run() {
             ], {
                 cwd,
                 input: Buffer.from(output.stdout, "utf-8"),
+                ignoreReturnCode: true,
             });
         });
         if (cacheState) {
@@ -63513,6 +63514,9 @@ async function run() {
                     await cache.save(cacheState);
                 }
             });
+        }
+        if (code !== 0) {
+            core.setFailed(`reviewdog exited with status code: ${code}`);
         }
     }
     catch (error) {
@@ -63848,9 +63852,6 @@ async function run(versionSpec) {
             core.debug(`add bin ${added}`);
             core.info(`Successfully setup go version ${versionSpec}`);
         }
-        // add problem matchers
-        const matchersPath = path_1.default.join(__dirname, "..", "matchers.json");
-        core.info(`##[add-matcher]${matchersPath}`);
         // output the version actually being used
         const goPath = await io.which("go");
         const goVersion = (child_process_1.default.execSync(`${goPath} version`) || "").toString();
