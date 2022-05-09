@@ -36,7 +36,7 @@
     "@types/jest": "27.5.0",
     "@types/node": "16.11.33",
     "@types/semver": "7.3.9",
-    "@typescript-eslint/parser": "5.22.0",
+    "@typescript-eslint/parser": "5.23.0",
     "@vercel/ncc": "0.33.4",
     "eslint": "8.15.0",
     "eslint-plugin-github": "4.3.6",
