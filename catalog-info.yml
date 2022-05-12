@@ -1,0 +1,16 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: action-golangci-lint
+  description: |
+    Runs golangci-lint with reviewdog
+  annotations:
+    github.com/project-slug: Tradeshift/action-golangci-lint
+  tags:
+    - github-action
+    - nodejs
+    - fork
+spec:
+  type: library
+  owner: developer-productivity
+  lifecycle: production
