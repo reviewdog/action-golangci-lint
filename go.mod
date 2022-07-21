@@ -5,4 +5,4 @@
 // So we need the go.mod file in our test modules.
 module github.com/reviewdog/action-golangci-lint
 
-go 1.17
+go 1.18
