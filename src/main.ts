@@ -19,6 +19,7 @@ async function run() {
     const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
     const golangciLintVersion = core.getInput("golangci_lint_version") || "latest";
     const goVersion = core.getInput("go_version");
+    const goVersionFile = core.getInput("go_version_file");
     const golangciLintFlags = core.getInput("golangci_lint_flags");
     const toolName = core.getInput("tool_name") || "golangci";
     const level = core.getInput("level") || "error";
@@ -30,9 +31,9 @@ async function run() {
     const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
     const enableCache = core.getBooleanInput("cache");
 
-    if (goVersion !== "") {
+    if (goVersion !== "" || goVersionFile !== "") {
       await core.group("Installing Go ...", async () => {
-        await setupGo.run(goVersion);
+        await setupGo.run(goVersion, goVersionFile);
       });
     }
 

@@ -64729,6 +64729,7 @@ async function run() {
         const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
         const golangciLintVersion = core.getInput("golangci_lint_version") || "latest";
         const goVersion = core.getInput("go_version");
+        const goVersionFile = core.getInput("go_version_file");
         const golangciLintFlags = core.getInput("golangci_lint_flags");
         const toolName = core.getInput("tool_name") || "golangci";
         const level = core.getInput("level") || "error";
@@ -64739,9 +64740,9 @@ async function run() {
         const workdir = core.getInput("workdir") || ".";
         const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
         const enableCache = core.getBooleanInput("cache");
-        if (goVersion !== "") {
+        if (goVersion !== "" || goVersionFile !== "") {
             await core.group("Installing Go ...", async () => {
-                await setupGo.run(goVersion);
+                await setupGo.run(goVersion, goVersionFile);
             });
         }
         const reviewdog = await core.group("🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog", async () => {
@@ -64822,7 +64823,7 @@ run();
 
 "use strict";
 
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
+// this file comes from https://github.com/actions/setup-go/blob/b22fbbc2921299758641fab08929b4ac52b32923/src/installer.ts
 // see LICENSE for its license
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -64851,7 +64852,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
+exports.parseGoVersionFile = exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
 const core = __importStar(__nccwpck_require__(2186));
 const httpm = __importStar(__nccwpck_require__(6255));
 const path = __importStar(__nccwpck_require__(1017));
@@ -64859,6 +64860,7 @@ const semver = __importStar(__nccwpck_require__(1383));
 const sys = __importStar(__nccwpck_require__(540));
 const tc = __importStar(__nccwpck_require__(7784));
 const os_1 = __importDefault(__nccwpck_require__(2037));
+const fs_1 = __importDefault(__nccwpck_require__(7147));
 async function getGo(versionSpec, checkLatest, auth) {
     const osPlat = os_1.default.platform();
     const osArch = os_1.default.arch();
@@ -65059,6 +65061,15 @@ function makeSemver(version) {
     return fullVersion;
 }
 exports.makeSemver = makeSemver;
+function parseGoVersionFile(versionFilePath) {
+    const contents = fs_1.default.readFileSync(versionFilePath).toString();
+    if (path.basename(versionFilePath) === "go.mod") {
+        const match = contents.match(/^go (\d+(\.\d+)*)/m);
+        return match ? match[1] : "";
+    }
+    return contents.trim();
+}
+exports.parseGoVersionFile = parseGoVersionFile;
 
 
 /***/ }),
@@ -65068,7 +65079,7 @@ exports.makeSemver = makeSemver;
 
 "use strict";
 
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/main.ts
+// this file comes from https://github.com/actions/setup-go/blob/b22fbbc2921299758641fab08929b4ac52b32923/src/main.ts
 // see LICENSE for its license
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
@@ -65105,8 +65116,12 @@ const url_1 = __nccwpck_require__(7310);
 const child_process_1 = __importDefault(__nccwpck_require__(2081));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const path_1 = __importDefault(__nccwpck_require__(1017));
-async function run(versionSpec) {
+async function run(version, versionFilePath) {
     try {
+        const versionSpec = resolveVersionInput(version, versionFilePath);
+        if (versionSpec === "") {
+            return;
+        }
         core.info(`Setup go version spec ${versionSpec}`);
         if (versionSpec) {
             const token = core.getInput("token");
@@ -65165,6 +65180,21 @@ exports.addBinToPath = addBinToPath;
 function isGhes() {
     const ghUrl = new url_1.URL(process.env["GITHUB_SERVER_URL"] || "https://github.com");
     return ghUrl.hostname.toUpperCase() !== "GITHUB.COM";
+}
+function resolveVersionInput(version, versionFilePath) {
+    if (version && versionFilePath) {
+        core.warning("Both go_version and go_version_file inputs are specified, only go_version will be used");
+    }
+    if (version) {
+        return version;
+    }
+    if (versionFilePath) {
+        if (!fs_1.default.existsSync(versionFilePath)) {
+            throw new Error(`The specified go version file at: ${versionFilePath} does not exist`);
+        }
+        version = installer.parseGoVersionFile(versionFilePath);
+    }
+    return version;
 }
 
 

@@ -1,4 +1,4 @@
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/installer.ts
+// this file comes from https://github.com/actions/setup-go/blob/b22fbbc2921299758641fab08929b4ac52b32923/src/installer.ts
 // see LICENSE for its license
 
 import * as core from "@actions/core";
@@ -8,6 +8,7 @@ import * as semver from "semver";
 import * as sys from "./system";
 import * as tc from "@actions/tool-cache";
 import os from "os";
+import fs from "fs";
 
 type InstallationType = "dist" | "manifest";
 
@@ -260,4 +261,15 @@ export function makeSemver(version: string): string {
     throw new Error(`The version: ${version} can't be changed to SemVer notation`);
   }
   return fullVersion;
+}
+
+export function parseGoVersionFile(versionFilePath: string): string {
+  const contents = fs.readFileSync(versionFilePath).toString();
+
+  if (path.basename(versionFilePath) === "go.mod") {
+    const match = contents.match(/^go (\d+(\.\d+)*)/m);
+    return match ? match[1] : "";
+  }
+
+  return contents.trim();
 }
