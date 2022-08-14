@@ -65116,6 +65116,7 @@ const url_1 = __nccwpck_require__(7310);
 const child_process_1 = __importDefault(__nccwpck_require__(2081));
 const fs_1 = __importDefault(__nccwpck_require__(7147));
 const path_1 = __importDefault(__nccwpck_require__(1017));
+const defaultGoVersion = "1.x";
 async function run(version, versionFilePath) {
     try {
         const versionSpec = resolveVersionInput(version, versionFilePath);
@@ -65193,6 +65194,9 @@ function resolveVersionInput(version, versionFilePath) {
             throw new Error(`The specified go version file at: ${versionFilePath} does not exist`);
         }
         version = installer.parseGoVersionFile(versionFilePath);
+    }
+    if (!version) {
+        version = defaultGoVersion;
     }
     return version;
 }
