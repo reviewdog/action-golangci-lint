@@ -101,6 +101,11 @@ Optional. Additional reviewdog flags
 Optional. Install a specific version of Go.
 By default, the latest version of Go 1.x is installed.
 
+### `go_version_file`
+
+Optional. Install a specific version of Go from a file. It accepts a path to a `go.mod` file or a file containing only Go version.
+If both the `go_version` and the `go_version_file` inputs are provided then the `go_version` input is used.
+
 ### `cache`
 
 Optional. [`true`, `false`]

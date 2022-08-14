@@ -1,4 +1,4 @@
-// this file comes from https://github.com/actions/setup-go/blob/3b4dc6cbed1779f759b9c638cb83696acea809d1/src/main.ts
+// this file comes from https://github.com/actions/setup-go/blob/b22fbbc2921299758641fab08929b4ac52b32923/src/main.ts
 // see LICENSE for its license
 
 import * as core from "@actions/core";
@@ -9,8 +9,13 @@ import cp from "child_process";
 import fs from "fs";
 import path from "path";
 
-export async function run(versionSpec: string): Promise<void> {
+export async function run(version: string, versionFilePath: string): Promise<void> {
   try {
+    const versionSpec = resolveVersionInput(version, versionFilePath);
+    if (versionSpec === "") {
+      return;
+    }
+
     core.info(`Setup go version spec ${versionSpec}`);
 
     if (versionSpec) {
@@ -77,4 +82,23 @@ export async function addBinToPath(): Promise<boolean> {
 function isGhes(): boolean {
   const ghUrl = new URL(process.env["GITHUB_SERVER_URL"] || "https://github.com");
   return ghUrl.hostname.toUpperCase() !== "GITHUB.COM";
+}
+
+function resolveVersionInput(version: string, versionFilePath: string): string {
+  if (version && versionFilePath) {
+    core.warning("Both go_version and go_version_file inputs are specified, only go_version will be used");
+  }
+
+  if (version) {
+    return version;
+  }
+
+  if (versionFilePath) {
+    if (!fs.existsSync(versionFilePath)) {
+      throw new Error(`The specified go version file at: ${versionFilePath} does not exist`);
+    }
+    version = installer.parseGoVersionFile(versionFilePath);
+  }
+
+  return version;
 }
