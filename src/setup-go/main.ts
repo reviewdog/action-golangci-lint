@@ -9,6 +9,8 @@ import cp from "child_process";
 import fs from "fs";
 import path from "path";
 
+const defaultGoVersion = "1.x";
+
 export async function run(version: string, versionFilePath: string): Promise<void> {
   try {
     const versionSpec = resolveVersionInput(version, versionFilePath);
@@ -98,6 +100,10 @@ function resolveVersionInput(version: string, versionFilePath: string): string {
       throw new Error(`The specified go version file at: ${versionFilePath} does not exist`);
     }
     version = installer.parseGoVersionFile(versionFilePath);
+  }
+
+  if (!version) {
+    version = defaultGoVersion;
   }
 
   return version;
