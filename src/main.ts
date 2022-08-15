@@ -31,11 +31,9 @@ async function run() {
     const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
     const enableCache = core.getBooleanInput("cache");
 
-    if (goVersion !== "" || goVersionFile !== "") {
-      await core.group("Installing Go ...", async () => {
-        await setupGo.run(goVersion, goVersionFile);
-      });
-    }
+    await core.group("Installing Go ...", async () => {
+      await setupGo.run(goVersion, goVersionFile);
+    });
 
     const reviewdog = await core.group(
       "🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog",

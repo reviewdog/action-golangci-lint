@@ -53,7 +53,9 @@ inputs:
   go_version:
     description: "the version of Go. By default, the latest version of Go 1.x is installed."
     required: false
-    default: "1.x"
+  go_version_file:
+    description: "Path to the go.mod file or the file containing only Go version."
+    required: false
   cache:
     deprecation: "enable cache"
     default: true
