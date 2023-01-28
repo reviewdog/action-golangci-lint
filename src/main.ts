@@ -16,7 +16,7 @@ async function run() {
   const tmpdir = await fs.mkdtemp(path.join(runnerTmpdir, "reviewdog-"));
 
   try {
-    const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
+    const reviewdogVersion = core.getInput("reviewdog_version") || process.env["REVIEWDOG_VERSION"];
     const golangciLintVersion = core.getInput("golangci_lint_version") || "latest";
     const goVersion = core.getInput("go_version");
     const goVersionFile = core.getInput("go_version_file");

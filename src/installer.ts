@@ -104,7 +104,7 @@ async function tagToVersion(tag: string, owner: string, repo: string): Promise<s
   interface Release {
     tag_name: string;
   }
-  const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
+  const url = `https://api.github.com/repos/${owner}/${repo}/releases/${tag}`;
   const client = new http.HttpClient("action-golangci-lint/v1");
   const headers = { [http.Headers.Accept]: "application/json" };
   const response = await client.getJson<Release>(url, headers);
