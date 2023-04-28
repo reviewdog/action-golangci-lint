@@ -46,7 +46,7 @@
     "jest-circus": "29.3.1",
     "js-yaml": "4.1.0",
     "prettier": "2.8.8",
-    "ts-jest": "29.0.5",
+    "ts-jest": "29.1.0",
     "typescript": "5.0.4"
   }
 }
