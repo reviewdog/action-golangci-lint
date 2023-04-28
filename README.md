@@ -27,6 +27,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       # no need with v2
       # - name: Set up Go
@@ -138,6 +140,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
@@ -160,6 +164,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
@@ -178,6 +184,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: golint
         uses: reviewdog/action-golangci-lint@v2
         with:
@@ -192,6 +200,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: errcheck
         uses: reviewdog/action-golangci-lint@v2
         with:
@@ -206,6 +216,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
 
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
@@ -227,6 +239,8 @@ jobs:
     steps:
       - name: Check out code into the Go module directory
         uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
       - name: golangci-lint
         uses: reviewdog/action-golangci-lint@v2
         with:
