@@ -171,7 +171,7 @@ jobs:
 
       - uses: actions/setup-node@v3
         with:
-          node-version: "12"
+          node-version-file: "package.json"
           cache: "npm"
       - run: npm ci
       - uses: reviewdog/action-eslint@v1
