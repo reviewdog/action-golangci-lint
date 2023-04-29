@@ -4,6 +4,9 @@
   "private": true,
   "description": "Run golangci-lint with reviewdog",
   "main": "lib/main.js",
+  "engines": {
+    "node": ">=16.0.0"
+  },
   "scripts": {
     "build": "tsc",
     "format": "prettier --write **/*.ts",
