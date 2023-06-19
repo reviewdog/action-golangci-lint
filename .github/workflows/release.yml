@@ -38,17 +38,13 @@ jobs:
           if_false: ${{ steps.bumpr.outputs.next_version }}
 
       # Create release.
-      - uses: actions/create-release@v1
-        if: "${{ steps.tag.outputs.value != '' }}"
+      - if: "steps.tag.outputs.value != ''"
         env:
-          # This token is provided by Actions, you do not need to create your own token
+          TAG_NAME: ${{ steps.tag.outputs.value }}
+          BODY: ${{ steps.bumpr.outputs.message }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        with:
-          tag_name: ${{ steps.tag.outputs.value }}
-          release_name: Release ${{ steps.tag.outputs.value }}
-          body: ${{ steps.bumpr.outputs.message }}
-          draft: false
-          prerelease: false
+        run: |
+          gh release create "${TAG_NAME}" -t "Release ${TAG_NAME/refs\/tags\//}" --notes "${BODY}"
 
   release-check:
     if: ${{ github.event.action == 'labeled' }}
