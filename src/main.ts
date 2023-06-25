@@ -11,7 +11,7 @@ import * as flags from "./flags";
 import * as setupGo from "./setup-go/main";
 import * as cache from "./cache";
 
-async function run() {
+async function run(): Promise<void> {
   const runnerTmpdir = process.env["RUNNER_TEMP"] || os.tmpdir();
   const tmpdir = await fs.mkdtemp(path.join(runnerTmpdir, "reviewdog-"));
 
@@ -119,4 +119,4 @@ async function run() {
   }
 }
 
-run();
+void run();
