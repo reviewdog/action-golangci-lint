@@ -1,5 +1,6 @@
 import * as cache from "@actions/cache";
 import * as core from "@actions/core";
+import * as exec from "@actions/exec";
 import * as crypto from "crypto";
 import * as fs from "fs";
 import * as path from "path";
@@ -15,7 +16,10 @@ export interface State {
 
 export async function restore(cwd: string): Promise<State> {
   const keyPrefix = `${process.platform}-golangci-`;
-  const hash = await hashFiles(path.join(cwd, "go.sum"));
+  const goSumPath = await getGoSumPath(cwd);
+  core.info(`go.sum path is ${goSumPath}`);
+
+  const hash = await hashFiles(goSumPath);
   const key = keyPrefix + hash;
   const restoreKeys = [keyPrefix];
 
@@ -38,6 +42,13 @@ export async function restore(cwd: string): Promise<State> {
     core.info(`cache not found for input keys: ${key}, ${restoreKeys.join(", ")}`);
   }
   return { key, cachedKey };
+}
+
+async function getGoSumPath(cwd: string): Promise<string> {
+  const opt = { cwd };
+  const output = await exec.getExecOutput("go", ["env", "GOMOD"], opt);
+  const goModPath = output.stdout.trim();
+  return path.join(path.dirname(goModPath), "go.sum");
 }
 
 export async function save(state: State): Promise<void> {
