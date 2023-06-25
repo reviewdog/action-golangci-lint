@@ -63834,6 +63834,7 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.save = exports.restore = void 0;
 const cache = __importStar(__nccwpck_require__(7799));
 const core = __importStar(__nccwpck_require__(2186));
+const exec = __importStar(__nccwpck_require__(1514));
 const crypto = __importStar(__nccwpck_require__(6113));
 const fs = __importStar(__nccwpck_require__(7147));
 const path = __importStar(__nccwpck_require__(1017));
@@ -63842,7 +63843,9 @@ const util = __importStar(__nccwpck_require__(3837));
 const paths = ["~/.cache/golangci-lint", "~/.cache/go-build", "~/go/pkg"];
 async function restore(cwd) {
     const keyPrefix = `${process.platform}-golangci-`;
-    const hash = await hashFiles(path.join(cwd, "go.sum"));
+    const goSumPath = await getGoSumPath(cwd);
+    core.info(`go.sum path is ${goSumPath}`);
+    const hash = await hashFiles(goSumPath);
     const key = keyPrefix + hash;
     const restoreKeys = [keyPrefix];
     let cachedKey = undefined;
@@ -63868,6 +63871,12 @@ async function restore(cwd) {
     return { key, cachedKey };
 }
 exports.restore = restore;
+async function getGoSumPath(cwd) {
+    const opt = { cwd };
+    const output = await exec.getExecOutput("go", ["env", "GOMOD"], opt);
+    const goModPath = output.stdout.trim();
+    return path.join(path.dirname(goModPath), "go.sum");
+}
 async function save(state) {
     const { cachedKey, key } = state;
     if (cachedKey === key) {
@@ -64066,7 +64075,7 @@ async function tagToVersion(tag, owner, repo) {
     const client = new http.HttpClient("action-golangci-lint/v1");
     const headers = { [http.Headers.Accept]: "application/json" };
     const response = await client.getJson(url, headers);
-    if (response.statusCode != http.HttpCodes.OK) {
+    if (response.statusCode !== http.HttpCodes.OK) {
         core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
     }
     if (!response.result) {
@@ -64209,7 +64218,7 @@ async function run() {
         }
     }
 }
-run();
+void run();
 
 
 /***/ }),

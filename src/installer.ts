@@ -109,7 +109,7 @@ async function tagToVersion(tag: string, owner: string, repo: string): Promise<s
   const headers = { [http.Headers.Accept]: "application/json" };
   const response = await client.getJson<Release>(url, headers);
 
-  if (response.statusCode != http.HttpCodes.OK) {
+  if (response.statusCode !== http.HttpCodes.OK) {
     core.error(`${url} returns unexpected HTTP status code: ${response.statusCode}`);
   }
   if (!response.result) {
