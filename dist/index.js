@@ -55571,7 +55571,7 @@ class Range {
     this.set = this.raw
       .split('||')
       // map the range to a 2d array of comparators
-      .map(r => this.parseRange(r))
+      .map(r => this.parseRange(r.trim()))
       // throw out any comparator lists that are empty
       // this generally means that it was not a valid range, which is allowed
       // in loose mode, but will still throw if the WHOLE range is invalid.
@@ -57043,7 +57043,11 @@ module.exports = parseOptions
 /***/ 9523:
 /***/ ((module, exports, __nccwpck_require__) => {
 
-const { MAX_SAFE_COMPONENT_LENGTH, MAX_SAFE_BUILD_LENGTH } = __nccwpck_require__(2293)
+const {
+  MAX_SAFE_COMPONENT_LENGTH,
+  MAX_SAFE_BUILD_LENGTH,
+  MAX_LENGTH,
+} = __nccwpck_require__(2293)
 const debug = __nccwpck_require__(106)
 exports = module.exports = {}
 
@@ -57064,7 +57068,7 @@ const LETTERDASHNUMBER = '[a-zA-Z0-9-]'
 // all input should have extra whitespace removed.
 const safeRegexReplacements = [
   ['\\s', 1],
-  ['\\d', MAX_SAFE_COMPONENT_LENGTH],
+  ['\\d', MAX_LENGTH],
   [LETTERDASHNUMBER, MAX_SAFE_BUILD_LENGTH],
 ]
 
