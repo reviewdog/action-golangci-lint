@@ -114,7 +114,7 @@ async function tagToVersion(tag: string, owner: string, repo: string): Promise<s
   }
   if (!response.result) {
     throw new Error(
-      `unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`
+      `unable to find '${tag}' - use 'latest' or see https://github.com/${owner}/${repo}/releases for details`,
     );
   }
   let realTag = response.result.tag_name;

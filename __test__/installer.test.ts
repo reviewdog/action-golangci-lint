@@ -24,7 +24,7 @@ describe("installer", () => {
       const reviewdog = await installer.installReviewdog("v0.12.0", dir);
       await exec.exec(reviewdog, ["--version"]);
     },
-    5 * 60 * 1000
+    5 * 60 * 1000,
   );
 
   it(
@@ -34,7 +34,7 @@ describe("installer", () => {
       const reviewdog = await installer.installReviewdog("latest", dir);
       await exec.exec(reviewdog, ["--version"]);
     },
-    5 * 60 * 1000
+    5 * 60 * 1000,
   );
 
   it(
@@ -44,7 +44,7 @@ describe("installer", () => {
       const golangci = await installer.installGolangciLint("v1.41.1", dir);
       await exec.exec(golangci, ["--version"]);
     },
-    5 * 60 * 1000
+    5 * 60 * 1000,
   );
 
   it(
@@ -54,6 +54,6 @@ describe("installer", () => {
       const golangci = await installer.installGolangciLint("latest", dir);
       await exec.exec(golangci, ["--version"]);
     },
-    5 * 60 * 1000
+    5 * 60 * 1000,
   );
 });

@@ -39,14 +39,14 @@ async function run(): Promise<void> {
       "🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog",
       async () => {
         return await installer.installReviewdog(reviewdogVersion, tmpdir);
-      }
+      },
     );
 
     const golangci = await core.group(
       "Installing golangci-lint ... https://github.com/golangci/golangci-lint",
       async () => {
         return await installer.installGolangciLint(golangciLintVersion, tmpdir);
-      }
+      },
     );
 
     let cacheState: cache.State | undefined = undefined;
@@ -63,7 +63,7 @@ async function run(): Promise<void> {
         {
           cwd,
           ignoreReturnCode: true,
-        }
+        },
       );
 
       process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
@@ -82,7 +82,7 @@ async function run(): Promise<void> {
           cwd,
           input: Buffer.from(output.stdout, "utf-8"),
           ignoreReturnCode: true,
-        }
+        },
       );
     });
 
