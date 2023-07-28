@@ -3,9 +3,7 @@
         "jest",
         "@typescript-eslint"
     ],
-    "extends": [
-        "plugin:github/recommended"
-    ],
+    "extends": [],
     "parser": "@typescript-eslint/parser",
     "parserOptions": {
         "ecmaVersion": 9,
