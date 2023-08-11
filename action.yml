@@ -57,7 +57,7 @@ inputs:
     description: "Path to the go.mod file or the file containing only Go version."
     required: false
   cache:
-    deprecation: "enable cache"
+    description: "enable cache"
     default: true
     required: false
 
