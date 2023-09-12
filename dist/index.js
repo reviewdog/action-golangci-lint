@@ -64228,9 +64228,9 @@ async function installReviewdog(tag, directory) {
     const repo = "reviewdog";
     const version = await tagToVersion(tag, owner, repo);
     // get the os information
-    let platform = process.platform.toString();
+    let platform;
     let ext = "";
-    switch (platform) {
+    switch (process.platform) {
         case "darwin":
             platform = "Darwin";
             break;
@@ -64242,21 +64242,19 @@ async function installReviewdog(tag, directory) {
             ext = ".exe";
             break;
         default:
-            throw new Error(`unsupported platform: ${platform}`);
+            throw new Error(`unsupported platform: ${process.platform}`);
     }
     // get the arch information
-    let arch = process.arch;
-    switch (arch) {
+    let arch;
+    switch (process.arch) {
         case "x64":
             arch = "x86_64";
             break;
         case "arm64":
-            break;
-        case "x32":
-            arch = "i386";
+            arch = "arm64";
             break;
         default:
-            throw new Error(`unsupported arch: ${arch}`);
+            throw new Error(`unsupported arch: ${process.arch}`);
     }
     const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/reviewdog_${version}_${platform}_${arch}.tar.gz`;
     core.info(`downloading from ${url}`);
@@ -64271,13 +64269,15 @@ async function installGolangciLint(tag, directory) {
     const repo = "golangci-lint";
     const version = await tagToVersion(tag, owner, repo);
     // get the os information
-    let platform = process.platform.toString();
+    let platform;
     let ext = "";
     let archive = "tar.gz";
-    switch (platform) {
+    switch (process.platform) {
         case "darwin":
+            platform = "darwin";
             break;
         case "linux":
+            platform = "linux";
             break;
         case "win32":
             platform = "windows";
@@ -64285,21 +64285,19 @@ async function installGolangciLint(tag, directory) {
             archive = "zip";
             break;
         default:
-            throw new Error(`unsupported platform: ${platform}`);
+            throw new Error(`unsupported platform: ${process.platform}`);
     }
     // get the arch information
-    let arch = process.arch;
-    switch (arch) {
+    let arch;
+    switch (process.arch) {
         case "x64":
             arch = "amd64";
             break;
         case "arm64":
-            break;
-        case "x32":
-            arch = "386";
+            arch = "arm64";
             break;
         default:
-            throw new Error(`unsupported arch: ${arch}`);
+            throw new Error(`unsupported arch: ${process.arch}`);
     }
     const url = `https://github.com/${owner}/${repo}/releases/download/v${version}/golangci-lint-${version}-${platform}-${arch}.${archive}`;
     core.info(`downloading from ${url}`);
