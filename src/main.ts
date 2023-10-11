@@ -56,8 +56,8 @@ async function run(): Promise<void> {
       });
     }
 
-    const code = await core.group("Running golangci-lint with reviewdog 🐶 ...", async (): Promise<number> => {
-      const output = await exec.getExecOutput(
+    const output = await core.group("Running golangci-lint ...", async (): Promise<exec.ExecOutput> => {
+      return await exec.getExecOutput(
         golangci,
         ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)],
         {
@@ -65,7 +65,18 @@ async function run(): Promise<void> {
           ignoreReturnCode: true,
         },
       );
+    });
 
+    switch (output.exitCode) {
+      case 0:
+      case 1:
+      case 2:
+        break;
+      default:
+        throw new Error(`golangci-lint exited with status code: ${output.exitCode}`);
+    }
+
+    const code = await core.group("Running reviewdog 🐶 ...", async (): Promise<number> => {
       process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
       return await exec.exec(
         reviewdog,
