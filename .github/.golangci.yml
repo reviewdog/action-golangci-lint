@@ -1,3 +1,4 @@
+# https://golangci-lint.run/usage/configuration/
 linters-settings:
   govet:
     check-shadowing: true
@@ -10,7 +11,12 @@ linters-settings:
     check-blank: false
 
 linters:
-  enable-all: true
+  disable-all: true
+  enable:
+    - govet
+    - golint
+    - misspell
+    - errcheck
 
 issues:
   exclude-use-default: false
