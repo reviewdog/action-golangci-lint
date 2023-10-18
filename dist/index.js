@@ -87253,11 +87253,21 @@ async function run() {
                 return await cache.restore(cwd);
             });
         }
-        const code = await core.group("Running golangci-lint with reviewdog 🐶 ...", async () => {
-            const output = await exec.getExecOutput(golangci, ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)], {
+        const output = await core.group("Running golangci-lint ...", async () => {
+            return await exec.getExecOutput(golangci, ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)], {
                 cwd,
                 ignoreReturnCode: true,
             });
+        });
+        switch (output.exitCode) {
+            case 0:
+            case 1:
+            case 2:
+                break;
+            default:
+                throw new Error(`golangci-lint exited with status code: ${output.exitCode}`);
+        }
+        const code = await core.group("Running reviewdog 🐶 ...", async () => {
             process.env["REVIEWDOG_GITHUB_API_TOKEN"] = core.getInput("github_token");
             return await exec.exec(reviewdog, [
                 "-f=golangci-lint",
