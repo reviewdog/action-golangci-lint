@@ -32,7 +32,7 @@ jobs:
           github_token: ${{ secrets.github_token }}
           tool_name: golangci-lint-${{ matrix.platform }}
           level: warning
-          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata"
+          golangci_lint_flags: "--config=.github/.golangci.yml ./testdata --timeout 10m"
 
   golangci-lint-github-pr-review:
     name: runner / golangci-lint (github-pr-review)
