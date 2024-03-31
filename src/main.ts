@@ -35,12 +35,7 @@ async function run(): Promise<void> {
       await setupGo.run(goVersion, goVersionFile);
     });
 
-    const reviewdog = await core.group(
-      "🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog",
-      async () => {
-        return await installer.installReviewdog(reviewdogVersion, tmpdir);
-      },
-    );
+    const reviewdog = "reviewdog";
 
     const golangci = await core.group(
       "Installing golangci-lint ... https://github.com/golangci/golangci-lint",

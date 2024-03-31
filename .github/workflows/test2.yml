@@ -1,0 +1,16 @@
+name: test2
+on:
+  pull_request:
+
+jobs:
+  test2:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: go install github.com/massongit/reviewdog/cmd/reviewdog@use_git_diff
+      - uses: ./
+        with:
+          go_version_file: go.mod
+          fail_on_error: true
