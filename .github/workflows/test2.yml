@@ -9,7 +9,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: go install github.com/massongit/reviewdog/cmd/reviewdog@use_git_diff
+      - run: go install github.com/massongit/reviewdog/cmd/reviewdog@use_git_diff_test
       - uses: ./
         with:
           go_version_file: go.mod
