@@ -8,6 +8,9 @@
     },
     {
       "updateTypes": ["patch", "pin", "digest"]
+    },
+    {
+      "matchPackageNames": ["@typescript-eslint/parser", "eslint-plugin-jest"]
     }
   ]
 }
