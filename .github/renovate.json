@@ -10,6 +10,7 @@
       "updateTypes": ["patch", "pin", "digest"]
     },
     {
+      "groupName": "@typescript-eslint/parser and eslint-plugin-jest",
       "matchPackageNames": ["@typescript-eslint/parser", "eslint-plugin-jest"]
     }
   ]
