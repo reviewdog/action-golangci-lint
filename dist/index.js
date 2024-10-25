@@ -86955,7 +86955,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.save = exports.restore = void 0;
+exports.restore = restore;
+exports.save = save;
 const cache = __importStar(__nccwpck_require__(7799));
 const core = __importStar(__nccwpck_require__(2186));
 const exec = __importStar(__nccwpck_require__(1514));
@@ -86994,7 +86995,6 @@ async function restore(cwd) {
     }
     return { key, cachedKey };
 }
-exports.restore = restore;
 async function getGoSumPath(cwd) {
     const opt = { cwd };
     const output = await exec.getExecOutput("go", ["env", "GOMOD"], opt);
@@ -87028,7 +87028,6 @@ async function save(state) {
         }
     }
 }
-exports.save = save;
 // see https://github.com/actions/runner/blob/master/src/Misc/expressionFunc/hashFiles/src/hashFiles.ts
 async function hashFiles(...files) {
     const result = crypto.createHash("sha256");
@@ -87059,7 +87058,7 @@ async function hashFiles(...files) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parse = void 0;
+exports.parse = parse;
 function parse(flags) {
     flags = flags.trim();
     if (flags === "") {
@@ -87068,7 +87067,6 @@ function parse(flags) {
     // TODO: need to simulate bash?
     return flags.split(/\s+/);
 }
-exports.parse = parse;
 
 
 /***/ }),
@@ -87102,7 +87100,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.installGolangciLint = exports.installReviewdog = void 0;
+exports.installReviewdog = installReviewdog;
+exports.installGolangciLint = installGolangciLint;
 const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const tc = __importStar(__nccwpck_require__(7784));
@@ -87147,7 +87146,6 @@ async function installReviewdog(tag, directory) {
     const extractedDir = await tc.extractTar(archivePath, directory);
     return path.join(extractedDir, `reviewdog${ext}`);
 }
-exports.installReviewdog = installReviewdog;
 async function installGolangciLint(tag, directory) {
     const owner = "golangci";
     const repo = "golangci-lint";
@@ -87190,7 +87188,6 @@ async function installGolangciLint(tag, directory) {
     const extractedDir = archive === "zip" ? await tc.extractZip(archivePath, directory) : await tc.extractTar(archivePath, directory);
     return path.join(extractedDir, `golangci-lint-${version}-${platform}-${arch}`, `golangci-lint${ext}`);
 }
-exports.installGolangciLint = installGolangciLint;
 async function tagToVersion(tag, owner, repo) {
     core.info(`finding a release for ${tag}`);
     const url = `https://github.com/${owner}/${repo}/releases/${tag}`;
@@ -87389,7 +87386,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.parseGoVersionFile = exports.makeSemver = exports.getVersionsDist = exports.findMatch = exports.getInfoFromManifest = exports.extractGoArchive = exports.getGo = void 0;
+exports.getGo = getGo;
+exports.extractGoArchive = extractGoArchive;
+exports.getInfoFromManifest = getInfoFromManifest;
+exports.findMatch = findMatch;
+exports.getVersionsDist = getVersionsDist;
+exports.makeSemver = makeSemver;
+exports.parseGoVersionFile = parseGoVersionFile;
 const core = __importStar(__nccwpck_require__(2186));
 const httpm = __importStar(__nccwpck_require__(6255));
 const path = __importStar(__nccwpck_require__(1017));
@@ -87466,7 +87469,6 @@ async function getGo(versionSpec, checkLatest, auth) {
     }
     return downloadPath;
 }
-exports.getGo = getGo;
 async function resolveVersionFromManifest(versionSpec, stable, auth) {
     try {
         const info = await getInfoFromManifest(versionSpec, stable, auth);
@@ -87502,7 +87504,6 @@ async function extractGoArchive(archivePath) {
     }
     return extPath;
 }
-exports.extractGoArchive = extractGoArchive;
 async function getInfoFromManifest(versionSpec, stable, auth) {
     let info = null;
     const releases = await tc.getManifestFromRepo("actions", "go-versions", auth, "main");
@@ -87517,7 +87518,6 @@ async function getInfoFromManifest(versionSpec, stable, auth) {
     }
     return info;
 }
-exports.getInfoFromManifest = getInfoFromManifest;
 async function getInfoFromDist(versionSpec) {
     const version = await findMatch(versionSpec);
     if (!version) {
@@ -87564,7 +87564,6 @@ async function findMatch(versionSpec) {
     }
     return result;
 }
-exports.findMatch = findMatch;
 async function getVersionsDist(dlUrl) {
     // this returns versions descending so latest is first
     const http = new httpm.HttpClient("setup-go", [], {
@@ -87573,7 +87572,6 @@ async function getVersionsDist(dlUrl) {
     });
     return (await http.getJson(dlUrl)).result;
 }
-exports.getVersionsDist = getVersionsDist;
 //
 // Convert the go version syntax into semver for semver matching
 // 1.13.1 => 1.13.1
@@ -87597,7 +87595,6 @@ function makeSemver(version) {
     }
     return fullVersion;
 }
-exports.makeSemver = makeSemver;
 function parseGoVersionFile(versionFilePath) {
     const contents = fs_1.default.readFileSync(versionFilePath).toString();
     if (path.basename(versionFilePath) === "go.mod") {
@@ -87606,7 +87603,6 @@ function parseGoVersionFile(versionFilePath) {
     }
     return contents.trim();
 }
-exports.parseGoVersionFile = parseGoVersionFile;
 
 
 /***/ }),
@@ -87645,7 +87641,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.addBinToPath = exports.run = void 0;
+exports.run = run;
+exports.addBinToPath = addBinToPath;
 const core = __importStar(__nccwpck_require__(2186));
 const installer = __importStar(__nccwpck_require__(2640));
 const io = __importStar(__nccwpck_require__(7436));
@@ -87686,7 +87683,6 @@ async function run(version, versionFilePath) {
         core.setFailed(`${error}`);
     }
 }
-exports.run = run;
 async function addBinToPath() {
     let added = false;
     const g = await io.which("go");
@@ -87714,7 +87710,6 @@ async function addBinToPath() {
     }
     return added;
 }
-exports.addBinToPath = addBinToPath;
 function isGhes() {
     const ghUrl = new url_1.URL(process.env["GITHUB_SERVER_URL"] || "https://github.com");
     return ghUrl.hostname.toUpperCase() !== "GITHUB.COM";
@@ -87772,7 +87767,8 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.getArch = exports.getPlatform = void 0;
+exports.getPlatform = getPlatform;
+exports.getArch = getArch;
 const os = __importStar(__nccwpck_require__(2037));
 function getPlatform() {
     // darwin and linux match already
@@ -87785,7 +87781,6 @@ function getPlatform() {
     }
     return plat;
 }
-exports.getPlatform = getPlatform;
 function getArch() {
     // 'arm', 'arm64', 'ia32', 'mips', 'mipsel', 'ppc', 'ppc64', 's390', 's390x', 'x32', and 'x64'.
     let arch = os.arch();
@@ -87804,7 +87799,6 @@ function getArch() {
     }
     return arch;
 }
-exports.getArch = getArch;
 
 
 /***/ }),
