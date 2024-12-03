@@ -25,6 +25,7 @@ async function run(): Promise<void> {
     const level = core.getInput("level") || "error";
     const reporter = core.getInput("reporter") || "github-pr-check";
     const filterMode = core.getInput("filter_mode") || "added";
+    const failLevel = core.getInput("fail_level") || "none";
     const failOnError = core.getInput("fail_on_error") || "false";
     const reviewdogFlags = core.getInput("reviewdog_flags");
     const workdir = core.getInput("workdir") || ".";
@@ -85,6 +86,7 @@ async function run(): Promise<void> {
           `-name=${toolName}`,
           `-reporter=${reporter}`,
           `-filter-mode=${filterMode}`,
+          `-fail-level=${failLevel}`,
           `-fail-on-error=${failOnError}`,
           `-level=${level}`,
           ...flags.parse(reviewdogFlags),
