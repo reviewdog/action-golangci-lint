@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
@@ -49,7 +49,7 @@ jobs:
       #       ${{ runner.os }}-golangcilint-
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
 ```
 
 ## Inputs
@@ -148,12 +148,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
 ```
 
 ### Advanced Usage Example
@@ -172,11 +172,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
         with:
           # optionally use a specific version of Go rather than the latest one
           go_version: "1.17"
@@ -192,11 +192,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: golint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
         with:
           golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
@@ -208,11 +208,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: errcheck
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
         with:
           golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
@@ -224,12 +224,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
         with:
           cache: false
 ```
@@ -247,11 +247,11 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Check out code into the Go module directory
-        uses: actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
         with:
           fetch-depth: 0
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@v2
+        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
         with:
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```
