@@ -132,7 +132,7 @@ async function run(): Promise<void> {
   }
 }
 
-function isGolangciLintV1(version: string): boolean {
+export function isGolangciLintV1(version: string): boolean {
   if (version === "latest") {
     return false;
   }
