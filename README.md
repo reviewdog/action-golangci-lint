@@ -49,7 +49,7 @@ jobs:
       #       ${{ runner.os }}-golangcilint-
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
 ```
 
 ## Inputs
@@ -153,7 +153,7 @@ jobs:
           fetch-depth: 0
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
 ```
 
 ### Advanced Usage Example
@@ -176,7 +176,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
         with:
           # optionally use a specific version of Go rather than the latest one
           go_version: "1.17"
@@ -196,7 +196,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: golint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
         with:
           golangci_lint_flags: "--disable-all -E golint"
           tool_name: golint # Change reporter name.
@@ -212,7 +212,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: errcheck
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
         with:
           golangci_lint_flags: "--disable-all -E errcheck"
           tool_name: errcheck
@@ -229,7 +229,7 @@ jobs:
           fetch-depth: 0
 
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
         with:
           cache: false
 ```
@@ -251,7 +251,7 @@ jobs:
         with:
           fetch-depth: 0
       - name: golangci-lint
-        uses: reviewdog/action-golangci-lint@64c149605d92715a545b1d80908eff8cecec21b1 # v2.7.1
+        uses: reviewdog/action-golangci-lint@3dfdce20f5ca12d264c214abb993dbb40834da90 # v2.7.2
         with:
           golangci_lint_flags: "--enable-all --exclude-use-default=false"
 ```
