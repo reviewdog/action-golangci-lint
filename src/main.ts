@@ -60,7 +60,7 @@ async function run(): Promise<void> {
     const output = await core.group("Running golangci-lint ...", async (): Promise<exec.ExecOutput> => {
       return await exec.getExecOutput(
         golangci,
-        ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)],
+        ["run", "--output.text.path", "stdout", ...flags.parse(golangciLintFlags)],
         {
           cwd,
           ignoreReturnCode: true,

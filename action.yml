@@ -7,7 +7,7 @@ inputs:
     required: true
     default: ${{ github.token }}
   golangci_lint_flags:
-    description: "golangci-lint flags. (golangci-lint run --out-format=line-number <golangci_lint_flags>)"
+    description: "golangci-lint flags. (golangci-lint run --output.text.path=stdout <golangci_lint_flags>)"
     required: false
     default: ""
   tool_name:

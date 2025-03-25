@@ -60,7 +60,7 @@ jobs:
 
 ### `golangci_lint_flags`
 
-Optional. golangci-lint flags. (golangci-lint run --out-format=line-number
+Optional. golangci-lint flags. (golangci-lint run --output.text.path=stdout
 `<golangci_lint_flags>`)
 
 Note that you can change golangci-lint behavior by [configuration

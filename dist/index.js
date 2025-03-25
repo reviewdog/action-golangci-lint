@@ -92988,7 +92988,7 @@ async function run() {
             });
         }
         const output = await core.group("Running golangci-lint ...", async () => {
-            return await exec.getExecOutput(golangci, ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)], {
+            return await exec.getExecOutput(golangci, ["run", "--output.text.path", "stdout", ...flags.parse(golangciLintFlags)], {
                 cwd,
                 ignoreReturnCode: true,
             });
