@@ -1,13 +1,11 @@
 {
-  "extends": [
-    "config:base"
-  ],
+  "extends": ["config:recommended"],
   "packageRules": [
     {
-      "updateTypes": ["minor"]
+      "matchUpdateTypes": ["minor"]
     },
     {
-      "updateTypes": ["patch", "pin", "digest"]
+      "matchUpdateTypes": ["patch", "pin", "digest"]
     },
     {
       "groupName": "@typescript-eslint/parser and eslint-plugin-jest",
