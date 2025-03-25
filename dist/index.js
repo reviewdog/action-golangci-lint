@@ -92943,6 +92943,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", ({ value: true }));
+exports.isGolangciLintV1 = isGolangciLintV1;
 const fs_1 = __nccwpck_require__(9896);
 const os = __importStar(__nccwpck_require__(857));
 const path = __importStar(__nccwpck_require__(6928));
@@ -92988,7 +92989,10 @@ async function run() {
             });
         }
         const output = await core.group("Running golangci-lint ...", async () => {
-            return await exec.getExecOutput(golangci, ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)], {
+            const options = isGolangciLintV1(golangciLintVersion)
+                ? ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)]
+                : ["run", "--output.text.path", "stdout", ...flags.parse(golangciLintFlags)];
+            return await exec.getExecOutput(golangci, options, {
                 cwd,
                 ignoreReturnCode: true,
             });
@@ -93053,6 +93057,16 @@ async function run() {
             }
         }
     }
+}
+function isGolangciLintV1(version) {
+    if (version === "latest") {
+        return false;
+    }
+    const match = version.match(/^v?(\d+)/);
+    if (!match) {
+        throw new Error(`Invalid golangci-lint version: ${version}`);
+    }
+    return parseInt(match[1], 10) === 1;
 }
 void run();
 

@@ -58,14 +58,14 @@ async function run(): Promise<void> {
     }
 
     const output = await core.group("Running golangci-lint ...", async (): Promise<exec.ExecOutput> => {
-      return await exec.getExecOutput(
-        golangci,
-        ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)],
-        {
-          cwd,
-          ignoreReturnCode: true,
-        },
-      );
+      const options = isGolangciLintV1(golangciLintVersion)
+        ? ["run", "--out-format", "line-number", ...flags.parse(golangciLintFlags)]
+        : ["run", "--output.text.path", "stdout", ...flags.parse(golangciLintFlags)];
+
+      return await exec.getExecOutput(golangci, options, {
+        cwd,
+        ignoreReturnCode: true,
+      });
     });
 
     switch (output.exitCode) {
@@ -130,6 +130,19 @@ async function run(): Promise<void> {
       }
     }
   }
+}
+
+export function isGolangciLintV1(version: string): boolean {
+  if (version === "latest") {
+    return false;
+  }
+
+  const match = version.match(/^v?(\d+)/);
+  if (!match) {
+    throw new Error(`Invalid golangci-lint version: ${version}`);
+  }
+
+  return parseInt(match[1], 10) === 1;
 }
 
 void run();
