@@ -19,6 +19,4 @@ jobs:
           curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b $(go env GOPATH)/bin ${{ matrix.golangci-lint-version == 'v1' && 'v1.64.8' || 'latest' }}
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
       - name: Validate golangci-lint config
-        run: |
-          golangci-lint --version
-          golangci-lint config verify --config=.github/.golangci.${{ matrix.golangci-lint-version }}.yml
+        run: golangci-lint config verify --config=.github/.golangci.${{ matrix.golangci-lint-version }}.yml
