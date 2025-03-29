@@ -19,6 +19,8 @@ jobs:
         run: echo "TAG_NAME=v1.64.8" >> "$GITHUB_ENV"
       - name: Set TAG_NAME
         if: ${{ matrix.golangci-lint-version != 'v1' }}
+        env:
+          GH_TOKEN: ${{ secrets.github_token }}
         run: echo "TAG_NAME=$(gh release list --repo golangci/golangci-lint --json name,isLatest --jq '.[] | select(.isLatest) | .name')" >> "$GITHUB_ENV"
       - name: Install golangci-lint
         run: |
