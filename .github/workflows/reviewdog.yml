@@ -23,7 +23,10 @@ jobs:
           golangci_lint_version: ${{ matrix.golangci-lint-version == 'v1' && 'v1.64.8' || 'latest' }}
           golangci_lint_flags: "--config=${{env.CONFIG_FILE_NAME}} ./testdata"
       - name: Validate golangci-lint config
-        run: golangci-lint config verify --config="$CONFIG_FILE_NAME"
+        run: |
+          pwd
+          ls -la
+          golangci-lint config verify --config="$CONFIG_FILE_NAME"
 
   golangci-lint-platform:
     name: runner / golangci-lint-platform
