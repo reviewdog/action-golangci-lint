@@ -16,7 +16,8 @@ jobs:
         uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
       - name: Install golangci-lint
         run: |
-          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/HEAD/install.sh | sh -s -- -b "$(go env GOPATH)/bin" ${{ matrix.golangci-lint-version == 'v1' && 'v1.64.8' || 'latest' }}
+          install_script_url="https://raw.githubusercontent.com/golangci/golangci-lint/refs/tags/$(curl https://api.github.com/repos/golangci/golangci-lint/releases/latest | yq '.tag_name')/install.sh"
+          curl -sSfL "$install_script_url" | sh -s -- -b "$(go env GOPATH)/bin" ${{ matrix.golangci-lint-version == 'v1' && 'v1.64.8' || 'latest' }}
           echo "$(go env GOPATH)/bin" >> "$GITHUB_PATH"
       - name: Validate golangci-lint config
         run: golangci-lint config verify --config=.github/.golangci.${{ matrix.golangci-lint-version }}.yml
