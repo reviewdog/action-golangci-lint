@@ -3,8 +3,6 @@ linters-settings:
   govet:
     enable:
       - shadow
-  golint:
-    min-confidence: 0
   misspell:
     locale: US
   errcheck:
