@@ -8,7 +8,6 @@ import * as io from "@actions/io";
 
 import * as installer from "./installer";
 import * as flags from "./flags";
-import * as setupGo from "./setup-go/main";
 import * as cache from "./cache";
 
 async function run(): Promise<void> {
@@ -18,8 +17,6 @@ async function run(): Promise<void> {
   try {
     const reviewdogVersion = core.getInput("reviewdog_version") || "latest";
     const golangciLintVersion = core.getInput("golangci_lint_version") || "latest";
-    const goVersion = core.getInput("go_version");
-    const goVersionFile = core.getInput("go_version_file");
     const golangciLintFlags = core.getInput("golangci_lint_flags");
     const toolName = core.getInput("tool_name") || "golangci";
     const level = core.getInput("level") || "error";
@@ -31,10 +28,6 @@ async function run(): Promise<void> {
     const workdir = core.getInput("workdir") || ".";
     const cwd = path.relative(process.env["GITHUB_WORKSPACE"] || process.cwd(), workdir);
     const enableCache = core.getBooleanInput("cache");
-
-    await core.group("Installing Go ...", async () => {
-      await setupGo.run(goVersion, goVersionFile);
-    });
 
     const reviewdog = await core.group(
       "🐶 Installing reviewdog ... https://github.com/reviewdog/reviewdog",

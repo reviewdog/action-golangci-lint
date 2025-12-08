@@ -71,8 +71,41 @@ inputs:
     required: false
 
 runs:
-  using: "node20"
-  main: "dist/index.js"
+  using: "composite"
+  steps:
+    - name: Setup Node.js
+      uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
+      with:
+        node-version: '20'
+    
+    - name: Setup Go
+      uses: actions/setup-go@d35c59abb061a4a6fb18e82ac0862c26744d6ab5 # v5.5.0
+      if: ${{ inputs.go_version != '' || inputs.go_version_file != '' }}
+      with:
+        go-version: ${{ inputs.go_version }}
+        go-version-file: ${{ inputs.go_version_file }}
+        cache: false
+    
+    - name: Run golangci-lint with reviewdog
+      shell: bash
+      run: node ${{ github.action_path }}/dist/index.js
+      env:
+        INPUT_GITHUB_TOKEN: ${{ inputs.github_token }}
+        INPUT_GOLANGCI_LINT_FLAGS: ${{ inputs.golangci_lint_flags }}
+        INPUT_TOOL_NAME: ${{ inputs.tool_name }}
+        INPUT_LEVEL: ${{ inputs.level }}
+        INPUT_REPORTER: ${{ inputs.reporter }}
+        INPUT_FILTER_MODE: ${{ inputs.filter_mode }}
+        INPUT_FAIL_LEVEL: ${{ inputs.fail_level }}
+        INPUT_FAIL_ON_ERROR: ${{ inputs.fail_on_error }}
+        INPUT_REVIEWDOG_FLAGS: ${{ inputs.reviewdog_flags }}
+        INPUT_WORKDIR: ${{ inputs.workdir }}
+        INPUT_REVIEWDOG_VERSION: ${{ inputs.reviewdog_version }}
+        INPUT_GOLANGCI_LINT_VERSION: ${{ inputs.golangci_lint_version }}
+        INPUT_GO_VERSION: ${{ inputs.go_version }}
+        INPUT_GO_VERSION_FILE: ${{ inputs.go_version_file }}
+        INPUT_CACHE: ${{ inputs.cache }}
+
 branding:
   icon: "check-circle"
   color: "blue"
