@@ -93183,7 +93183,7 @@ async function getGo(versionSpec, checkLatest, auth) {
         core.info("Falling back to download directly from Go");
     }
     //
-    // Download from storage.googleapis.com
+    // Download from go.dev
     //
     if (!downloadPath) {
         info = await getInfoFromDist(versionSpec);
@@ -93254,7 +93254,7 @@ async function getInfoFromDist(versionSpec) {
     if (!version) {
         return null;
     }
-    const downloadUrl = `https://storage.googleapis.com/golang/${version.files[0].filename}`;
+    const downloadUrl = `https://go.dev/dl/${version.files[0].filename}`;
     return {
         type: "dist",
         downloadUrl,
