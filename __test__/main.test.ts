@@ -1,4 +1,4 @@
-import { isGolangciLintV1 } from "../src/main";
+import { isGolangciLintV1 } from "../src/main.js";
 
 describe("isV1", () => {
   it("should return false if the version is latest", () => {

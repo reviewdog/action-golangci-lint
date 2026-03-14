@@ -1,12 +1,16 @@
 import { promises as fs } from "fs";
 import * as path from "path";
+import { fileURLToPath } from "url";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const tempDir = path.join(__dirname, "_temp");
 process.env["RUNNER_TEMP"] = tempDir;
 
 import * as io from "@actions/io";
 import * as exec from "@actions/exec";
-import * as installer from "../src/installer";
+import * as installer from "../src/installer.js";
 
 describe("installer", () => {
   beforeAll(async () => {

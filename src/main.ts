@@ -6,12 +6,12 @@ import * as core from "@actions/core";
 import * as exec from "@actions/exec";
 import * as io from "@actions/io";
 
-import * as installer from "./installer";
-import * as flags from "./flags";
-import * as setupGo from "./setup-go/main";
-import * as cache from "./cache";
+import * as installer from "./installer.js";
+import * as flags from "./flags.js";
+import * as setupGo from "./setup-go/main.js";
+import * as cache from "./cache.js";
 
-async function run(): Promise<void> {
+export async function run(): Promise<void> {
   const runnerTmpdir = process.env["RUNNER_TEMP"] || os.tmpdir();
   const tmpdir = await fs.mkdtemp(path.join(runnerTmpdir, "reviewdog-"));
 
@@ -144,5 +144,3 @@ export function isGolangciLintV1(version: string): boolean {
 
   return parseInt(match[1], 10) === 1;
 }
-
-void run();

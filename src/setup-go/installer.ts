@@ -5,7 +5,7 @@ import * as core from "@actions/core";
 import * as httpm from "@actions/http-client";
 import * as path from "path";
 import * as semver from "semver";
-import * as sys from "./system";
+import * as sys from "./system.js";
 import * as tc from "@actions/tool-cache";
 import os from "os";
 import fs from "fs";

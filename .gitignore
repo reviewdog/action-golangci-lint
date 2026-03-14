@@ -99,3 +99,6 @@ __tests__/runner/*
 lib/**/*
 
 _temp/
+
+# Coverage
+coverage/
