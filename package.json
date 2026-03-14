@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "description": "Run golangci-lint with reviewdog",
-  "main": "dist/index.js",
+  "main": "dist/index.cjs",
   "type": "module",
   "engines": {
     "node": ">=24.0.0"
@@ -14,7 +14,7 @@
     "format-check": "prettier --check **/*.ts",
     "lint": "eslint src/**/*.ts",
     "package": "npx rollup --config rollup.config.ts --configPlugin @rollup/plugin-typescript",
-    "test": "NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest",
+    "test": "cross-env NODE_OPTIONS=--experimental-vm-modules NODE_NO_WARNINGS=1 npx jest",
     "all": "npm run build && npm run format && npm run lint && npm run package && npm test"
   },
   "repository": {
@@ -46,6 +46,7 @@
     "@types/node": "^24.0.0",
     "@types/semver": "7.7.0",
     "@typescript-eslint/parser": "8.57.0",
+    "cross-env": "10.1.0",
     "eslint": "8.57.1",
     "eslint-plugin-import": "2.32.0",
     "eslint-plugin-jest": "29.15.0",
