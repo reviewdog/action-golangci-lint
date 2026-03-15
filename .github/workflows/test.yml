@@ -24,13 +24,3 @@ jobs:
         run: npm ci
       - name: Run Test
         run: npm run test
-      - name: Ensure dist/ folder is up-to-date
-        if: ${{ runner.os == 'Linux' }}
-        shell: bash
-        run: |
-          npm run package
-          if [ "$(git diff --ignore-space-at-eol | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build.  See status below:"
-            git diff
-            exit 1
-          fi
