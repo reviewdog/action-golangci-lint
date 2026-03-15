@@ -34,7 +34,7 @@
     "@actions/exec": "1.1.1",
     "@actions/http-client": "2.2.3",
     "@actions/tool-cache": "2.0.2",
-    "semver": "7.7.1",
+    "semver": "7.7.4",
     "tslib": "2.8.1"
   },
   "devDependencies": {
@@ -46,7 +46,7 @@
     "@rollup/plugin-typescript": "12.3.0",
     "@types/jest": "29.5.14",
     "@types/node": "^24.0.0",
-    "@types/semver": "7.7.0",
+    "@types/semver": "7.7.1",
     "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "8.57.0",
     "cross-env": "10.1.0",
