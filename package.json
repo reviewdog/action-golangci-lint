@@ -38,6 +38,8 @@
     "tslib": "2.8.1"
   },
   "devDependencies": {
+    "@eslint/eslintrc": "^3.3.5",
+    "@eslint/js": "^10.0.1",
     "@rollup/plugin-commonjs": "29.0.2",
     "@rollup/plugin-json": "6.1.0",
     "@rollup/plugin-node-resolve": "16.0.3",
@@ -45,10 +47,10 @@
     "@types/jest": "29.5.14",
     "@types/node": "^24.0.0",
     "@types/semver": "7.7.0",
+    "@typescript-eslint/eslint-plugin": "^8.57.0",
     "@typescript-eslint/parser": "8.57.0",
     "cross-env": "10.1.0",
-    "eslint": "8.57.1",
-    "eslint-plugin-import": "2.32.0",
+    "eslint": "^10.0.3",
     "eslint-plugin-jest": "29.15.0",
     "jest": "29.7.0",
     "js-yaml": "4.1.1",
