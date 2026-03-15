@@ -18,19 +18,9 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4.4.0
         with:
-          node-version-file: "package.json"
+          node-version-file: ".node-version"
           cache: npm
       - name: Install Dependencies
         run: npm ci
       - name: Run Test
         run: npm run test
-      - name: Ensure dist/ folder is up-to-date
-        if: ${{ runner.os == 'Linux' }}
-        shell: bash
-        run: |
-          npm run package
-          if [ "$(git diff --ignore-space-at-eol | wc -l)" -gt "0" ]; then
-            echo "Detected uncommitted changes after build.  See status below:"
-            git diff
-            exit 1
-          fi

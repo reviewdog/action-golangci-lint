@@ -6,13 +6,6 @@
     "moduleResolution": "NodeNext",
     "outDir": "./dist"
   },
-  "exclude": [
-    "__test__",
-    "coverage",
-    "dist",
-    "node_modules"
-  ],
-  "include": [
-    "src"
-  ]
+  "exclude": ["__test__", "coverage", "dist", "node_modules"],
+  "include": ["src"]
 }

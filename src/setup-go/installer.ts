@@ -71,7 +71,7 @@ export async function getGo(versionSpec: string, checkLatest: boolean, auth: str
   } catch (err) {
     if (err instanceof tc.HTTPError && (err.httpStatusCode === 403 || err.httpStatusCode === 429)) {
       core.info(
-        `Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`
+        `Received HTTP status code ${err.httpStatusCode}.  This usually indicates the rate limit has been exceeded`,
       );
     } else {
       core.info(`${err}`);
@@ -107,7 +107,7 @@ export async function getGo(versionSpec: string, checkLatest: boolean, auth: str
 async function resolveVersionFromManifest(
   versionSpec: string,
   stable: boolean,
-  auth: string | undefined
+  auth: string | undefined,
 ): Promise<string | undefined> {
   try {
     const info = await getInfoFromManifest(versionSpec, stable, auth);
@@ -151,7 +151,7 @@ export async function extractGoArchive(archivePath: string): Promise<string> {
 export async function getInfoFromManifest(
   versionSpec: string,
   stable: boolean,
-  auth: string | undefined
+  auth: string | undefined,
 ): Promise<IGoVersionInfo | null> {
   let info: IGoVersionInfo | null = null;
   const releases = await tc.getManifestFromRepo("actions", "go-versions", auth, "main");

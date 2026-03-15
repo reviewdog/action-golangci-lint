@@ -1,0 +1,56 @@
+# In TypeScript actions, `dist/` is a special directory. When you reference
+# an action with the `uses:` property, `dist/index.js` is the code that will be
+# run. For this project, the `dist/index.js` file is transpiled from other
+# source files. This workflow ensures the `dist/` directory contains the
+# expected transpiled code.
+#
+# If this workflow is run from a feature branch, it will act as an additional CI
+# check and fail if the checked-in `dist/` directory does not match what is
+# expected from the build.
+name: Check dist/
+
+on:
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - "**.md"
+  pull_request:
+    paths-ignore:
+      - "**.md"
+  workflow_dispatch:
+
+jobs:
+  check-dist:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+
+      - uses: actions/setup-node@53b83947a5a98c8d113130e565377fae1a50d02f # v6.3.0
+        with:
+          node-version-file: ".node-version"
+          cache: "npm"
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Rebuild the dist/ directory
+        run: |
+          npm run bundle
+
+      - name: Compare the expected and actual dist/ directories
+        run: |
+          if [ "$(git diff --ignore-space-at-eol --text dist/ | wc -l)" -gt "0" ]; then
+            echo "Detected uncommitted changes after build.  See status below:"
+            git diff
+            exit 1
+          fi
+        id: diff
+
+      # If index.js was different than expected, upload the expected version as an artifact
+      - uses: actions/upload-artifact@bbbca2ddaa5d8feaa63e36b76fdaad77386f024f # v7.0.0
+        if: ${{ failure() && steps.diff.conclusion == 'failure' }}
+        with:
+          name: dist
+          path: dist/
