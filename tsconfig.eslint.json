@@ -4,7 +4,8 @@
   "compilerOptions": {
     "allowJs": true,
     "isolatedModules": true,
-    "noEmit": true
+    "noEmit": true,
+    "rootDir": "."
   },
   "exclude": ["dist", "node_modules"],
   "include": ["__test__", "src", "jest.config.js", "rollup.config.ts"]
