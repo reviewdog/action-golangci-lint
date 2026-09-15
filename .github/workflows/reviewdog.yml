@@ -166,7 +166,7 @@ jobs:
           node-version-file: ".node-version"
           cache: "npm"
       - run: npm ci
-      - uses: reviewdog/action-eslint@5eb89b1e6e94ca33e91c3814c34b25a8370bba46 # v1.35.0
+      - uses: reviewdog/action-eslint@f7eb7e555c4d14324b1827e69cad181d370a173e # v1.35.1
         with:
           reporter: github-pr-review
           level: warning
