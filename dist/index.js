@@ -34362,10 +34362,10 @@ async function run$1(version, versionFilePath) {
         }
         // output the version actually being used
         const goPath = await which("go");
-        const goVersion = (cp__default.execSync(`${goPath} version`) || "").toString();
+        const goVersion = (cp__default.execFileSync(goPath, ["version"]) || "").toString();
         info(goVersion);
         startGroup("go env");
-        const goEnv = (cp__default.execSync(`${goPath} env`) || "").toString();
+        const goEnv = (cp__default.execFileSync(goPath, ["env"]) || "").toString();
         info(goEnv);
         endGroup();
     }
@@ -34381,7 +34381,7 @@ async function addBinToPath() {
         debug("go not in the path");
         return added;
     }
-    const buf = cp__default.execSync("go env GOPATH");
+    const buf = cp__default.execFileSync(g, ["env", "GOPATH"]);
     if (buf) {
         const gp = buf.toString().trim();
         debug(`go env GOPATH :${gp}:`);
