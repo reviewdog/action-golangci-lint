@@ -38,11 +38,11 @@ export async function run(version: string, versionFilePath: string): Promise<voi
 
     // output the version actually being used
     const goPath = await io.which("go");
-    const goVersion = (cp.execSync(`${goPath} version`) || "").toString();
+    const goVersion = (cp.execFileSync(goPath, ["version"]) || "").toString();
     core.info(goVersion);
 
     core.startGroup("go env");
-    const goEnv = (cp.execSync(`${goPath} env`) || "").toString();
+    const goEnv = (cp.execFileSync(goPath, ["env"]) || "").toString();
     core.info(goEnv);
     core.endGroup();
   } catch (error) {
@@ -59,7 +59,7 @@ export async function addBinToPath(): Promise<boolean> {
     return added;
   }
 
-  const buf = cp.execSync("go env GOPATH");
+  const buf = cp.execFileSync(g, ["env", "GOPATH"]);
   if (buf) {
     const gp = buf.toString().trim();
     core.debug(`go env GOPATH :${gp}:`);
