@@ -20,7 +20,7 @@ workflows:
     '.github/workflows/reviewdog.yml':
         - 'actions/checkout@v7.0.1'
         - 'actions/setup-node@v7.1.0'
-        - 'reviewdog/action-actionlint@v1.81.0'
+        - 'reviewdog/action-actionlint@v1.81.1'
         - 'reviewdog/action-eslint@v1.36.1'
     '.github/workflows/test.yml':
         - 'actions/checkout@v7.0.1'
@@ -61,9 +61,9 @@ dependencies:
         commit: 'sha1-7d2c558640ea49e798d46539536190aff8c18715'
         owner_id: 3797062
         repo_id: 225328382
-    'reviewdog/action-actionlint@v1.81.0':
-        ref: 'v1.81.0'
-        commit: 'sha1-5d802a8ebdcb24d712925118c3a4596f571d8fcd'
+    'reviewdog/action-actionlint@v1.81.1':
+        ref: 'v1.81.1'
+        commit: 'sha1-619a81ec64ff8c0211cd6146eb2b21e8f1d7f440'
         owner_id: 48765237
         repo_id: 385059686
     'reviewdog/action-eslint@v1.36.1':
