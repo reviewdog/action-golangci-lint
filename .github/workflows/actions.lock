@@ -11,7 +11,7 @@ workflows:
         - 'actions/checkout@v7.0.1'
     '.github/workflows/codeql-analysis.yml':
         - 'actions/checkout@v7.0.1'
-        - 'github/codeql-action@v4.39.2'
+        - 'github/codeql-action@v4.39.3'
     '.github/workflows/release.yml':
         - 'actions/checkout@v7.0.1'
         - 'haya14busa/action-bumpr@v1.11.4'
@@ -41,9 +41,9 @@ dependencies:
         commit: 'sha1-cf430e030ddbb5b0abf93d22962f4752f3646cd9'
         owner_id: 44036562
         repo_id: 192625955
-    'github/codeql-action@v4.39.2':
-        ref: 'v4.39.2'
-        commit: 'sha1-1fc58d04a4d4374f921bdac573c3811c240f9c26'
+    'github/codeql-action@v4.39.3':
+        ref: 'v4.39.3'
+        commit: 'sha1-33d7b85da1a04171e211befe2c739303b9a4c066'
         owner_id: 9919
         repo_id: 259445878
     'haya14busa/action-bumpr@v1.11.4':
